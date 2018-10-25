@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  build:
+
+    working_directory: ~/library-grad-project-java
+
+    docker:
+    - image: circleci/openjdk:8-jdk-browsers
+
+    steps:
+    - checkout
+
+    - restore_cache:
+        key: library-grad-project-java-{{ checksum "server/pom.xml" }}
+
+    - save_cache:
+        paths:
+        - ~/.m2
+        key: library-grad-project-java-{{ checksum "server/pom.xml" }}
+
+    - run:
+        name: Package
+        command: cd server && mvn package
+
+    - run:
+        name: Run server tests
+        command: cd server && mvn surefire:test
