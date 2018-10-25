@@ -11,17 +11,17 @@ jobs:
     - checkout
 
     - restore_cache:
-        key: library-grad-project-java-{{ checksum "server/pom.xml" }}
+        key: library-grad-project-java-{{ checksum "pom.xml" }}
 
     - save_cache:
         paths:
         - ~/.m2
-        key: library-grad-project-java-{{ checksum "server/pom.xml" }}
+        key: library-grad-project-java-{{ checksum "pom.xml" }}
 
     - run:
         name: Package
-        command: cd server && mvn package
+        command: mvn package
 
     - run:
         name: Run server tests
-        command: cd server && mvn surefire:test
+        command: mvn surefire:test
