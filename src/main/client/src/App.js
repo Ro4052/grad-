@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import styles from './App.module.css';
+
 class App extends Component {
   constructor() {
     super();
@@ -21,7 +23,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <h1> Grad Library App </h1>
+        <h1 className={styles.pageHeader}> Grad Library App </h1>
         <ul>
           {this.state.books.map((book) =>
             <li key={book.id}>
