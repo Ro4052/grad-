@@ -19,9 +19,13 @@ jobs:
         key: library-grad-project-java-{{ checksum "pom.xml" }}
 
     - run:
-        name: Package
-        command: mvn package
+        name: Setup Dependencies
+        command: mvn package && cd src/main/client && npm install
 
     - run:
-        name: Run server tests
+        name: Run Server Tests
         command: mvn surefire:test
+    
+    - run:
+        name: Run Client Tests
+        command: cd src/main/client && set CI=true && npm run test
