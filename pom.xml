@@ -16,6 +16,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.16</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -51,28 +57,26 @@
             <id>prod</id>
             <build>
                 <plugins>
-                    <!--uncomment this and one below if want to use pom for building frontend.
-                    Also update package.json script to only build and not move files.-->
-                    <!--<plugin>-->
-                        <!--<artifactId>maven-resources-plugin</artifactId>-->
-                        <!--<executions>-->
-                            <!--<execution>-->
-                                <!--<id>copy-resources</id>-->
-                                <!--<phase>process-classes</phase>-->
-                                <!--<goals>-->
-                                    <!--<goal>copy-resources</goal>-->
-                                <!--</goals>-->
-                                <!--<configuration>-->
-                                    <!--<outputDirectory>${basedir}/target/classes/static</outputDirectory>-->
-                                    <!--<resources>-->
-                                        <!--<resource>-->
-                                            <!--<directory>src/main/client/build</directory>-->
-                                        <!--</resource>-->
-                                    <!--</resources>-->
-                                <!--</configuration>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
-                    <!--</plugin>-->
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/classes/static</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/client/build</directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
@@ -107,19 +111,16 @@
                                     <arguments>test</arguments>
                                 </configuration>
                             </execution>
-
-                            <!--uncomment this and one above if want to use pom for building frontend.
-                            Also update package.json script to only build and not move files.-->
-                            <!--<execution>-->
-                                <!--<id>npm build</id>-->
-                                <!--<goals>-->
-                                    <!--<goal>npm</goal>-->
-                                <!--</goals>-->
-                                <!--<phase>compile</phase>-->
-                                <!--<configuration>-->
-                                    <!--<arguments>run build</arguments>-->
-                                <!--</configuration>-->
-                            <!--</execution>-->
+                            <execution>
+                                <id>npm build</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <arguments>run build</arguments>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
