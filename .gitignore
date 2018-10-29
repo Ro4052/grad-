@@ -2,15 +2,18 @@
 .classpath
 .project
 .settings/
- 
+
 # Intellij
 .idea/
 *.iml
 *.iws
- 
+
 # Maven
 log/
 target/
+src/main/client/node_modules/
+src/main/client/node/
+src/main/client/build/
 
 # Node
 node_modules/
