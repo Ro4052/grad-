@@ -58,6 +58,10 @@ jobs:
     docker:
     - image: circleci/node:8
 
+    dependencies:
+      pre:
+      - gem install cucumber
+
     steps:
     - run:
         name: Run server acceptance tests
