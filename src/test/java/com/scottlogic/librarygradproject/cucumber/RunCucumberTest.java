@@ -11,5 +11,5 @@ import cucumber.api.CucumberOptions;
         features = {"src/test/java/com/scottlogic/librarygradproject/cucumber/features"}
 )
 
-public class CucumberRunner {
+public class RunCucumberTest {
 }
