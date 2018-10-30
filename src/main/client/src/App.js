@@ -1,45 +1,25 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux'
 
 import styles from './App.module.css';
+import BookList from './bookList/BookList';
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      books: []
-    };
-    this.getBooks();
-  }
-
-  getBooks() {
-    axios.get('/api/books').then((res) => {
-      this.setState({
-        books: res.data
-      });
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <h1 className={styles.pageHeader}> Grad Library App </h1>
-        <ul>
-          {this.state.books.map((book) =>
-            <li key={book.id}>
-              <h3> {book.title} </h3>
-              <p>
-                id: {book.id},
-                author: {book.author},
-                isbn: {book.isbn},
-                publishDate: {book.publishDate}
-              </p>
-            </li>
-          )}
-        </ul>
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div>
+				<h1 className={styles.pageHeader}> Grad Library App </h1>
+				<BookList books={this.props.books}></BookList>
+			</div>
+		);
+	}
 }
 
-export default App;
+const mapStateToProps = state => ({
+	books: state.bookList.books
+});
+ 
+// const mapDispatchToProps = dispatch => bindActionCreators(loginActions, dispatch);
+ 
+export default connect(mapStateToProps)(App);
