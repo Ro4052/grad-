@@ -5,7 +5,7 @@ export default class Book extends Component {
         const {book} = this.props;
         return (
             <li>
-                <h3> {book.title} </h3>
+                <h3>{book.title}</h3>
                 <p>
                     id: {book.id},
                     author: {book.author},
