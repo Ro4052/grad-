@@ -57,13 +57,14 @@ jobs:
   test_cucumber:
     docker:
     - image: circleci/node:8
+    dependencies:
+      pre: - echo "export rvm_ignore_gemsets_flag=1" >> ~/.rvmrc - gem install bundler
 
     steps:
     - run:
         name: Run server acceptance tests
         command: |
           mkdir -p src/test/java/com/scottlogic/librarygradproject/cucumber
-          sudo gem install bundler
           bundle exec cucumber --format junit --out src/test/java/com/scottlogic/librarygradproject/cucumber/junit.xml
           when: always
           - store_test_results:
