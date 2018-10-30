@@ -7,7 +7,7 @@ import cucumber.api.CucumberOptions;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         plugin = {"pretty"},
-        glue = {"src/test/java/com/scottlogic/librarygradproject/cucumber/steps"},
+        glue = {"com.scottlogic.librarygradproject.cucumber.steps"},
         features = {"src/test/java/com/scottlogic/librarygradproject/cucumber/features"}
 )
 

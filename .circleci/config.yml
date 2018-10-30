@@ -54,32 +54,9 @@ jobs:
         name: Run Client Tests
         command: cd src/main/client/ && set CI=true && npm run test
 
-#  test_cucumber:
-#    docker:
-#    - image: circleci/node:8
-#
-#
-#    steps:
-#    - run:
-#        name: setup bundler
-#        command:
-#          echo "export rvm_ignore_gemsets_flag=1" >> ~/.rvmrc &&  npm install cucumber
-#    - run:
-#        name: Run server acceptance tests
-#        command: |
-#          mkdir -p src/test/java/com/scottlogic/librarygradproject/cucumber
-#          bundle exec cucumber --format junit --out src/test/java/com/scottlogic/librarygradproject/cucumber/junit.xml
-#          when: always
-#          - store_test_results:
-#          path: src/test/java/com/scottlogic/librarygradproject/cucumber
-#          - store_artifacts:
-#          path: src/test/java/com/scottlogic/librarygradproject/cucumber
-
 workflows:
   version: 2
   test_all:
     jobs:
       - test_maven
       - test_node
-#      - test_cucumber
-
