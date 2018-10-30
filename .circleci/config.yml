@@ -30,33 +30,33 @@ jobs:
     - store_artifacts:
         path: target/grad-library-project-0.0.1-SNAPSHOT.jar
     
-  test_node:
-
-    docker:
-      - image: circleci/node:8
-
-    steps:
-    - checkout
-
-    - restore_cache:
-        key: node-dependencies-{{ checksum "src/main/client/package.json" }}
-
-    - run:
-        name: Setup Node Dependencies
-        command: cd src/main/client/ && npm install
-    
-    - save_cache:
-        paths:
-          - ./node_modules
-        key: node-dependencies-{{ checksum "src/main/client/package.json" }}
-
-    - run:
-        name: Run Client Tests
-        command: cd src/main/client/ && set CI=true && npm run test
+#  test_node:
+#
+#    docker:
+#      - image: circleci/node:8
+#
+#    steps:
+#    - checkout
+#
+#    - restore_cache:
+#        key: node-dependencies-{{ checksum "src/main/client/package.json" }}
+#
+#    - run:
+#        name: Setup Node Dependencies
+#        command: cd src/main/client/ && npm install
+#
+#    - save_cache:
+#        paths:
+#          - ./node_modules
+#        key: node-dependencies-{{ checksum "src/main/client/package.json" }}
+#
+#    - run:
+#        name: Run Client Tests
+#        command: cd src/main/client/ && set CI=true && npm run test
 
 workflows:
   version: 2
   test_all:
     jobs:
       - test_maven
-      - test_node
+#      - test_node
