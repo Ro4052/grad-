@@ -57,7 +57,7 @@ jobs:
   test_cucumber:
     docker:
     - image: circleci/node:8
-      
+
     steps:
     - run:
         name: Run server acceptance tests
@@ -76,4 +76,5 @@ workflows:
     jobs:
       - test_maven
       - test_node
+      - test_cucumber
 
