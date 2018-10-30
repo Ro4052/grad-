@@ -55,6 +55,9 @@ jobs:
         command: cd src/main/client/ && set CI=true && npm run test
 
   test_cucumber:
+    docker:
+    - image: circleci/node:8
+      
     steps:
     - run:
         name: Run server acceptance tests
