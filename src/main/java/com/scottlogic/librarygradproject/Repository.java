@@ -7,4 +7,5 @@ public interface Repository<T> {
     List<T> getAll();
     void add(T entity);
     void remove(int id);
+    void update(T entity, int id);
 }

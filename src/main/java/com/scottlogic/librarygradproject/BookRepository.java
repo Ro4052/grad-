@@ -2,8 +2,11 @@ package com.scottlogic.librarygradproject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookRepository implements Repository<Book> {
+
+    private int id = 0;
 
     private List<Book> bookCollection = new ArrayList<>();
 
@@ -35,11 +38,30 @@ public class BookRepository implements Repository<Book> {
         }
         book.setId(bookCollection.size());
         bookCollection.add(book);
+
     }
 
     @Override
     public void remove(int id) {
         Book bookToRemove = get(id);
         bookCollection.remove(bookToRemove);
+    }
+
+    @Override
+    public void update(Book entity, int id) {
+        final BooleanWrapper updated = new BooleanWrapper(false);
+        bookCollection.stream().forEach(book -> {
+            if (book.getId() == id) {
+                book.setTitle(entity.getTitle());
+                book.setAuthor(entity.getAuthor());
+                book.setIsbn(entity.getIsbn());
+                book.setPublishDate(entity.getPublishDate());
+                updated.setBool(true);
+            }
+        });
+
+        if (!updated.getBool()) {
+            throw new BookNotFoundException(id);
+        }
     }
 }

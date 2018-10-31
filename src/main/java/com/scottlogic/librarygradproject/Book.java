@@ -4,6 +4,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class Book {
+
     private int id;
     private String isbn;
 
