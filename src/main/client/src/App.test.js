@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import store from "./store/store";
 import { Provider } from "react-redux";
-
+import { shallow } from "enzyme";
 
 describe('Startup application tests', () => {
 	test('Renders without crashing', () => {
@@ -14,9 +14,10 @@ describe('Startup application tests', () => {
 		ReactDOM.unmountComponentAtNode(div);
 	});
 
-	test('dummy Test', () => {
-		const testBook = {}
-		const a = 5
-		expect(a).toBe(5)
+	test('it has correct header', () => {
+		const wrapper = shallow(<App store={store}/>);
+		const component = wrapper.dive();
+		expect(component.find(".pageHeader").exists()).toEqual(true);
+		expect(component.find(".pageHeader").text()).toEqual(" Grad Library App ")
 	})
 })
