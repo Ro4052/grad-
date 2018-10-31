@@ -18,9 +18,23 @@ public class BookRepository implements Repository<Book> {
     }
 
     @Override
-    public void add(Book entity) {
-        entity.setId(bookCollection.size());
-        bookCollection.add(entity);
+    public void add(Book book) {
+        if (book.getIsbn() == null) {book.setIsbn("");}
+        if (book.getTitle() == null) {book.setTitle("");}
+        if (book.getAuthor() == null) {book.setAuthor("");}
+        if (book.getPublishDate() == null) {book.setPublishDate("");}
+        book.setIsbn(book.getIsbn().trim());
+        book.setAuthor(book.getAuthor().trim());
+        book.setTitle(book.getTitle().trim());
+        book.setPublishDate(book.getPublishDate().trim());
+        if (!book.getIsbn().matches("|[0-9]{10}|[0-9]{13}") ||
+                (book.getAuthor().length() == 0 || book.getAuthor().length() > 200) ||
+                (book.getTitle().length() == 0 || book.getTitle().length() > 200) ||
+                (!book.getPublishDate().matches("|[0-9]{4}"))) {
+            throw new IncorrectBookFormatException();
+        }
+        book.setId(bookCollection.size());
+        bookCollection.add(book);
     }
 
     @Override
