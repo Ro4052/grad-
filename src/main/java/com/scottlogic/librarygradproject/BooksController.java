@@ -32,7 +32,8 @@ public class BooksController {
     }
 
     @RequestMapping(value = "/books", method = RequestMethod.POST)
-    public void post(@RequestBody() Book book) {
-        bookRepo.add(book);
-    }
+    public void post(@RequestBody() Book book) {bookRepo.add(book); }
+
+    @RequestMapping(value = "/books/{id}", method = RequestMethod.PUT)
+    public void put(@PathVariable int id, @RequestBody() Book book) {bookRepo.update(book, id); }
 }
