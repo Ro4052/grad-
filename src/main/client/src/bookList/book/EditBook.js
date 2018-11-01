@@ -10,7 +10,8 @@ export default class EditBook extends Component {
             isbn: this.props.book.isbn,
             title: this.props.book.title,
             author: this.props.book.author,
-            publishDate: this.props.book.publishDate
+            publishDate: this.props.book.publishDate,
+            buttonText: "Save changes"
         }
         this.handleChange = this.handleChange.bind(this);
         this.submitForm = this.submitForm.bind(this);

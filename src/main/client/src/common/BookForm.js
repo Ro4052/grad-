@@ -8,7 +8,7 @@ export default class BookForm extends Component {
             <div>
                 <div>
                     <label>ISBN</label>
-                    <input type="text" pattern="^[0-9]{10}|[0-9]{13}$" maxLength="13"
+                    <input type="text" pattern="^[0-9]{10}|[0-9]{13}$" maxLength="13" placeholder="ISBN"
                         value={state.isbn} id="isbn" onChange={this.props.handleChange} ></input>
                 </div>
                 <div>
@@ -24,10 +24,10 @@ export default class BookForm extends Component {
                 <div>
                     <label>Publish Date</label>
                     <input type="number" placeholder="Publish Date"
-                        value={state.publishDate} id="publishDate" pattern="^[0-9]{4}$" maxLength="4" max={date} onChange={this.props.handleChange}></input>
+                        value={state.publishDate} id="publishDate" pattern="^[0-9]{4}$" max={date} onChange={this.props.handleChange}></input>
                 </div>
                 <div>
-                    <button type="submit">Save Changes</button>
+                    <button type="submit" id="submitButton">{state.buttonText}</button>
                 </div>
             </div>
         )
