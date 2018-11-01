@@ -9,10 +9,10 @@ import java.util.List;
 @RequestMapping("/api")
 public class BooksController {
 
-    private BookRepository bookRepo;
+    private FilledBookRepository bookRepo;
 
     @Autowired
-    public BooksController(BookRepository bookRepository){
+    public BooksController(FilledBookRepository bookRepository){
         bookRepo = bookRepository;
     }
 

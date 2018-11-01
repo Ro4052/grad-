@@ -1,7 +1,9 @@
 package com.scottlogic.librarygradproject;
 
-public class Book {
+import lombok.Builder;
 
+@Builder
+public class Book {
     private int id;
     private String isbn;
     private String title;
@@ -15,6 +17,12 @@ public class Book {
         this.title = title;
         this.author = author;
         this.publishDate = publishDate;
+    }
+
+    public static class BookBuilder {
+        public Book build() {
+            return new Book(this.isbn, this.title, this.author, this.publishDate);
+        }
     }
 
     public int getId() {

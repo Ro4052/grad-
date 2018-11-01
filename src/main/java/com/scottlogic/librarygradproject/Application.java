@@ -12,7 +12,7 @@ public class Application {
     }
 
     @Bean
-    public BookRepository getBookRepository(){
-        return new BookRepository();
+    public FilledBookRepository getBookRepository(){
+        return new FilledBookRepository();
     }
 }

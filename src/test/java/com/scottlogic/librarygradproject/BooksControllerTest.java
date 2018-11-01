@@ -1,18 +1,23 @@
 package com.scottlogic.librarygradproject;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
 public class BooksControllerTest {
 
+    FilledBookRepository mockRepo;
+    BooksController controller;
+
+    @Before
+    public void before_Each_Test() {
+        mockRepo = mock(FilledBookRepository.class);
+        controller = new BooksController(mockRepo);
+    }
+
     @Test
     public void getAll_Calls_Repo_GetAll() {
-
-        // Arrange
-        BookRepository mockRepo = mock(BookRepository.class);
-        BooksController controller = new BooksController(mockRepo);
-
         // Act
         controller.getAll();
 
@@ -25,9 +30,6 @@ public class BooksControllerTest {
 
         // Arrange
         int id = 1;
-        BookRepository mockRepo = mock(BookRepository.class);
-        BooksController controller = new BooksController(mockRepo);
-
         // Act
         controller.get(id);
 
@@ -37,10 +39,6 @@ public class BooksControllerTest {
 
     @Test
     public void post_With_Book_Calls_Repo_Add() {
-
-        // Arrange
-        BookRepository mockRepo = mock(BookRepository.class);
-        BooksController controller = new BooksController(mockRepo);
 
         Book newBook = new Book();
 
@@ -56,8 +54,6 @@ public class BooksControllerTest {
 
         // Arrange
         int id = 1;
-        BookRepository mockRepo = mock(BookRepository.class);
-        BooksController controller = new BooksController(mockRepo);
 
         // Act
         controller.delete(id);
