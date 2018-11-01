@@ -26,9 +26,16 @@ export const getBooks = () => dispatch => {
 }
 
 export const editStateChange = id => (dispatch, getState) => {
-    console.log("toggling")
     const newBooks = getState().bookList.books.map(book => {
-        return book.id === id ? {...book, editState: true} : book
+        return book.id === id ? {...book, editState: !book.editState} : book
+    })
+    dispatch(getBooksAction(newBooks))
+}
+
+export const updateBook = updatedBook => (dispatch, getState) => {
+    axios.put(`/api/books/${updatedBook.id}`, updatedBook);
+    const newBooks = getState().bookList.books.map(book => {
+        return book.id === updatedBook.id ? updatedBook : book
     })
     dispatch(getBooksAction(newBooks))
 }

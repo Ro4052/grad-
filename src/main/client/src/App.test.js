@@ -16,8 +16,7 @@ describe('Startup application tests', () => {
 
 	test('it has correct header', () => {
 		const wrapper = shallow(<App store={store}/>);
-		const component = wrapper.dive();
-		expect(component.find(".pageHeader").exists()).toEqual(true);
-		expect(component.find(".pageHeader").text()).toEqual(" Grad Library App ")
+		expect(wrapper.find(".pageHeader").exists()).toEqual(true);
+		expect(wrapper.find(".pageHeader").text()).toEqual(" Grad Library App ")
 	})
 })

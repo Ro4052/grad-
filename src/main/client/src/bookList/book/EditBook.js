@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import * as axios from "axios";
-import BookForm from "../../common/BookForm"
+import React, { Component } from 'react';
+import BookForm from "../../common/BookForm";
 
 export default class EditBook extends Component {
 
@@ -18,25 +17,27 @@ export default class EditBook extends Component {
     }
 
     handleChange(evt) {
-        this.setState({ [evt.target.id]: evt.target.value.trimStart() });
         if (evt.target.id === "publishDate" && evt.target.value.length > 0) { evt.target.value = evt.target.value.slice(0, 4) };
+        this.setState({ [evt.target.id]: evt.target.value.trimStart() });
     }
 
-    async submitForm(evt) {
+    submitForm(evt) {
         evt.preventDefault();
-        let newBook = {
+        const updatedBook = {
+            "id": this.props.book.id,
             "isbn": this.state.isbn.trim(),
             "title": this.state.title.trim(),
             "author": this.state.author.trim(),
-            "publishDate": this.state.publishDate.trim()
+            "publishDate": this.state.publishDate.trim(),
+            "editState": false
         }
-        await axios.put(`/api/books/${this.props.book.id}`, newBook);
+        this.props.updateBook(updatedBook);
     }
 
     render() {
         return (
             <div>
-                <form onSubmit={this.submitForm}>
+                <form className="test" onSubmit={this.submitForm}>
                     <BookForm state={this.state} handleChange={this.handleChange} />
                 </form>
             </div>
