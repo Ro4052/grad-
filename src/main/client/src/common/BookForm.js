@@ -16,8 +16,8 @@ export default class BookForm extends Component {
     }
 
     handleChange(evt) {
-        if (evt.target.id === "publishDate" && evt.target.value.length > 0) { evt.target.value = evt.target.value.slice(0, 4) };
-        this.setState({ [evt.target.id]: evt.target.value.trimStart() });
+        if (evt.target.id === "publishDate" && evt.target.value.length > 0) { evt.target.value = evt.target.value.trimLeft().slice(0, 4) };
+        this.setState({ [evt.target.id]: evt.target.value.trimLeft() });
     }
 
     submitForm(evt) {

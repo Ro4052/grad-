@@ -29,21 +29,20 @@ describe('Testing the book form', () => {
     })
 
     test("Leading white spaces not allowed", () => {
-        wrapper.find("#publishDate").simulate("change", {target: {value: "1"} })
-        // expect(component.find("#isbn").text()).toBe("1")
-        // expect(component.find("#title").text()).toBe("2")
-        // expect(component.find("#author").text()).toBe("3")
-        expect(component.find("#publishDate").text()).toBe("4")
+        wrapper.find("#isbn").simulate("change", {target: {id: "isbn", value:  "     2321"}})
+        wrapper.find("#title").simulate("change", {target: {id: "title", value:  "     Title1"}})
+        wrapper.find("#author").simulate("change", {target: {id: "author", value:  " Author1"}})
+        wrapper.find("#publishDate").simulate("change", {target: {id: "publishDate", value:  "     1"}})
+        expect(wrapper.state("isbn")).toEqual("2321")
+        expect(wrapper.state("title")).toEqual("Title1")
+        expect(wrapper.state("author")).toEqual("Author1")
+        expect(wrapper.state("publishDate")).toEqual("1")
     })
 
-    // test('all fields are populated', () => {
-    //     expect(wrapper.find("p").text()).toBe(
-    //             `id: ${testBook.id}, `
-    //             + `author: ${testBook.author}, `
-    //             + `isbn: ${testBook.isbn}, `
-    //             + `publishDate: ${testBook.publishDate}`
-    //     )
-    // })
+    test("Test publish Date is sliced to 4 digits", () => {
+        wrapper.find("#publishDate").simulate("change", {target: {id: "publishDate", value:  "123111"}})
+        expect(wrapper.state("publishDate")).toEqual("1231")
+    })
+
+
 })
-
-
