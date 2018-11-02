@@ -40,6 +40,14 @@ public class BookRepositoryTest {
     }
 
     @Test
+    public void add_With_Whitespaces_Trims_And_Inserts() {
+        Book newBook = new Book("  1231231231231 ", "    Correct Book ", "  Correct Author  ", " 1999 ");
+        repo.add(newBook);
+        Book trimmedBook = new Book("1231231231231", "Correct Book", "Correct Author", "1999");
+        assertArrayEquals(new Book[] {trimmedBook}, repo.getAll().toArray() );
+    }
+
+    @Test
     public void add_Sets_New_Id() {
         // Act
         repo.add(correctBook1);
@@ -55,9 +63,57 @@ public class BookRepositoryTest {
         repo.add(newBook);
     }
 
+    @Test
+    public void add_With_Null_BookISBN_Works() {
+        Book newBook = new Book(null, "Correct Book", "Correct Author", "1999");
+        repo.add(newBook);
+        assertArrayEquals(new Book[] {newBook}, repo.getAll().toArray() );
+    }
+
+    @Test
+    public void add_With_Empty_BookISBN_Works() {
+        Book newBook = new Book("", "Correct Book", "Correct Author", "1999");
+        repo.add(newBook);
+        assertArrayEquals(new Book[] {newBook}, repo.getAll().toArray() );
+    }
+
+    @Test
+    public void add_With_10Digits_BookISBN_Works() {
+        Book newBook = new Book("1231231231", "Correct Book", "Correct Author", "1999");
+        repo.add(newBook);
+        assertArrayEquals(new Book[] {newBook}, repo.getAll().toArray() );
+    }
+
+    @Test
+    public void add_With_13Digits_BookISBN_Works() {
+        Book newBook = new Book("1231231231231", "Correct Book", "Correct Author", "1999");
+        repo.add(newBook);
+        assertArrayEquals(new Book[] {newBook}, repo.getAll().toArray() );
+    }
+
+    @Test(expected = IncorrectBookFormatException.class)
+    public void add_With_9Digits_1Letter_BookISBN_Throws() {
+        Book newBook = new Book("123123123A", "Correct Book", "Correct Author", "1999");
+        repo.add(newBook);
+    }
+
+    @Test(expected = IncorrectBookFormatException.class)
+    public void add_With_12Digits_1Letter_BookISBN_Throws() {
+        Book newBook = new Book("123123123123A", "Correct Book", "Correct Author", "1999");
+        repo.add(newBook);
+    }
+
+
+
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Empty_BookTitle_Throws() {
         Book newBook = new Book("012345678", "", "Correct Author", "1999");
+        repo.add(newBook);
+    }
+
+    @Test(expected = IncorrectBookFormatException.class)
+    public void add_With_Null_BookTitle_Throws() {
+        Book newBook = new Book("012345678", null, "Correct Author", "1999");
         repo.add(newBook);
     }
 
@@ -71,6 +127,12 @@ public class BookRepositoryTest {
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Empty_BookAuthor_Throws() {
         Book newBook = new Book("012345678", "1", "", "1999");
+        repo.add(newBook);
+    }
+
+    @Test(expected = IncorrectBookFormatException.class)
+    public void add_With_Null_BookAuthor_Throws() {
+        Book newBook = new Book("012345678", "1", null, "1999");
         repo.add(newBook);
     }
 

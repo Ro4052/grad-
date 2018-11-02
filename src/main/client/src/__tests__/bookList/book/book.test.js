@@ -23,8 +23,8 @@ describe('Book Validation Tests', () => {
             const wrapper = shallow(<Book book={testBook}></Book>)
             // const component = wrapper.dive()
             expect(wrapper.find("p").text()).toBe(
-                  `id: ${testBook.id}, `
-                  + `author: ${testBook.author}, `
+
+                  `author: ${testBook.author}, `
                   + `isbn: ${testBook.isbn}, `
                   + `publishDate: ${testBook.publishDate}`
             )

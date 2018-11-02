@@ -1,7 +1,9 @@
 package com.scottlogic.librarygradproject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BookRepository implements Repository<Book> {
@@ -9,6 +11,28 @@ public class BookRepository implements Repository<Book> {
     private int id = 0;
 
     private List<Book> bookCollection = new ArrayList<>();
+
+    private Book validateBook(Book book) {
+        book.setIsbn(Optional.ofNullable(book.getIsbn()).orElse("").trim());
+        book.setAuthor(Optional.ofNullable(book.getAuthor()).orElseThrow(() -> new IncorrectBookFormatException()).trim());
+        book.setTitle(Optional.ofNullable(book.getTitle()).orElseThrow(() -> new IncorrectBookFormatException()).trim());
+        book.setPublishDate(Optional.ofNullable(book.getPublishDate()).orElse("").trim());
+        String year = book.getPublishDate();
+        if (year.length() > 0) {
+            while (year.length() < 4) {
+                year = "0" + year;
+            }
+        }
+        book.setPublishDate(year);
+        if (!book.getIsbn().matches("|[0-9]{10}|[0-9]{13}") ||
+                (book.getAuthor().length() == 0 || book.getAuthor().length() > 200) ||
+                (book.getTitle().length() == 0 || book.getTitle().length() > 200) ||
+                (book.getPublishDate().length() > 0 && (!book.getPublishDate().matches("|[0-9]{4}") ||
+                         Integer.parseInt(book.getPublishDate()) > Calendar.getInstance().get(Calendar.YEAR)))) {
+            throw new IncorrectBookFormatException();
+        }
+        return book;
+    }
 
     @Override
     public Book get(int id) {
@@ -22,22 +46,9 @@ public class BookRepository implements Repository<Book> {
 
     @Override
     public void add(Book book) {
-        if (book.getIsbn() == null) {book.setIsbn("");}
-        if (book.getTitle() == null) {book.setTitle("");}
-        if (book.getAuthor() == null) {book.setAuthor("");}
-        if (book.getPublishDate() == null) {book.setPublishDate("");}
-        book.setIsbn(book.getIsbn().trim());
-        book.setAuthor(book.getAuthor().trim());
-        book.setTitle(book.getTitle().trim());
-        book.setPublishDate(book.getPublishDate().trim());
-        if (!book.getIsbn().matches("|[0-9]{10}|[0-9]{13}") ||
-                (book.getAuthor().length() == 0 || book.getAuthor().length() > 200) ||
-                (book.getTitle().length() == 0 || book.getTitle().length() > 200) ||
-                (!book.getPublishDate().matches("|[0-9]{4}"))) {
-            throw new IncorrectBookFormatException();
-        }
-        book.setId(bookCollection.size());
-        bookCollection.add(book);
+        Book newBook = this.validateBook(book);
+        newBook.setId(bookCollection.size());
+        bookCollection.add(newBook);
 
     }
 
@@ -49,13 +60,14 @@ public class BookRepository implements Repository<Book> {
 
     @Override
     public void update(Book entity, int id) {
+        Book updatedBook = this.validateBook(entity);
         final BooleanWrapper updated = new BooleanWrapper(false);
         bookCollection.stream().forEach(book -> {
             if (book.getId() == id) {
-                book.setTitle(entity.getTitle());
-                book.setAuthor(entity.getAuthor());
-                book.setIsbn(entity.getIsbn());
-                book.setPublishDate(entity.getPublishDate());
+                book.setTitle(updatedBook.getTitle());
+                book.setAuthor(updatedBook.getAuthor());
+                book.setIsbn(updatedBook.getIsbn());
+                book.setPublishDate(updatedBook.getPublishDate());
                 updated.setBool(true);
             }
         });
