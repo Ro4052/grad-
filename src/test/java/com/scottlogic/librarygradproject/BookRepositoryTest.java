@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class BookRepositoryTest {
@@ -186,5 +187,22 @@ public class BookRepositoryTest {
 
         // Assert
         assertArrayEquals(new Book[] { correctBook1, correctBook3 }, books.toArray());
+    }
+
+    @Test
+    public void update_Updates_Correct_Book() {
+
+        // Arrange
+        FilledBookRepository repo = new FilledBookRepository();
+        Book editedBook = Book.builder().isbn("1010101010").title("new Title").publishDate("1027").author("New Author").build();
+
+        // Act
+        repo.update(editedBook, 1);
+
+        // Assert
+        assertThat(repo.get(1).getTitle(), is(editedBook.getTitle()));
+        assertThat(repo.get(1).getAuthor(), is(editedBook.getAuthor()));
+        assertThat(repo.get(1).getPublishDate(), is(editedBook.getPublishDate()));
+        assertThat(repo.get(1).getIsbn(), is(editedBook.getIsbn()));
     }
 }

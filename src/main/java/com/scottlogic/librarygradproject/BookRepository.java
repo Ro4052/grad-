@@ -36,7 +36,7 @@ public class BookRepository implements Repository<Book> {
 
     @Override
     public Book get(int id) {
-        return bookCollection.stream().filter(book -> book.getId() == id).findFirst().get();
+        return bookCollection.stream().filter(book -> book.getId() == id).findFirst().orElseThrow(() -> new BookNotFoundException(id));
     }
 
     @Override
@@ -71,7 +71,6 @@ public class BookRepository implements Repository<Book> {
                 updated.setBool(true);
             }
         });
-
         if (!updated.getBool()) {
             throw new BookNotFoundException(id);
         }

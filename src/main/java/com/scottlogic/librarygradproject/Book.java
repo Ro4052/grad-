@@ -1,10 +1,12 @@
 package com.scottlogic.librarygradproject;
 
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
+
+import lombok.Builder;
+
+
+@Builder
 public class Book {
-
     private int id;
     private String isbn;
 
@@ -20,6 +22,12 @@ public class Book {
         this.title = title;
         this.author = author;
         this.publishDate = publishDate;
+    }
+
+    public static class BookBuilder {
+        public Book build() {
+            return new Book(this.isbn, this.title, this.author, this.publishDate);
+        }
     }
 
     public int getId() {

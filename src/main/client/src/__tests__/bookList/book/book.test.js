@@ -4,7 +4,6 @@ import { shallow } from "enzyme";
 
 const testBook = {
       title: "Harry Potter",
-      id: 0,
       author: "JK Rowling",
       isbn: "1000000000",
       publishDate: "1999"
@@ -23,7 +22,10 @@ describe('Book Validation Tests', () => {
             const wrapper = shallow(<Book book={testBook}></Book>)
             // const component = wrapper.dive()
             expect(wrapper.find("p").text()).toBe(
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
                   `author: ${testBook.author}, `
                   + `isbn: ${testBook.isbn}, `
                   + `publishDate: ${testBook.publishDate}`
