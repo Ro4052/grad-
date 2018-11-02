@@ -75,4 +75,11 @@ public class BookRepository implements Repository<Book> {
             throw new BookNotFoundException(id);
         }
     }
+
+    public void removeMultiple(List<Integer> ids) {
+        ids.forEach(id -> {
+            Book bookToRemove = get(id);
+            bookCollection.remove(bookToRemove);
+        });
+    }
 }

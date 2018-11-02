@@ -31,6 +31,11 @@ public class BooksController {
         bookRepo.remove(id);
     }
 
+    @RequestMapping(value = "/books/", method = RequestMethod.DELETE)
+    public void delete(@RequestBody() List<Integer> ids) {
+        bookRepo.removeMultiple(ids);
+    }
+
     @RequestMapping(value = "/books", method = RequestMethod.POST)
     public void post(@RequestBody() Book book) {bookRepo.add(book); }
 

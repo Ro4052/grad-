@@ -1,5 +1,6 @@
 package com.scottlogic.librarygradproject;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface Repository<T> {
