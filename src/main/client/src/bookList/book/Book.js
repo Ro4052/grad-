@@ -8,7 +8,6 @@ export default class Book extends Component {
             <li>
                 <h3>{book.title}</h3>
                 <p>
-                    id: {book.id},
                     author: {book.author},
                     isbn: {book.isbn},
                     publishDate: {book.publishDate}
