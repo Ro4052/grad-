@@ -2,6 +2,7 @@ package com.scottlogic.librarygradproject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BookRepository implements Repository<Book> {
@@ -12,7 +13,7 @@ public class BookRepository implements Repository<Book> {
 
     @Override
     public Book get(int id) {
-        return bookCollection.stream().filter(book -> book.getId() == id).findFirst().get();
+        return bookCollection.stream().filter(book -> book.getId() == id).findFirst().orElseThrow(() -> new BookNotFoundException(id));
     }
 
     @Override
@@ -37,10 +38,10 @@ public class BookRepository implements Repository<Book> {
         final BooleanWrapper updated = new BooleanWrapper(false);
         bookCollection.stream().forEach(book -> {
             if (book.getId() == id) {
-                book.setTitle(entity.getTitle());
-                book.setAuthor(entity.getAuthor());
-                book.setIsbn(entity.getIsbn());
-                book.setPublishDate(entity.getPublishDate());
+                book.setTitle(Optional.ofNullable(entity.getTitle()).get());
+                book.setAuthor(Optional.ofNullable(entity.getAuthor()).get());
+                book.setIsbn(Optional.ofNullable(entity.getIsbn()).orElse(""));
+                book.setPublishDate(Optional.ofNullable(entity.getPublishDate()).orElse(""));
                 updated.setBool(true);
             }
         });
