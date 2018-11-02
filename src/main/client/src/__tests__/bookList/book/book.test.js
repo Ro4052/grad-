@@ -4,7 +4,6 @@ import { shallow } from "enzyme";
 
 const testBook = {
       title: "Harry Potter",
-      id: 0,
       author: "JK Rowling",
       isbn: "1000000000",
       publishDate: "1999"
