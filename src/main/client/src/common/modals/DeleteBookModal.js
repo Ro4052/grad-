@@ -22,22 +22,22 @@ export default class DeleteBookModal extends Component {
                         Delete Selected Book(s)
                     </button>
                 } basic size='small' open={this.state.open}>
-                    <Header icon='trash alternate' content='Delete Selected Books' />
+                    <Header id="modalHeader" icon='trash alternate' content='Delete Selected Books' />
                     <Modal.Content>
                         <p>
                             You are about to permanently delete the selected books. Do you wish to continue?
                         </p>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button basic color='red' inverted onClick={this.close}>
-                            <Icon name='remove' /> No
+                        <Button id="noBtn" basic color='red' inverted onClick={this.close}>
+                            <Icon name='remove' />No
                         </Button>
-                        <Button color='green' inverted onClick={() => {
+                        <Button id="yesBtn" color='green' inverted onClick={() => {
                             this.close();
                             this.props.deleteBook(this.props.deleteList);
                             this.props.clearDeleteList();
                         }}>
-                            <Icon name='checkmark' /> Yes
+                            <Icon name='checkmark' />Yes
                         </Button>
                     </Modal.Actions>
                 </Modal>
