@@ -1,8 +1,11 @@
 package com.scottlogic.librarygradproject;
 
+import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -204,5 +207,22 @@ public class BookRepositoryTest {
         assertThat(repo.get(1).getAuthor(), is(editedBook.getAuthor()));
         assertThat(repo.get(1).getPublishDate(), is(editedBook.getPublishDate()));
         assertThat(repo.get(1).getIsbn(), is(editedBook.getIsbn()));
+    }
+
+    @Test
+    public void delete_Multiple_Correct_Books() {
+        repo.add(correctBook1);
+        repo.add(correctBook2);
+        repo.add(correctBook3);
+        List<Integer> ids = new ArrayList<Integer>();
+        ids.add(0);
+        ids.add(2);
+
+        // Act
+        repo.removeMultiple(ids);
+        List<Book> books = repo.getAll();
+
+        // Assert
+        assertArrayEquals(new Book[] { correctBook2 }, books.toArray());
     }
 }
