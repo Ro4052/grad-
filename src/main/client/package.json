@@ -12,10 +12,6 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   },
-  "dev-dependencies": {
-    "enzyme": "^3.7.0",
-    "redux-mock-store": "^1.5.3"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -33,6 +29,8 @@
   ],
   "devDependencies": {
     "enzyme-adapter-react-16": "^1.6.0",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "enzyme": "^3.7.0",
+    "redux-mock-store": "^1.5.3"
   }
 }
