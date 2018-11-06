@@ -163,6 +163,38 @@ public class Stepdefs implements En {
             catch (IncorrectBookFormatException e) {}
             newBook = trimBook;
         });
+        When("^An edit book request is received without isbn$", () -> {
+            newBook = new Book("", "Correct Book", "Correct Author", "1999");
+            controller.put(0, newBook);
+        });
+        When("^An edit book request is received without publish date$", () -> {
+            newBook = new Book("0123456789", "Correct Book", "Correct Author", "");
+            controller.put(0, newBook);
+        });
+        Given("^A book exists without isbn$", () -> {
+            newBook = new Book("", "Correct Book", "Correct Author", "1999");
+            controller.put(0, newBook);
+        });
+        When("^The book is edited to have isbn$", () -> {
+            newBook = new Book("0123456789", "Correct Book", "Correct Author", "1999");
+            controller.put(0, newBook);
+        });
+        Given("^A book exists without publish date$", () -> {
+            newBook = new Book("0123456789", "Correct Book", "Correct Author", "");
+            controller.put(0, newBook);
+        });
+        When("^The book is edited to have publish date$", () -> {
+            newBook = new Book("0123456789", "Correct Book", "Correct Author", "1999");
+            controller.put(0, newBook);
+        });
+        When("^An add book request is received without isbn$", () -> {
+            newBook = new Book("", "Correct Book", "Correct Author", "1999");
+            controller.post(newBook);
+        });
+        When("^An add book request is received without publish date$", () -> {
+            newBook = new Book("0123456789", "Correct Book", "Correct Author", "");
+            controller.post(newBook);
+        });
 
     }
 

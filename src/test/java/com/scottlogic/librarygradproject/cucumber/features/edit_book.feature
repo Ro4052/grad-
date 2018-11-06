@@ -7,6 +7,24 @@ Feature: Correctly editing books in the database
     When An edit book request is received with correct book details
     Then the modified book should replace the original
 
+  Scenario: An edit book request is received without isbn
+    When An edit book request is received without isbn
+    Then the modified book should replace the original
+
+  Scenario: An edit book request is received without publish date
+    When An edit book request is received without publish date
+    Then the modified book should replace the original
+
+  Scenario: A book without isbn is edited to have one
+    Given A book exists without isbn
+    When The book is edited to have isbn
+    Then the modified book should replace the original
+
+  Scenario: A book without publish date is edited to have one
+    Given A book exists without publish date
+    When The book is edited to have publish date
+    Then the modified book should replace the original
+
   Scenario: An edit book request is received with incorrect ISBN value
     When An edit book request is received with incorrect ISBN
     Then the database should not be modified
