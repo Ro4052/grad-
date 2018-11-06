@@ -6,7 +6,12 @@ export default class Book extends Component {
         const { book } = this.props;
         return (
             <li>
-                <h3>{book.title}</h3>
+                <h3>{book.title}
+                    <label className="container">
+                        <input type="checkbox" value={book.id} onClick={this.props.handleCheck}></input>
+                        <span className="checkmark"></span>
+                    </label>
+                </h3>
                 <p>
                     author: {book.author},
                     isbn: {book.isbn},
