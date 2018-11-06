@@ -41,8 +41,8 @@ export const updateBook = updatedBook => (dispatch, getState) => {
 }
 
 export const deleteBook = bookIds => (dispatch, getState) => {
-    axios.delete("/api/books", bookIds);
-    const newBooks = getState().bookList.books.filter(book => bookIds.includes(book.id))
+    axios.delete("/api/books", { data: bookIds });
+    const newBooks = getState().bookList.books.filter(book => !bookIds.includes(book.id.toString()))
     dispatch(getBooksAction(newBooks));
 }
 
