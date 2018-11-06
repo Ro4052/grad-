@@ -15,7 +15,7 @@ export default class DashBoard extends Component {
         return (
             <div>
                 <div className={styles.navBar}>
-					<h1> Grad Library App </h1>
+					<h1 className={styles.pageHeader}> Grad Library App </h1>
 					<button>Select Books</button>
 				</div>
 				<BookList deleteMode={this.state.deleteMode}></BookList>
