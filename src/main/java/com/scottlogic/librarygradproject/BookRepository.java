@@ -55,7 +55,7 @@ public class BookRepository implements Repository<Book> {
     @Override
     public void remove(int id) {
         Book bookToRemove = get(id);
-            bookCollection.remove(bookToRemove);
+        bookCollection.remove(bookToRemove);
     }
 
     @Override
