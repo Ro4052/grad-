@@ -42,7 +42,7 @@ To run a development version of the app you can use:
 npm start
 ```
 
-To setup automatic linting in VSCode you can refer to [this tutorial](https://www.youtube.com/watch?v=bfyI9yl3qfE) or follow there steps:
+To setup automatic linting in VSCode you can refer to [this tutorial](https://www.youtube.com/watch?v=bfyI9yl3qfE) or follow these steps:
 
 - Install the _ESLint_ plugin from Dirk Baeumer and reload
 - Install the _Prettier - Code formatter_ plugin from Esben Petersen and reload
