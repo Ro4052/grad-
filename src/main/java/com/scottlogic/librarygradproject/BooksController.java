@@ -4,36 +4,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api")
 public class BooksController {
 
-    private BookRepository bookRepo;
+    private final BookService bookService;
 
     @Autowired
-    public BooksController(BookRepository bookRepository){
-        bookRepo = bookRepository;
+    public BooksController(BookService bookService){
+        this.bookService = bookService;
     }
 
     @RequestMapping(value = "/books", method = RequestMethod.GET)
-    public List<Book> getAll() {
-        return bookRepo.getAll();
-    }
+    public List<Book> getAll() {return bookService.findAll();}
 
     @RequestMapping(value = "/books/{id}", method = RequestMethod.GET)
-    public Book get(@PathVariable int id) {
-        return bookRepo.get(id);
-    }
+    public Book get(@PathVariable long id) { return bookService.findOne(id); }
 
     @RequestMapping(value = "/books/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id) {
-        bookRepo.remove(id);
-    }
+    public void delete(@PathVariable long id) {bookService.delete(id);}
 
     @RequestMapping(value = "/books", method = RequestMethod.POST)
-    public void post(@RequestBody() Book book) {bookRepo.add(book); }
+    public void post(@RequestBody() Book book) {bookService.save(book); }
 
     @RequestMapping(value = "/books/{id}", method = RequestMethod.PUT)
-    public void put(@PathVariable int id, @RequestBody() Book book) {bookRepo.update(book, id); }
+    public void put(@RequestBody() Book book, @PathVariable long id) {bookService.put(book, id);}
 }

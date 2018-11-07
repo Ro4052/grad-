@@ -1,22 +1,23 @@
 package com.scottlogic.librarygradproject.cucumber.steps;
 
 
-import com.scottlogic.librarygradproject.Book;
-import com.scottlogic.librarygradproject.BookRepository;
-import com.scottlogic.librarygradproject.BooksController;
-import com.scottlogic.librarygradproject.IncorrectBookFormatException;
-import cucumber.api.PendingException;
+import com.scottlogic.librarygradproject.*;
 import cucumber.api.java8.En;
-import org.junit.Test;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
 
-
-
+@DataJpaTest
 public class Stepdefs implements En {
     private boolean run = false;
-    BookRepository bookRepo;
+
+    @Autowired
+    BookService bookService;
     BooksController controller;
     public Stepdefs() {
 
@@ -25,8 +26,8 @@ public class Stepdefs implements En {
         Then("test should succeed", () ->  assertTrue(run));
 
         Given("a book repository exists", () -> {
-            bookRepo = new BookRepository();
-            controller = new BooksController(bookRepo);
+            bookService.deleteAll();
+            controller = new BooksController(bookService);
         });
 
         When("An add book request is received with correct book details", () -> {
@@ -35,7 +36,7 @@ public class Stepdefs implements En {
         });
 
         Then("the book should enter the database", () ->{
-           assertEquals(bookRepo.getAll().size(), 1);
+           assertEquals(bookService.findAll().size(), 1);
         });
         When("^An add book request is received with incorrect ISBN$", () -> {
             Book newBook = new Book("012345678", "Correct Book", "Correct Author", "1999");
@@ -45,7 +46,7 @@ public class Stepdefs implements En {
             catch (IncorrectBookFormatException e) {}
         });
         Then("^the book should not enter the database$", () -> {
-            assertEquals(bookRepo.getAll().size(), 0);
+            assertEquals(bookService.findAll().size(), 0);
         });
         When("^An add book request is received without author$", () -> {
             Book newBook = new Book("0123456789", "Correct Book", "", "1999");
@@ -95,7 +96,5 @@ public class Stepdefs implements En {
             }
             catch (IncorrectBookFormatException e) {}
         });
-
     }
-
 }
