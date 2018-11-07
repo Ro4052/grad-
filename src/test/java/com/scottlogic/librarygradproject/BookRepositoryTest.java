@@ -106,8 +106,6 @@ public class BookRepositoryTest {
         repo.add(newBook);
     }
 
-
-
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Empty_BookTitle_Throws() {
         Book newBook = new Book("012345678", "", "Correct Author", "1999");
@@ -145,7 +143,6 @@ public class BookRepositoryTest {
         Book newBook = new Book("012345678", "1", longAuthor, "1999");
         repo.add(newBook);
     }
-
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Incorrect_BookPublishDate_Throws() {
@@ -210,6 +207,8 @@ public class BookRepositoryTest {
 
     @Test
     public void delete_Multiple_Correct_Books() {
+
+        // Arrange
         repo.add(correctBook1);
         repo.add(correctBook2);
         repo.add(correctBook3);
@@ -223,5 +222,29 @@ public class BookRepositoryTest {
 
         // Assert
         assertArrayEquals(new Book[] { correctBook2 }, books.toArray());
+    }
+
+    @Test
+    public void delete_Multiple_Rejects_Invalid_Books() {
+
+        // Arrange
+        repo.add(correctBook1);
+        repo.add(correctBook2);
+        repo.add(correctBook3);
+        List<Integer> ids = new ArrayList<Integer>();
+        ids.add(5);
+        ids.add(2);
+
+        // Act
+        try {
+            repo.removeMultiple(ids);
+        }
+        catch(Exception BookNotFoundException) {
+            assertThat(BookNotFoundException.getMessage(), is("Could not find book ids: 5"));
+        }
+
+        // Assert
+        List<Book> books = repo.getAll();
+        assertArrayEquals(new Book[] {correctBook1, correctBook2}, books.toArray());
     }
 }

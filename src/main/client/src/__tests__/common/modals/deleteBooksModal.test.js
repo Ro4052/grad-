@@ -15,12 +15,19 @@ describe('Modal renders when open', () => {
         expect(wrapper.find("#yesBtn").render().text()).toEqual("Delete");
     })
 
-    test("Yes button calls deleteBooks function", () => {
+    test("Delete button calls deleteBooks function", () => {
         const deleteBook = jest.fn();
         const toggleSelectMode = jest.fn();
         const wrapper = shallow(<DeleteBookModal deleteBook={deleteBook} toggleSelectMode={toggleSelectMode}/>);
         wrapper.find("#yesBtn").prop("onClick")();
         expect(deleteBook).toHaveBeenCalled();
         expect(toggleSelectMode).toHaveBeenCalled();
+    })
+
+    test("Cancel button sets modal open state to false", () => {
+        const wrapper = shallow(<DeleteBookModal />);
+        wrapper.setState({open: true});
+        wrapper.find("#noBtn").prop("onClick")();
+        expect(wrapper.state("open")).toEqual(false);
     })
 })
