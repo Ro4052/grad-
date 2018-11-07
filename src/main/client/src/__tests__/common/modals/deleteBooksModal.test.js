@@ -11,16 +11,16 @@ describe('Modal renders when open', () => {
 
     test("modal renders yes and no buttons", () => {
         const wrapper = shallow(<DeleteBookModal/>);
-        expect(wrapper.find("#noBtn").render().text()).toEqual("No");
-        expect(wrapper.find("#yesBtn").render().text()).toEqual("Yes");
+        expect(wrapper.find("#noBtn").render().text()).toEqual("Cancel");
+        expect(wrapper.find("#yesBtn").render().text()).toEqual("Delete");
     })
 
     test("Yes button calls deleteBooks function", () => {
         const deleteBook = jest.fn();
-        const clearDeleteList = jest.fn();
-        const wrapper = shallow(<DeleteBookModal deleteBook={deleteBook} clearDeleteList={clearDeleteList}/>);
+        const toggleSelectMode = jest.fn();
+        const wrapper = shallow(<DeleteBookModal deleteBook={deleteBook} toggleSelectMode={toggleSelectMode}/>);
         wrapper.find("#yesBtn").prop("onClick")();
         expect(deleteBook).toHaveBeenCalled();
-        expect(clearDeleteList).toHaveBeenCalled();
+        expect(toggleSelectMode).toHaveBeenCalled();
     })
 })
