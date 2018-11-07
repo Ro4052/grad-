@@ -1,6 +1,5 @@
 package com.scottlogic.librarygradproject;
 
-import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;

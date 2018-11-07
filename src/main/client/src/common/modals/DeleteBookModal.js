@@ -8,17 +8,24 @@ export default class DeleteBookModal extends Component {
             open: false
         };
         this.close = this.close.bind(this);
+        this.callDeleteBook = this.callDeleteBook.bind(this);
     }
 
-    close = () => {
+    close() {
         this.setState({ open: false })
+    }
+
+    callDeleteBook() {
+        this.close();
+        this.props.deleteBook(this.props.deleteList);
+        this.props.toggleSelectMode();
     }
 
     render() {
         return (
             <div>
                 <Modal trigger={
-                    <button id="delBookBtn" onClick={() => this.setState({open: true})}>
+                    <button id="delBookBtn" onClick={() => this.setState({ open: true })}>
                         Delete Selected Book(s)
                     </button>
                 } basic size='small' open={this.state.open}>
@@ -29,15 +36,11 @@ export default class DeleteBookModal extends Component {
                         </p>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button id="noBtn" basic color='red' inverted onClick={this.close}>
-                            <Icon name='remove' />No
+                        <Button id="noBtn" inverted onClick={this.close}>
+                            <Icon name='remove' />Cancel
                         </Button>
-                        <Button id="yesBtn" color='green' inverted onClick={() => {
-                            this.close();
-                            this.props.deleteBook(this.props.deleteList);
-                            this.props.clearDeleteList();
-                        }}>
-                            <Icon name='checkmark' />Yes
+                        <Button id="yesBtn" color='red' inverted onClick={this.callDeleteBook}>
+                            <Icon name='checkmark' />Delete
                         </Button>
                     </Modal.Actions>
                 </Modal>

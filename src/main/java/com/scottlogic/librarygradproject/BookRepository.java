@@ -55,7 +55,7 @@ public class BookRepository implements Repository<Book> {
     @Override
     public void remove(int id) {
         Book bookToRemove = get(id);
-        bookCollection.remove(bookToRemove);
+            bookCollection.remove(bookToRemove);
     }
 
     @Override
@@ -77,9 +77,24 @@ public class BookRepository implements Repository<Book> {
     }
 
     public void removeMultiple(List<Integer> ids) {
+        List<Book> validBooks = new ArrayList<>();
+        List<Integer> invalidBooks = new ArrayList<>();
+
         ids.forEach(id -> {
-            Book bookToRemove = get(id);
-            bookCollection.remove(bookToRemove);
+            try {
+                Book validBook = get(id);
+                validBooks.add(validBook);
+            }
+            catch(Exception BookNotFoundException) {
+                invalidBooks.add((id));
+            }
         });
+
+        validBooks.forEach(book -> {
+            bookCollection.remove(book);
+        });
+        if (invalidBooks.size() > 0) {
+            throw new BookNotFoundException(invalidBooks);
+        }
     }
 }

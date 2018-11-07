@@ -14,8 +14,8 @@ class DashBoard extends Component {
             deleteMode: false,
             deleteList: []
         }
-        this.clearDeleteList = this.clearDeleteList.bind(this);
         this.handleCheck = this.handleCheck.bind(this);
+        this.toggleSelectMode = this.toggleSelectMode.bind(this);
     }
 
     handleCheck(event) {
@@ -26,7 +26,8 @@ class DashBoard extends Component {
         this.setState({ deleteList: newDeleteList });
     }
 
-    clearDeleteList() {
+    toggleSelectMode() {
+        this.setState({ deleteMode: !this.state.deleteMode })
         this.setState({ deleteList: [] });
     }
 
@@ -35,10 +36,7 @@ class DashBoard extends Component {
             <div>
                 <div className={styles.navBar}>
                     <h1 className={styles.pageHeader}> Grad Library App </h1>
-                    <button onClick={() => {
-                        this.setState({ deleteMode: !this.state.deleteMode })
-                        this.clearDeleteList();
-                    }}>Select Books</button>
+                    <button onClick={this.toggleSelectMode}>Select Books</button>
                 </div>
                 <BookList
                     deleteMode={this.state.deleteMode}
@@ -46,7 +44,7 @@ class DashBoard extends Component {
                 ></BookList>
                 {this.state.deleteMode && this.state.deleteList.length > 0 &&
                     <DeleteBookModal
-                        clearDeleteList={this.clearDeleteList}
+                        toggleSelectMode={this.toggleSelectMode}
                         deleteList={this.state.deleteList}
                         deleteBook={this.props.deleteBook}
                     />
