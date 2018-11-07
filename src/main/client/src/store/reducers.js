@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import bookList from "../bookList/reducer";
 
 const allReducers = combineReducers({
-   bookList
+  bookList
 });
 
 export default allReducers;
