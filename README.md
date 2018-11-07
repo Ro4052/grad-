@@ -87,6 +87,8 @@ npm test
 - All tests must pass before a branch can merge into either of these
 - Develop requires a code review with at least two approvals
 - New front-end code will be automatically linted using [Husky](https://github.com/typicode/husky) and [Prettier](https://prettier.io/)
+- Feature branches should be named as such: _[story number]-[appropriate name]_
+- Feature branches should be deleted after the pull request has been merged
 
 ## Deployment
 
