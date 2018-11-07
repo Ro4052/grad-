@@ -47,7 +47,8 @@ public class BookRepository implements Repository<Book> {
     @Override
     public void add(Book book) {
         Book newBook = this.validateBook(book);
-        newBook.setId(bookCollection.size());
+        newBook.setId(id);
+        id++;
         bookCollection.add(newBook);
 
     }
