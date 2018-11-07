@@ -32,38 +32,56 @@ For Java, setup is fairly simple with IntelliJ
 For front-end dependencies run the following command in _/src/main/client_:
 
 ```
-npm i
+npm i
+```
+
+T
 ```
 
 To run a development version of the app you can use:
 
 ```
-npm start
+```
+
+To
 ```
 
-To setup automatic linting in VSCode you can refer to [this tutorial](https://www.youtube.com/watch?v=bfyI9yl3qfE) or follow there steps:
+To setup automatic linting in VSCode you can refer to load
+- Install the _Prettier - Code formatter_ plugin from  or follow there steps:
 
 - Install the _ESLint_ plugin from Dirk Baeumer and reload
 - Install the _Prettier - Code formatter_ plugin from Esben Petersen and reload
 - Go to settings
 
 ```
-Ctrl + ,
+
+- Click the three dots on the top left and select _Open settings.json_
+- I
 ```
 
 - Click the three dots on the top left and select _Open settings.json_
 - Insert the following options into the settings json:
 
 ```
-"editor.formatOnSave": true,
-"[javascript]": {
-  "editor.formatOnSave": false
-},
-"eslint.autoFixOnSave": true,
-"eslint.alwaysShowStatus": true,
-"prettier.disableLanguages": [
-  "js"
-]
+},
+"eslint.autoFixOnSave": true,
+"eslint.alwaysShowStatus": true,
+"prettier.disableLanguages": [
+"js"
+]
+```
+
+## Local Tests
+
+### Maven Tests
+
+Maven unit tests can be run directly from IntelliJ.
+
+### Node Tests
+
+Unit tests can be run with this commmand:
+
+```
 ```
 
 ## Local Tests
@@ -77,7 +95,9 @@ Maven unit tests can be run directly from IntelliJ.
 Unit tests can be run with this commmand:
 
 ```
-npm test
+Both _Master_ and _Develop_ have automatic deployments on Heroku
+
+- [
 ```
 
 ## Version Control
@@ -85,11 +105,11 @@ npm test
 - This repository has two protected branches, _Master_ and _Develop_
 - All tests must pass before a branch can merge into either of these
 - Develop requires a code review with at least two approvals
-- New code will be automatically linted using [Husky](https://github.com/typicode/husky) and [Prettier](https://prettier.io/)
+- New front-end code will be automatically linted using  and
 
 ## Deployment
 
 Both _Master_ and _Develop_ have automatic deployments on Heroku
 
-- [Master](https://bristol-library.herokuapp.com/)
-- [Develop](https://bristol-library-dev.herokuapp.com/)
+-
+-
