@@ -44,7 +44,6 @@ npm start
 
 To setup automatic linting in VSCode you can refer to [this tutorial](https://www.youtube.com/watch?v=bfyI9yl3qfE) or follow these steps:
 
-- Install the _ESLint_ plugin from Dirk Baeumer and reload
 - Install the _Prettier - Code formatter_ plugin from Esben Petersen and reload
 - Go to settings
 
@@ -56,15 +55,7 @@ Ctrl + ,
 - Insert the following options into the settings json:
 
 ```
-"editor.formatOnSave": true,
-"[javascript]": {
-  "editor.formatOnSave": false
-},
-"eslint.autoFixOnSave": true,
-"eslint.alwaysShowStatus": true,
-"prettier.disableLanguages": [
-  "js"
-]
+"editor.formatOnSave": true
 ```
 
 ## Local Tests
