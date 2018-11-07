@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class FilledBookRepository extends BookRepository {
 
-    FilledBookRepository() {
+    public FilledBookRepository() {
         this.add(Book.builder()
                 .isbn("9780747532743")
                 .title("Harry Potter and the Philosopher's Stone")
