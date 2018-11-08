@@ -7,7 +7,7 @@ Feature: Correctly deleting books from the database
     When A delete request is received for a book that exists
     Then That book is deleted
 
-  Scenario: A delete request is received for a book that exists
+  Scenario: A delete request is received for a book that does not exist
     When A delete request is received for a book that does not exist
     Then no books should be deleted
 
