@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount, dive } from "enzyme";
-import AddBook from "../../addBook/AddBook";
-import BookForm from "../../common/BookForm";
+import AddBook from "../../../dashBoard/addBook/AddBook";
+import BookForm from "../../../common/BookForm";
 
 describe('Add Book Tests', () => {
     let wrapper;

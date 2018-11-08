@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import store from "./store/store";
 import { Provider } from "react-redux";
-import { shallow } from "enzyme";
 
 describe('Startup application tests', () => {
 	test('Renders without crashing', () => {
@@ -13,10 +12,4 @@ describe('Startup application tests', () => {
 		</Provider>, div);
 		ReactDOM.unmountComponentAtNode(div);
 	});
-
-	test('it has correct header', () => {
-		const wrapper = shallow(<App store={store}/>);
-		expect(wrapper.find(".pageHeader").exists()).toEqual(true);
-		expect(wrapper.find(".pageHeader").text()).toEqual(" Grad Library App ")
-	})
 })
