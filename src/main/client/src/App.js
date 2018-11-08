@@ -1,17 +1,13 @@
-import React, { Component } from 'react';
-
-import styles from './App.module.css';
-import BookList from './bookList/BookList';
-import AddBook from './addBook/AddBook';
+import React, { Component } from "react";
+import styles from "./App.module.css";
+import DashBoard from "./dashBoard/DashBoard";
 
 export default class App extends Component {
-	render() {
-		return (
-			<div>
-				<h1 className={styles.pageHeader}> Grad Library App </h1>
-				<BookList></BookList>
-				<AddBook></AddBook>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className={styles.container}>
+        <DashBoard />
+      </div>
+    );
+  }
 }

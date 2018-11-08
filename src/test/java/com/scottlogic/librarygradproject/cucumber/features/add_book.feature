@@ -7,6 +7,14 @@ Feature: Correctly adding books to the database
     When An add book request is received with correct book details
     Then the book should enter the database
 
+  Scenario: An add book request is received without isbn
+    When An add book request is received without isbn
+    Then the book should enter the database
+
+  Scenario: An add book request is received without publish date
+    When An add book request is received without publish date
+    Then the book should enter the database
+
   Scenario: An add book request is received with incorrect ISBN value
     When An add book request is received with incorrect ISBN
     Then the book should not enter the database

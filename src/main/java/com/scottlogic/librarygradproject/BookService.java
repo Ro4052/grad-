@@ -3,6 +3,7 @@ package com.scottlogic.librarygradproject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -65,4 +66,24 @@ public class BookService {
     }
 
     public void deleteAll() {bookRepo.deleteAll();}
+
+    public void removeMultiple(List<Long> ids) {
+        List<Book> validBooks = new ArrayList<>();
+        List<Long> invalidBooks = new ArrayList<>();
+
+        ids.forEach(id -> {
+            try {
+                Book validBook = this.findOne(id);
+                validBooks.add(validBook);
+            }
+            catch(Exception BookNotFoundException) {
+                invalidBooks.add((id));
+            }
+        });
+
+        validBooks.forEach(book -> bookRepo.delete(book.getId()));
+        if (invalidBooks.size() > 0) {
+            throw new BookNotFoundException(invalidBooks);
+        }
+    }
 }

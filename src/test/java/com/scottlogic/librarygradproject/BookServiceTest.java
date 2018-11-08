@@ -1,17 +1,15 @@
 package com.scottlogic.librarygradproject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
-import static org.mockito.Mockito.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -24,9 +22,9 @@ public class BookServiceTest {
     @Autowired
     BookService service;
 
-    Book correctBook1 = new Book("0123456789", "Correct Book", "Correct Author", "1999");
-    Book correctBook2 = new Book("0123456789", "Correct Book", "Correct Author", "1999");
-    Book correctBook3 = new Book("0123456789", "Correct Book", "Correct Author", "1999");
+    Book correctBook1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
+    Book correctBook2 = new Book("0123456789222", "Correct Book2", "Correct Author2", "2002");
+    Book correctBook3 = new Book("0123456789333", "Correct Book3", "Correct Author3", "2003");
 
     @Test
     public void new_BookRepository_Is_Empty() {
@@ -146,7 +144,7 @@ public class BookServiceTest {
 
         List<Book> allBooks = service.findAll();
         allBooks.forEach(book -> System.out.println(book.getId()));
-        Book book = service.findOne((long) 2);
+        Book book = service.findOne(2L);
         assertEquals(correctBook2, book);
     }
 
@@ -163,7 +161,7 @@ public class BookServiceTest {
         service.save(correctBook1);
         service.save(correctBook2);
         service.save(correctBook3);
-        service.delete((long) 2);
+        service.delete(2L);
         List<Book> books = service.findAll();
         assertArrayEquals(new Book[]{correctBook1, correctBook3}, books.toArray());
     }
@@ -179,5 +177,48 @@ public class BookServiceTest {
         assertThat(service.findOne(1).getAuthor(), is(editedBook.getAuthor()));
         assertThat(service.findOne(1).getPublishDate(), is(editedBook.getPublishDate()));
         assertThat(service.findOne(1).getIsbn(), is(editedBook.getIsbn()));
+    }
+
+    @Test
+    public void delete_Multiple_Correct_Books() {
+
+        // Arrange
+        service.save(correctBook1);
+        service.save(correctBook2);
+        service.save(correctBook3);
+        List<Long> ids = new ArrayList<Long>();
+        ids.add(1L);
+        ids.add(3L);
+
+        // Act
+        service.removeMultiple(ids);
+        List<Book> books = service.findAll();
+
+        // Assert
+        assertArrayEquals(new Book[] { correctBook2 }, books.toArray());
+    }
+
+    @Test
+    public void delete_Multiple_Rejects_Invalid_Books() {
+
+        // Arrange
+        service.save(correctBook1);
+        service.save(correctBook2);
+        service.save(correctBook3);
+        List<Long> ids = new ArrayList<Long>();
+        ids.add(5L);
+        ids.add(2L);
+
+        // Act
+        try {
+            service.removeMultiple(ids);
+        }
+        catch(Exception BookNotFoundException) {
+            assertThat(BookNotFoundException.getMessage(), is("Could not find book ids: 5"));
+        }
+
+        // Assert
+        List<Book> books = service.findAll();
+        assertArrayEquals(new Book[] {correctBook1, correctBook3}, books.toArray());
     }
 }

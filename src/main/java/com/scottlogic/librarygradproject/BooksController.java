@@ -24,6 +24,11 @@ public class BooksController {
     @RequestMapping(value = "/books/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable long id) {bookService.delete(id);}
 
+    @RequestMapping(value = "/books", method = RequestMethod.DELETE)
+    public void delete(@RequestBody() List<Long> ids) {
+        bookService.removeMultiple(ids);
+    }
+
     @RequestMapping(value = "/books", method = RequestMethod.POST)
     public void post(@RequestBody() Book book) {bookService.save(book); }
 
