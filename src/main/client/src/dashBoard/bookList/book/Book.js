@@ -22,9 +22,9 @@ export default class Book extends Component {
           <h3 className={styles.bookTitle}>{book.title}</h3>
         )}
         <div className={styles.bookDetails}>
-          <div id="author">author: {book.author}</div>
-          <div id="isbn">isbn: {book.isbn}</div>
-          <div id="publishDate">publishDate: {book.publishDate}</div>
+          <div id="isbn">ISBN: {book.isbn}</div>
+          <div id="author">Author: {book.author}</div>
+          <div id="publishDate">Publish Date: {book.publishDate}</div>
         </div>
         {book.editState ? (
           <EditBook

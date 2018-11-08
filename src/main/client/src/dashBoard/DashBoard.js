@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import * as bookListActions from "./bookList/reducer";
 import { bindActionCreators } from "redux";
 import { Button } from "semantic-ui-react";
-import ScottLogicLogo from "../common/ScottLogicLogo.jpg";
+import scottLogicLogo from "../common/SL_primary_AW_POS_LO_RGB.jpg";
 
 class DashBoard extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class DashBoard extends Component {
       <div className={styles.dashBoard}>
         <div className={styles.navBar}>
           <img
-            src={ScottLogicLogo}
+            src={scottLogicLogo}
             alt="Scott Logic Logo"
             className={styles.logo}
           />

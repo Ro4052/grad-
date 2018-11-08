@@ -1,4 +1,5 @@
 .addBook {
-    flex: 1;
-    margin: 2em;
+  flex: 1;
+  margin: 1em;
+  width: 50%;
 }
