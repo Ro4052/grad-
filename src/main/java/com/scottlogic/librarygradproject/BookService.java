@@ -68,22 +68,11 @@ public class BookService {
     public void deleteAll() {bookRepo.deleteAll();}
 
     public void removeMultiple(List<Long> ids) {
-        List<Book> validBooks = new ArrayList<>();
-        List<Long> invalidBooks = new ArrayList<>();
-
-        ids.forEach(id -> {
-            try {
-                Book validBook = this.findOne(id);
-                validBooks.add(validBook);
-            }
-            catch(Exception BookNotFoundException) {
-                invalidBooks.add((id));
-            }
-        });
-
-        validBooks.forEach(book -> bookRepo.delete(book.getId()));
-        if (invalidBooks.size() > 0) {
-            throw new BookNotFoundException(invalidBooks);
+        List<Book> validBooks = bookRepo.findAll(ids);
+        validBooks.forEach(book -> ids.remove(book.getId()));
+        bookRepo.delete(validBooks);
+        if (ids.size() > 0) {
+            throw new BookNotFoundException(ids);
         }
     }
 }
