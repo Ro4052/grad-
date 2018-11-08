@@ -7,6 +7,8 @@ import cucumber.api.java8.En;
 import org.junit.Test;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 
@@ -17,6 +19,7 @@ public class Stepdefs implements En {
     FilledBookRepository filledRepo;
     BooksController controller;
     Book newBook;
+    int repoLength;
     public Stepdefs() {
 
         Given("a book repository exists", () -> {
@@ -108,7 +111,7 @@ public class Stepdefs implements En {
             }
             catch (IncorrectBookFormatException e) {}
         });
-        Then("^the database should not be modified$", () -> {
+        Then("^the book should not be edited$", () -> {
             assertNotEquals(filledRepo.get(0), newBook);
         });
         When("^An edit book request is received without author$", () -> {
@@ -195,6 +198,52 @@ public class Stepdefs implements En {
             newBook = new Book("0123456789", "Correct Book", "Correct Author", "");
             controller.post(newBook);
         });
+        When("^A delete request is received for a book that exists$", () -> {
+            repoLength = controller.getAll().size();
+            controller.delete(0);
+        });
+        Then("^That book is deleted$", () -> {
+            try {
+                controller.get(0);
+            }
+            catch (BookNotFoundException e) {}
+            assertEquals(repoLength-1,controller.getAll().size());
+        });
+        When("^A delete request is received for a book that does not exist$", () -> {
+            repoLength = controller.getAll().size();
+            try {
+                controller.delete(7);
+            }
+            catch (BookNotFoundException e) {}
+        });
+        When("^A delete request is received for multiple books that exist$", () -> {
+            repoLength = controller.getAll().size();
+            controller.delete(Arrays.asList(0,1));
+        });
+        Then("^those books are deleted$", () -> {
+            try {controller.get(0);} catch (BookNotFoundException e) {}
+            try {controller.get(1);} catch (BookNotFoundException e) {}
+            assertEquals(repoLength-2,controller.getAll().size());
+        });
+        When("^A delete request is received for multiple books, only some of which exist$", () -> {
+            repoLength = controller.getAll().size();
+            try {controller.delete(Arrays.asList(0,8));} catch  (BookNotFoundException e) {}
+        });
+        Then("^no books should be deleted$", () -> {
+            assertEquals(repoLength, controller.getAll().size());
+        });
+        Then("^existing books should be deleted$", () -> {
+            try {
+                controller.get(0);
+            }
+            catch (BookNotFoundException e) {}
+            assertEquals(repoLength-1,controller.getAll().size());
+        });
+        When("^A delete request is received for multiple books, none of which exist$", () -> {
+            repoLength = controller.getAll().size();
+            try {controller.delete(Arrays.asList(9,8));} catch  (BookNotFoundException e) {}
+        });
+
 
     }
 
