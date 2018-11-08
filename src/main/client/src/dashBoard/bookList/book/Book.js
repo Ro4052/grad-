@@ -6,7 +6,19 @@ export default class Book extends Component {
     const { book } = this.props;
     return (
       <li>
-        <h3>{book.title}</h3>
+        <h3>
+          {book.title}
+          {this.props.deleteMode && (
+            <label className="container">
+              <input
+                type="checkbox"
+                value={book.id}
+                onClick={this.props.handleCheck}
+              />
+              <span className="checkmark" />
+            </label>
+          )}
+        </h3>
         <p>
           author: {book.author}, isbn: {book.isbn}, publishDate:{" "}
           {book.publishDate}

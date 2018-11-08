@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import BookList from "../../bookList/BookList";
+import BookList from "../../../dashBoard/bookList/BookList";
 import configureStore from "redux-mock-store";
 
 const mockStore = configureStore();

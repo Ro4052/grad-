@@ -1,4 +1,4 @@
-import * as axios from "axios";
+import axios from "axios";
 
 const types = {
   GET_BOOKS: "bookList/GET_BOOKS",
@@ -37,6 +37,14 @@ export const updateBook = updatedBook => (dispatch, getState) => {
   const newBooks = getState().bookList.books.map(book => {
     return book.id === updatedBook.id ? updatedBook : book;
   });
+  dispatch(getBooksAction(newBooks));
+};
+
+export const deleteBook = bookIds => (dispatch, getState) => {
+  axios.delete("/api/books", { data: bookIds });
+  const newBooks = getState().bookList.books.filter(
+    book => !bookIds.includes(book.id.toString())
+  );
   dispatch(getBooksAction(newBooks));
 };
 

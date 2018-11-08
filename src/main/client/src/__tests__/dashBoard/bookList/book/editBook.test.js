@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
-import EditBook from "../../../bookList/book/EditBook";
-import BookForm from "../../../common/BookForm";
+import EditBook from "../../../../dashBoard/bookList/book/EditBook";
+import BookForm from "../../../../common/BookForm";
 
 const testBook1 = {
   title: "Harry Potter and the Philosopher's Stone",

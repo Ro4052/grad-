@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import BookForm from "../../common/BookForm";
+import BookForm from "../../../common/BookForm";
 
 export default class EditBook extends Component {
   render() {

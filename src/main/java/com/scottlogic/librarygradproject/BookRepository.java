@@ -47,7 +47,8 @@ public class BookRepository implements Repository<Book> {
     @Override
     public void add(Book book) {
         Book newBook = this.validateBook(book);
-        newBook.setId(bookCollection.size());
+        newBook.setId(id);
+        id++;
         bookCollection.add(newBook);
 
     }
@@ -73,6 +74,28 @@ public class BookRepository implements Repository<Book> {
         });
         if (!updated.getBool()) {
             throw new BookNotFoundException(id);
+        }
+    }
+
+    public void removeMultiple(List<Integer> ids) {
+        List<Book> validBooks = new ArrayList<>();
+        List<Integer> invalidBooks = new ArrayList<>();
+
+        ids.forEach(id -> {
+            try {
+                Book validBook = get(id);
+                validBooks.add(validBook);
+            }
+            catch(Exception BookNotFoundException) {
+                invalidBooks.add((id));
+            }
+        });
+
+        validBooks.forEach(book -> {
+            bookCollection.remove(book);
+        });
+        if (invalidBooks.size() > 0) {
+            throw new BookNotFoundException(invalidBooks);
         }
     }
 }

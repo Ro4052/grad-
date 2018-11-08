@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import bookList from "../bookList/reducer";
+import bookList from "../dashBoard/bookList/reducer";
 
 const allReducers = combineReducers({
   bookList
