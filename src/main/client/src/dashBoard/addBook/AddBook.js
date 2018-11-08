@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import * as axios from "axios";
 import BookForm from "../../common/BookForm"
-
-
+import styles from "./AddBook.module.css";
 
 export default class AddBook extends Component {
 
@@ -11,20 +10,21 @@ export default class AddBook extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-        handleSubmit(newBook) { axios.post('/api/books', newBook); }
+    handleSubmit(newBook) { axios.post('/api/books', newBook); }
 
     render() {
         const newBook = {
-                id: "",
-                isbn: "",
-                title: "",
-                author: "",
-            publishDate: ""}
+            id: "",
+            isbn: "",
+            title: "",
+            author: "",
+            publishDate: ""
+        }
         return (
-            <div>
-                <BookForm 
+            <div className={styles.addBook}>
+                <BookForm
                     book={newBook}
-                    buttonText = "Add Book"
+                    buttonText="Add Book"
                     handleSubmit={this.handleSubmit}
                 />
             </div>

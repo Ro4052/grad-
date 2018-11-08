@@ -1,0 +1,11 @@
+.bookListContainer {
+    flex: 10;
+    overflow-y: auto;
+}
+
+.bookList {
+    margin: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
