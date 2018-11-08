@@ -25,6 +25,7 @@ export default class DeleteBookModal extends Component {
     return (
       <div>
         <Modal
+          id="modal"
           trigger={
             <Button
               disabled={!(this.props.deleteList.length > 0)}
