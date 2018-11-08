@@ -17,10 +17,10 @@ describe("Book Validation Tests", () => {
 
   test("all fields are populated", () => {
     const wrapper = shallow(<Book book={testBook} />);
-    expect(wrapper.find("#author").text()).toBe(`author: ${testBook.author}`);
-    expect(wrapper.find("#isbn").text()).toBe(`isbn: ${testBook.isbn}`);
+    expect(wrapper.find("#author").text()).toBe(`Author: ${testBook.author}`);
+    expect(wrapper.find("#isbn").text()).toBe(`ISBN: ${testBook.isbn}`);
     expect(wrapper.find("#publishDate").text()).toBe(
-      `publishDate: ${testBook.publishDate}`
+      `Publish Date: ${testBook.publishDate}`
     );
   });
 });
