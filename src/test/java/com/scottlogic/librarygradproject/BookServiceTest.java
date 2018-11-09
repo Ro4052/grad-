@@ -1,8 +1,12 @@
 package com.scottlogic.librarygradproject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,215 +14,191 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class BookRepositoryTest {
+@RunWith(SpringRunner.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DataJpaTest
+public class BookServiceTest {
 
-    BookRepository repo;
-    Book correctBook1 = new Book("0123456789", "Correct Book", "Correct Author", "1999");
-    Book correctBook2 = new Book("0123456789", "Correct Book", "Correct Author", "1999");
-    Book correctBook3 = new Book("0123456789", "Correct Book", "Correct Author", "1999");
+    @Autowired
+    BookService service;
 
-    @Before
-    public void before_Each_Test() {
-        repo = new BookRepository();
-    }
+    Book correctBook1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
+    Book correctBook2 = new Book("0123456789222", "Correct Book2", "Correct Author2", "2002");
+    Book correctBook3 = new Book("0123456789333", "Correct Book3", "Correct Author3", "2003");
 
     @Test
     public void new_BookRepository_Is_Empty() {
-
-        // Act
-        List<Book> books = repo.getAll();
-
-        // Assert
+        List<Book> books = service.findAll();
         assertTrue(books.isEmpty());
     }
 
     @Test
     public void add_Inserts_New_Book() {
-        // Act
-        repo.add(correctBook1);
-        List<Book> books = repo.getAll();
-
-        // Assert
-        assertArrayEquals(new Book[] {correctBook1}, books.toArray());
+        service.save(correctBook1);
+        List<Book> books = service.findAll();
+        assertArrayEquals(new Book[]{correctBook1}, books.toArray());
     }
 
     @Test
     public void add_With_Whitespaces_Trims_And_Inserts() {
         Book newBook = new Book("  1231231231231 ", "    Correct Book ", "  Correct Author  ", " 1999 ");
-        repo.add(newBook);
+        service.save(newBook);
         Book trimmedBook = new Book("1231231231231", "Correct Book", "Correct Author", "1999");
-        assertArrayEquals(new Book[] {trimmedBook}, repo.getAll().toArray() );
-    }
-
-    @Test
-    public void add_Sets_New_Id() {
-        // Act
-        repo.add(correctBook1);
-        List<Book> books = repo.getAll();
-
-        // Assert
-        assertEquals(0, books.get(0).getId());
+        assertArrayEquals(new Book[]{trimmedBook}, service.findAll().toArray());
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Incorrect_BookISBN_Throws() {
         Book newBook = new Book("012345678", "Correct Book", "Correct Author", "1999");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test
     public void add_With_Null_BookISBN_Works() {
         Book newBook = new Book(null, "Correct Book", "Correct Author", "1999");
-        repo.add(newBook);
-        assertArrayEquals(new Book[] {newBook}, repo.getAll().toArray() );
+        service.save(newBook);
+        assertArrayEquals(new Book[]{newBook}, service.findAll().toArray());
     }
 
     @Test
     public void add_With_Empty_BookISBN_Works() {
         Book newBook = new Book("", "Correct Book", "Correct Author", "1999");
-        repo.add(newBook);
-        assertArrayEquals(new Book[] {newBook}, repo.getAll().toArray() );
+        service.save(newBook);
+        assertArrayEquals(new Book[]{newBook}, service.findAll().toArray());
     }
 
     @Test
     public void add_With_10Digits_BookISBN_Works() {
         Book newBook = new Book("1231231231", "Correct Book", "Correct Author", "1999");
-        repo.add(newBook);
-        assertArrayEquals(new Book[] {newBook}, repo.getAll().toArray() );
+        service.save(newBook);
+        assertArrayEquals(new Book[]{newBook}, service.findAll().toArray());
     }
 
     @Test
     public void add_With_13Digits_BookISBN_Works() {
         Book newBook = new Book("1231231231231", "Correct Book", "Correct Author", "1999");
-        repo.add(newBook);
-        assertArrayEquals(new Book[] {newBook}, repo.getAll().toArray() );
+        service.save(newBook);
+        assertArrayEquals(new Book[]{newBook}, service.findAll().toArray());
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_9Digits_1Letter_BookISBN_Throws() {
         Book newBook = new Book("123123123A", "Correct Book", "Correct Author", "1999");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_12Digits_1Letter_BookISBN_Throws() {
         Book newBook = new Book("123123123123A", "Correct Book", "Correct Author", "1999");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Empty_BookTitle_Throws() {
         Book newBook = new Book("012345678", "", "Correct Author", "1999");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Null_BookTitle_Throws() {
         Book newBook = new Book("012345678", null, "Correct Author", "1999");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_TooLong_BookTitle_Throws() {
         String longTitle = StringUtils.repeat("A", 201);
         Book newBook = new Book("012345678", longTitle, "Correct Author", "1999");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Empty_BookAuthor_Throws() {
         Book newBook = new Book("012345678", "1", "", "1999");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Null_BookAuthor_Throws() {
         Book newBook = new Book("012345678", "1", null, "1999");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_TooLong_BookAuthor_Throws() {
         String longAuthor = StringUtils.repeat("A", 201);
         Book newBook = new Book("012345678", "1", longAuthor, "1999");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Incorrect_BookPublishDate_Throws() {
         Book newBook = new Book("012345678", "Correct Book", "Correct Author", "19991");
-        repo.add(newBook);
+        service.save(newBook);
     }
 
     @Test
     public void get_Returns_Specific_Books() {
-        repo.add(correctBook1);
-        repo.add(correctBook2);
+        service.save(correctBook1);
+        service.save(correctBook2);
 
-        // Act
-        Book book = repo.get(1);
-
-        // Assert
+        List<Book> allBooks = service.findAll();
+        Book book = service.findOne(2L);
         assertEquals(correctBook2, book);
     }
 
     @Test
     public void getAll_Returns_All_Books() {
-        repo.add(correctBook1);
-        repo.add(correctBook2);
-
-        // Act
-        List<Book> books = repo.getAll();
-
-        // Assert
-        assertArrayEquals(new Book[] { correctBook1, correctBook2 }, books.toArray());
+        service.save(correctBook1);
+        service.save(correctBook2);
+        List<Book> books = service.findAll();
+        assertArrayEquals(new Book[]{correctBook1, correctBook2}, books.toArray());
     }
 
     @Test
     public void delete_Removes_Correct_Book() {
-        repo.add(correctBook1);
-        repo.add(correctBook2);
-        repo.add(correctBook3);
-
-        // Act
-        repo.remove(1);
-        List<Book> books = repo.getAll();
-
-        // Assert
-        assertArrayEquals(new Book[] { correctBook1, correctBook3 }, books.toArray());
+        service.save(correctBook1);
+        service.save(correctBook2);
+        service.save(correctBook3);
+        service.delete(2L);
+        List<Book> books = service.findAll();
+        assertArrayEquals(new Book[]{correctBook1, correctBook3}, books.toArray());
     }
 
     @Test
-    public void update_Updates_Correct_Book() {
+    public void put_Updates_Correct_Book() {
 
         // Arrange
-        FilledBookRepository repo = new FilledBookRepository();
+        service.save(correctBook1);
+        service.save(correctBook2);
+        service.save(correctBook3);
         Book editedBook = Book.builder().isbn("1010101010").title("new Title").publishDate("1027").author("New Author").build();
+        editedBook.setId(1);
 
         // Act
-        repo.update(editedBook, 1);
+        service.put(editedBook);
 
         // Assert
-        assertThat(repo.get(1).getTitle(), is(editedBook.getTitle()));
-        assertThat(repo.get(1).getAuthor(), is(editedBook.getAuthor()));
-        assertThat(repo.get(1).getPublishDate(), is(editedBook.getPublishDate()));
-        assertThat(repo.get(1).getIsbn(), is(editedBook.getIsbn()));
+        assertThat(service.findOne(1).getTitle(), is(editedBook.getTitle()));
+        assertThat(service.findOne(1).getAuthor(), is(editedBook.getAuthor()));
+        assertThat(service.findOne(1).getPublishDate(), is(editedBook.getPublishDate()));
+        assertThat(service.findOne(1).getIsbn(), is(editedBook.getIsbn()));
     }
 
     @Test
     public void delete_Multiple_Correct_Books() {
 
         // Arrange
-        repo.add(correctBook1);
-        repo.add(correctBook2);
-        repo.add(correctBook3);
-        List<Integer> ids = new ArrayList<Integer>();
-        ids.add(0);
-        ids.add(2);
+        service.save(correctBook1);
+        service.save(correctBook2);
+        service.save(correctBook3);
+        List<Long> ids = new ArrayList<Long>();
+        ids.add(1L);
+        ids.add(3L);
 
         // Act
-        repo.removeMultiple(ids);
-        List<Book> books = repo.getAll();
+        service.removeMultiple(ids);
+        List<Book> books = service.findAll();
 
         // Assert
         assertArrayEquals(new Book[] { correctBook2 }, books.toArray());
@@ -228,23 +208,23 @@ public class BookRepositoryTest {
     public void delete_Multiple_Rejects_Invalid_Books() {
 
         // Arrange
-        repo.add(correctBook1);
-        repo.add(correctBook2);
-        repo.add(correctBook3);
-        List<Integer> ids = new ArrayList<Integer>();
-        ids.add(5);
-        ids.add(2);
+        service.save(correctBook1);
+        service.save(correctBook2);
+        service.save(correctBook3);
+        List<Long> ids = new ArrayList<Long>();
+        ids.add(5L);
+        ids.add(2L);
 
         // Act
         try {
-            repo.removeMultiple(ids);
+            service.removeMultiple(ids);
         }
         catch(Exception BookNotFoundException) {
             assertThat(BookNotFoundException.getMessage(), is("Could not find book ids: 5"));
         }
 
         // Assert
-        List<Book> books = repo.getAll();
-        assertArrayEquals(new Book[] {correctBook1, correctBook2}, books.toArray());
+        List<Book> books = service.findAll();
+        assertArrayEquals(new Book[] {correctBook1, correctBook3}, books.toArray());
     }
 }

@@ -1,6 +1,5 @@
 package com.scottlogic.librarygradproject;
 
-
 public class BooleanWrapper {
 
     private boolean bool;
@@ -17,6 +16,4 @@ public class BooleanWrapper {
 
         return this.bool;
     }
-
-
 }

@@ -7,13 +7,13 @@ import static org.mockito.Mockito.*;
 
 public class BooksControllerTest {
 
-    FilledBookRepository mockRepo;
+    BookService bookService;
     BooksController controller;
 
     @Before
     public void before_Each_Test() {
-        mockRepo = mock(FilledBookRepository.class);
-        controller = new BooksController(mockRepo);
+        bookService = mock(BookService.class);
+        controller = new BooksController(bookService);
     }
 
     @Test
@@ -22,7 +22,7 @@ public class BooksControllerTest {
         controller.getAll();
 
         // Assert
-        verify(mockRepo).getAll();
+        verify(bookService).findAll();
     }
 
     @Test
@@ -34,7 +34,7 @@ public class BooksControllerTest {
         controller.get(id);
 
         // Assert
-        verify(mockRepo).get(id);
+        verify(bookService).findOne(id);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class BooksControllerTest {
         controller.post(newBook);
 
         // Assert
-        verify(mockRepo).add(newBook);
+        verify(bookService).save(newBook);
     }
 
     @Test
@@ -59,6 +59,6 @@ public class BooksControllerTest {
         controller.delete(id);
 
         // Assert
-        verify(mockRepo).remove(id);
+        verify(bookService).delete(id);
     }
 }
