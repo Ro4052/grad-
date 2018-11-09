@@ -1,15 +1,17 @@
 package com.scottlogic.librarygradproject;
 
-
-
 import lombok.Builder;
-
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Builder
+@Entity
 public class Book {
-    private int id;
+    @Id
+    @GeneratedValue
+    private long id;
     private String isbn;
-
     private String title;
     private String author;
     private String publishDate;
@@ -30,11 +32,11 @@ public class Book {
         }
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -77,7 +79,6 @@ public class Book {
 
         Book book = (Book) o;
 
-        if (id != book.id) return false;
         if (isbn != null ? !isbn.equals(book.isbn) : book.isbn != null) return false;
         if (title != null ? !title.equals(book.title) : book.title != null) return false;
         if (author != null ? !author.equals(book.author) : book.author != null) return false;
@@ -86,7 +87,7 @@ public class Book {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (int) id;
         result = 31 * result + (isbn != null ? isbn.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (author != null ? author.hashCode() : 0);
