@@ -13,7 +13,9 @@ public class BookService {
     private final BookRepository bookRepo;
 
     @Autowired
-    public BookService(BookRepository bookRepo) {this.bookRepo = bookRepo;}
+    public BookService(BookRepository bookRepo) {
+        this.bookRepo = bookRepo;
+    }
 
     private Book validateBook(Book book) {
         book.setIsbn(Optional.ofNullable(book.getIsbn()).orElse("").trim());
@@ -37,7 +39,9 @@ public class BookService {
         return book;
     }
 
-    public List<Book> findAll() {return bookRepo.findAll();}
+    public List<Book> findAll() {
+        return bookRepo.findAll();
+    }
 
     public Book findOne(long id) {
         Optional<Book> bookToGet = Optional.ofNullable(bookRepo.findOne(id));
@@ -47,25 +51,25 @@ public class BookService {
     public void delete(long id) {
         try {
             bookRepo.delete(id);
-        }
-        catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new BookNotFoundException(id);
         }
     }
 
     public void save(Book book) {
-        Book newBook = this.validateBook(book);
+        Book newBook = validateBook(book);
         bookRepo.save(newBook);
     }
 
-    public void put(Book book, long id) {
-        this.findOne(id);
-        Book updatedBook = this.validateBook(book);
-        book.setId(id);
+    public void put(Book book) {
+        findOne(book.getId());
+        Book updatedBook = validateBook(book);
         bookRepo.save(updatedBook);
     }
 
-    public void deleteAll() {bookRepo.deleteAll();}
+    public void deleteAll() {
+        bookRepo.deleteAll();
+    }
 
     public void removeMultiple(List<Long> ids) {
         List<Book> validBooks = bookRepo.findAll(ids);
