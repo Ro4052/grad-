@@ -3,12 +3,13 @@ import Book from "./book/Book";
 import { connect } from "react-redux";
 import * as bookListActions from "./reducer";
 import { bindActionCreators } from "redux";
+import styles from "./BookList.module.css";
 
 class BookList extends Component {
   render() {
     return (
-      <div>
-        <ul>
+      <div className={styles.bookListContainer}>
+        <ul className={styles.bookList}>
           {this.props.books.map(book => (
             <Book
               deleteMode={this.props.deleteMode}

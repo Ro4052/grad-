@@ -4,7 +4,8 @@ import DeleteBookModal from "../../../common/modals/DeleteBookModal";
 
 describe("Modal renders when open", () => {
   test("modal renders correct heading", () => {
-    const wrapper = shallow(<DeleteBookModal />);
+    const deleteList = [];
+    const wrapper = shallow(<DeleteBookModal deleteList={deleteList} />);
     expect(wrapper.find("#modalHeader").exists()).toEqual(true);
     expect(
       wrapper
@@ -15,7 +16,8 @@ describe("Modal renders when open", () => {
   });
 
   test("modal renders yes and no buttons", () => {
-    const wrapper = shallow(<DeleteBookModal />);
+    const deleteList = [];
+    const wrapper = shallow(<DeleteBookModal deleteList={deleteList} />);
     expect(
       wrapper
         .find("#noBtn")
@@ -32,9 +34,11 @@ describe("Modal renders when open", () => {
 
   test("Delete button calls deleteBooks function", () => {
     const deleteBook = jest.fn();
+    const deleteList = [];
     const toggleSelectMode = jest.fn();
     const wrapper = shallow(
       <DeleteBookModal
+        deleteList={deleteList}
         deleteBook={deleteBook}
         toggleSelectMode={toggleSelectMode}
       />
@@ -45,7 +49,8 @@ describe("Modal renders when open", () => {
   });
 
   test("Cancel button sets modal open state to false", () => {
-    const wrapper = shallow(<DeleteBookModal />);
+    const deleteList = [];
+    const wrapper = shallow(<DeleteBookModal deleteList={deleteList} />);
     wrapper.setState({ open: true });
     wrapper.find("#noBtn").prop("onClick")();
     expect(wrapper.state("open")).toEqual(false);
