@@ -167,11 +167,18 @@ public class BookServiceTest {
 
     @Test
     public void put_Updates_Correct_Book() {
+
+        // Arrange
         service.save(correctBook1);
         service.save(correctBook2);
         service.save(correctBook3);
         Book editedBook = Book.builder().isbn("1010101010").title("new Title").publishDate("1027").author("New Author").build();
-        service.put(editedBook, 1);
+        editedBook.setId(1);
+
+        // Act
+        service.put(editedBook);
+
+        // Assert
         assertThat(service.findOne(1).getTitle(), is(editedBook.getTitle()));
         assertThat(service.findOne(1).getAuthor(), is(editedBook.getAuthor()));
         assertThat(service.findOne(1).getPublishDate(), is(editedBook.getPublishDate()));

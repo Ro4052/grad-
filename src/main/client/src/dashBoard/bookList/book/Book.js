@@ -1,28 +1,31 @@
 import React, { Component } from "react";
 import EditBook from "./EditBook";
+import styles from "./Book.module.css";
 
 export default class Book extends Component {
   render() {
     const { book } = this.props;
     return (
-      <li>
-        <h3>
-          {book.title}
-          {this.props.deleteMode && (
-            <label className="container">
-              <input
-                type="checkbox"
-                value={book.id}
-                onClick={this.props.handleCheck}
-              />
-              <span className="checkmark" />
-            </label>
-          )}
-        </h3>
-        <p>
-          author: {book.author}, isbn: {book.isbn}, publishDate:{" "}
-          {book.publishDate}
-        </p>
+      <li className={styles.book}>
+        {this.props.deleteMode ? (
+          <h3 className={styles.bookTitle}>
+            <input
+              id={book.id}
+              className={styles.checkBox}
+              type="checkbox"
+              value={book.id}
+              onClick={this.props.handleCheck}
+            />
+            <label htmlFor={book.id}>{book.title}</label>
+          </h3>
+        ) : (
+          <h3 className={styles.bookTitle}>{book.title}</h3>
+        )}
+        <div className={styles.bookDetails}>
+          <div id="isbn">ISBN: {book.isbn}</div>
+          <div id="author">Author: {book.author}</div>
+          <div id="publishDate">Publish Date: {book.publishDate}</div>
+        </div>
         {book.editState ? (
           <EditBook
             updateBook={this.props.updateBook}

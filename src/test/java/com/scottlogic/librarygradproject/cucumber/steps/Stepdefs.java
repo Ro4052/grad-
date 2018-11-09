@@ -101,7 +101,8 @@ public class Stepdefs implements En {
         });
         When("^An edit book request is received with correct book details$", () -> {
             newBook = new Book("0123456789", "Correct Book", "Correct Author", "1999");
-            controller.put(newBook, id);
+            newBook.setId(id);
+            controller.put(newBook);
             System.out.println(controller.getAll().get(0).getId());
         });
         Then("^the modified book should replace the original$", () -> {
@@ -109,8 +110,9 @@ public class Stepdefs implements En {
         });
         When("^An edit book request is received with incorrect ISBN$", () -> {
             newBook = new Book("012345678", "Correct Book", "Correct Author", "1999");
+            newBook.setId(id);
             try {
-                controller.put(newBook, id);
+                controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
@@ -119,79 +121,92 @@ public class Stepdefs implements En {
         });
         When("^An edit book request is received without author$", () -> {
             newBook = new Book("0123456789", "Correct Book","", "1999");
+            newBook.setId(id);
             try {
-                controller.put( newBook, id);
+                controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An edit book request is received without title$", () -> {
             newBook = new Book("0123456789", "","Correct Title", "1999");
+            newBook.setId(id);
             try {
-                controller.put(newBook, id);
+                controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An edit book request is received with author too long$", () -> {
             String longAuthor = StringUtils.repeat("A", 201);
             newBook = new Book("0123456789", "Correct Book", longAuthor, "1999");
+            newBook.setId(id);
             try {
-                controller.put(newBook, id);
+                controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An edit book request is received with title too long$", () -> {
             String longTitle = StringUtils.repeat("A", 201);
             newBook = new Book("0123456789", longTitle, "Correct Author", "1999");
+            newBook.setId(id);
             try {
-                controller.put(newBook, id);
+                controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An edit book request is received with incorrect date format$", () -> {
             newBook = new Book("0123456789", "Correct Book", "Correct Author", "19998");
+            newBook.setId(id);
             try {
-                controller.put(newBook, id);
+                controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An edit book request is received with leading and trailing whitespace in fields otherwise acceptable$", () -> {
             newBook = new Book("   0123456789    ", "  Correct Book  ", "  Correct Author  ", "  1999      ");
+            newBook.setId(id);
             Book trimBook = new Book("0123456789", "Correct Book", "Correct Author", "1999");
-            controller.put(newBook, id);
+            controller.put(newBook);
             newBook = trimBook;
         });
         When("^An edit book request is received with leading and trailing whitespace in fields and unacceptable$", () -> {
             newBook = new Book("   012345679    ", "  Correct Book  ", "  Correct Author  ", "  19939      ");
+            newBook.setId(id);
             Book trimBook = new Book("012345679", "Correct Book", "Correct Author", "19939");
             try {
-                controller.put(newBook, id);
+                controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
             newBook = trimBook;
         });
         When("^An edit book request is received without isbn$", () -> {
             newBook = new Book("", "Correct Book", "Correct Author", "1999");
-            controller.put(newBook, id);
+            newBook.setId(id);
+            controller.put(newBook);
         });
         When("^An edit book request is received without publish date$", () -> {
             newBook = new Book("0123456789", "Correct Book", "Correct Author", "");
-            controller.put(newBook, id);
+            newBook.setId(id);
+            controller.put(newBook);
         });
         Given("^A book exists without isbn$", () -> {
             newBook = new Book("", "Correct Book", "Correct Author", "1999");
-            controller.put(newBook, id);
+            newBook.setId(id);
+            controller.put(newBook);
         });
         When("^The book is edited to have isbn$", () -> {
             newBook = new Book("0123456789", "Correct Book", "Correct Author", "1999");
-            controller.put(newBook, id);
+            newBook.setId(id);
+            controller.put(newBook);
         });
         Given("^A book exists without publish date$", () -> {
             newBook = new Book("0123456789", "Correct Book", "Correct Author", "");
-            controller.put(newBook, id);
+            newBook.setId(id);
+            controller.put(newBook);
         });
         When("^The book is edited to have publish date$", () -> {
             newBook = new Book("0123456789", "Correct Book", "Correct Author", "1999");
-            controller.put(newBook, id);
+            newBook.setId(id);
+            controller.put(newBook);
         });
         When("^An add book request is received without isbn$", () -> {
             newBook = new Book("", "Correct Book", "Correct Author", "1999");

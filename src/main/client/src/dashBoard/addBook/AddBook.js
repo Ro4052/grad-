@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as axios from "axios";
 import BookForm from "../../common/BookForm";
+import styles from "./AddBook.module.css";
 
 export default class AddBook extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ export default class AddBook extends Component {
       publishDate: ""
     };
     return (
-      <div>
+      <div className={styles.addBook}>
         <BookForm
           book={newBook}
           buttonText="Add Book"
