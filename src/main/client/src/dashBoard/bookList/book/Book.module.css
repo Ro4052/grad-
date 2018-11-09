@@ -4,6 +4,10 @@
   margin-bottom: 2em;
 }
 
+.bookTitle {
+  word-break: break-word;
+}
+
 input[type="checkbox"] + label {
   display: block;
   cursor: pointer;
