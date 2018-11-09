@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import styles from "./BookForm.module.css";
 
 export default class BookForm extends Component {
   constructor(props) {
@@ -49,9 +50,10 @@ export default class BookForm extends Component {
     let date = new Date().getFullYear();
     return (
       <form onSubmit={this.submitForm}>
-        <div>
-          <label>ISBN</label>
+        <div className={styles.formItem}>
+          <label className={styles.formLabel}>ISBN:</label>
           <input
+            className={styles.formInput}
             type="text"
             pattern="^[0-9]{10}|[0-9]{13}$"
             maxLength="13"
@@ -61,9 +63,10 @@ export default class BookForm extends Component {
             onChange={this.handleChange}
           />
         </div>
-        <div>
-          <label>Title</label>
+        <div className={styles.formItem}>
+          <label className={styles.formLabel}>Title:</label>
           <input
+            className={styles.formInput}
             type="text"
             placeholder="Title"
             value={this.state.title}
@@ -73,9 +76,10 @@ export default class BookForm extends Component {
             onChange={this.handleChange}
           />
         </div>
-        <div>
-          <label>Author</label>
+        <div className={styles.formItem}>
+          <label className={styles.formLabel}>Author:</label>
           <input
+            className={styles.formInput}
             type="text"
             placeholder="Author"
             value={this.state.author}
@@ -85,9 +89,10 @@ export default class BookForm extends Component {
             onChange={this.handleChange}
           />
         </div>
-        <div>
-          <label>Publish Date</label>
+        <div className={styles.formItem}>
+          <label className={styles.formLabel}>Publish Date:</label>
           <input
+            className={styles.formInput}
             type="number"
             placeholder="Publish Date"
             value={this.state.publishDate}
@@ -97,7 +102,7 @@ export default class BookForm extends Component {
             onChange={this.handleChange}
           />
         </div>
-        <div>
+        <div className={styles.formItem}>
           <button type="submit" id="submitButton">
             {this.state.buttonText}
           </button>

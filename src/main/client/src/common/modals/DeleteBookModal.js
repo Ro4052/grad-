@@ -25,13 +25,15 @@ export default class DeleteBookModal extends Component {
     return (
       <div>
         <Modal
+          id="modal"
           trigger={
-            <button
+            <Button
+              disabled={!this.props.deleteList.length}
               id="delBookBtn"
               onClick={() => this.setState({ open: true })}
             >
               Delete Selected Book(s)
-            </button>
+            </Button>
           }
           basic
           size="small"
