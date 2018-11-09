@@ -1,24 +1,13 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import React, { Component } from "react";
+import styles from "./App.module.css";
+import DashBoard from "./dashBoard/DashBoard";
 
-import styles from './App.module.css';
-import BookList from './bookList/BookList';
-
-class App extends Component {
-	render() {
-		return (
-			<div>
-				<h1 className={styles.pageHeader}> Grad Library App </h1>
-				<BookList books={this.props.books}></BookList>
-			</div>
-		);
-	}
+export default class App extends Component {
+  render() {
+    return (
+      <div className={styles.container}>
+        <DashBoard />
+      </div>
+    );
+  }
 }
-
-const mapStateToProps = state => ({
-	books: state.bookList.books
-});
- 
-// const mapDispatchToProps = dispatch => bindActionCreators(loginActions, dispatch);
- 
-export default connect(mapStateToProps)(App);

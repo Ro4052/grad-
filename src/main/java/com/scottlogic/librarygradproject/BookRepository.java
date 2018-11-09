@@ -1,31 +1,10 @@
 package com.scottlogic.librarygradproject;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public class BookRepository implements Repository<Book> {
+@Repository
+public interface BookRepository extends JpaRepository<Book, Long> {
 
-    private List<Book> bookCollection = new ArrayList<>();
 
-    @Override
-    public Book get(int id) {
-        return bookCollection.stream().filter(book -> book.getId() == id).findFirst().get();
-    }
-
-    @Override
-    public List<Book> getAll() {
-        return bookCollection;
-    }
-
-    @Override
-    public void add(Book entity) {
-        entity.setId(bookCollection.size());
-        bookCollection.add(entity);
-    }
-
-    @Override
-    public void remove(int id) {
-        Book bookToRemove = get(id);
-        bookCollection.remove(bookToRemove);
-    }
 }

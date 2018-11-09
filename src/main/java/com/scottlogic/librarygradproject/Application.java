@@ -1,5 +1,6 @@
 package com.scottlogic.librarygradproject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -7,12 +8,16 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Application {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+    @Autowired
+    BookRepository bookRepository;
 
     @Bean
-    public BookRepository getBookRepository(){
-        return new BookRepository();
+    @Autowired
+    public BookService getBookService(BookRepository bookRepository) {
+        return new BookService(bookRepository);
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
     }
 }
