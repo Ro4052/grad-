@@ -1,3 +1,11 @@
+html,
+body,
+#root,
 .container {
-  margin: 1em;
+  height: 100vh;
+  width: 100vw;
+}
+
+.container {
+  padding: 0.5em;
 }

@@ -6,6 +6,8 @@ import DeleteBookModal from "../common/modals/DeleteBookModal";
 import { connect } from "react-redux";
 import * as bookListActions from "./bookList/reducer";
 import { bindActionCreators } from "redux";
+import { Button } from "semantic-ui-react";
+import scottLogicLogo from "../common/SL_primary_AW_POS_LO_RGB.jpg";
 
 class DashBoard extends Component {
   constructor(props) {
@@ -33,22 +35,34 @@ class DashBoard extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.dashBoard}>
         <div className={styles.navBar}>
+          <img
+            src={scottLogicLogo}
+            alt="Scott Logic Logo"
+            className={styles.logo}
+          />
           <h1 className={styles.pageHeader}> Grad Library App </h1>
-          <button onClick={this.toggleSelectMode}>Select Books</button>
+          <div className={styles.navBtns}>
+            <Button
+              className={styles.selectBookBtn}
+              size="small"
+              onClick={this.toggleSelectMode}
+            >
+              Select Books
+            </Button>
+            <DeleteBookModal
+              deleteMode={this.state.deleteMode}
+              toggleSelectMode={this.toggleSelectMode}
+              deleteList={this.state.deleteList}
+              deleteBook={this.props.deleteBook}
+            />
+          </div>
         </div>
         <BookList
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
         />
-        {this.state.deleteMode && this.state.deleteList.length > 0 && (
-          <DeleteBookModal
-            toggleSelectMode={this.toggleSelectMode}
-            deleteList={this.state.deleteList}
-            deleteBook={this.props.deleteBook}
-          />
-        )}
         <AddBook />
       </div>
     );
