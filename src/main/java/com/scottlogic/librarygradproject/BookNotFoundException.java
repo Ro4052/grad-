@@ -9,12 +9,13 @@ import java.util.List;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class BookNotFoundException extends RuntimeException {
 
-    private List<Integer> bookIDs = new ArrayList<>();
 
-    public BookNotFoundException(int id) {
+    private List<Long> bookIDs = new ArrayList<>();
+
+    public BookNotFoundException(long id) {
         this.bookIDs.add(id);
     }
-    public BookNotFoundException(List<Integer> listOfIds) {
+    public BookNotFoundException(List<Long> listOfIds) {
         this.bookIDs = listOfIds;
     }
 

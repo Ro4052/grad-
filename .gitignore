@@ -15,6 +15,7 @@ target/
 src/main/client/node_modules/
 src/main/client/node/
 src/main/client/build/
+src/main/resources/application-dev.properties
 
 # Node
 node_modules/
