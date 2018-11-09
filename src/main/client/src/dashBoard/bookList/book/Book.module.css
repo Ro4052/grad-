@@ -1,7 +1,11 @@
 .book {
-  width: 50%;
+  width: 45%;
   margin-top: 2em;
   margin-bottom: 2em;
+}
+
+.bookTitle {
+  word-break: break-word;
 }
 
 input[type="checkbox"] + label {
