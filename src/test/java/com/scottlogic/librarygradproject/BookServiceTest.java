@@ -143,7 +143,6 @@ public class BookServiceTest {
         service.save(correctBook2);
 
         List<Book> allBooks = service.findAll();
-        allBooks.forEach(book -> System.out.println(book.getId()));
         Book book = service.findOne(2L);
         assertEquals(correctBook2, book);
     }
