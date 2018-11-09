@@ -144,7 +144,7 @@
             </properties>
             <activation>
                 <property>
-                    <name>env.PROD</name>
+                    <name>env.MAVEN_PROD</name>
                 </property>
             </activation>
         </profile>
