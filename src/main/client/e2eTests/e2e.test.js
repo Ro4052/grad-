@@ -3,24 +3,32 @@ const puppeteer = require('puppeteer');
 let browser; 
 let page;
 
-describe('Google', () => {
-    beforeAll (async () => {
-        browser = await puppeteer.launch({
-            headless: false
-        });
-        page = await browser.newPage();
-    })
-
-    beforeEach(async () => { 
-        await page.goto('https://google.com'); 
-    })
-
-    it('should display "google" text on page', async () => {
-        const text = await page.evaluate(() => document.body.textContent)
-        expect(text).toContain('google')
-      })
-
-    afterEach(async () => { 
-        await browser.close()
-    })
+beforeAll(async () => { 
+    browser = await puppeteer.launch({
+        headless: false,
+        //args: ['--disable-dev-shm-usage'],
+    });
+    page = await browser.newPage();
+    await page.goto('https://bristol-library-dev.herokuapp.com/'); 
+    await page.waitForSelector('.DashBoard_pageHeader__6uKJh');
 })
+
+afterAll(async () => { 
+    await browser.close()
+})
+
+describe('Main page', () => {
+    it('should display "Grad Library App" text on page', async () => {
+        const text = await page.evaluate(() => document.body.textContent)
+        expect(text).toContain('Grad Library App')
+    })
+    //it('shows a list of books', async () => {
+       // await page.$$('.bookList')
+    //})
+})
+
+// describe('Adding a book',() => {
+//     it('the add book field is visible', async () => {
+//         await page.$$('.addBook');
+//     })
+// })
