@@ -49,7 +49,8 @@ export const deleteBook = bookIds => (dispatch, getState) => {
 };
 
 export const reserveBook = bookId => () => {
-  console.log(bookId);
+  // Need to handle any server response
+  axios.post(`/api/reserve/${bookId}`);
 };
 
 // Reducers
