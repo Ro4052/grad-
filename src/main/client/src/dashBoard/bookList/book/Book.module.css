@@ -12,7 +12,6 @@
 
 .bookFieldBreak {
   overflow-wrap: break-word;
-  color: red;
 }
 
 input[type="checkbox"] + label {
