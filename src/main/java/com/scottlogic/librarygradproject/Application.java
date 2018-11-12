@@ -1,5 +1,7 @@
 package com.scottlogic.librarygradproject;
 
+import com.scottlogic.librarygradproject.Repositories.BookRepository;
+import com.scottlogic.librarygradproject.Services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
