@@ -48,6 +48,10 @@ export const deleteBook = bookIds => (dispatch, getState) => {
   dispatch(getBooksAction(newBooks));
 };
 
+export const reserveBook = bookId => () => {
+  console.log(bookId);
+};
+
 // Reducers
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {

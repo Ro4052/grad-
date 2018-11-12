@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Button } from "semantic-ui-react";
+
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
 
@@ -70,6 +72,9 @@ export default class Book extends Component {
             Publish Date: {book.publishDate}
           </div>
         </div>
+        <Button primary onClick={() => this.props.reserveBook(book.id)}>
+          Reserve
+        </Button>
         {book.editState ? (
           <EditBook
             updateBook={this.props.updateBook}
@@ -77,9 +82,9 @@ export default class Book extends Component {
             editStateChange={this.props.editStateChange}
           />
         ) : (
-          <button onClick={() => this.props.editStateChange(book.id)}>
+          <Button onClick={() => this.props.editStateChange(book.id)}>
             Edit
-          </button>
+          </Button>
         )}
       </li>
     );

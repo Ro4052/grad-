@@ -16,6 +16,7 @@ class BookList extends Component {
               handleCheck={this.props.handleCheck}
               updateBook={this.props.updateBook}
               editStateChange={this.props.editStateChange}
+              reserveBook={this.props.reserveBook}
               key={book.id}
               book={book}
             />
