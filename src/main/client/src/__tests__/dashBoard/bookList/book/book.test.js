@@ -3,6 +3,7 @@ import Book from "../../../../dashBoard/bookList/book/Book";
 import { shallow } from "enzyme";
 
 const testBook = {
+  id: 1,
   title: "Harry Potter",
   author: "JK Rowling",
   isbn: "1000000000",
@@ -17,9 +18,9 @@ describe("Book Validation Tests", () => {
 
   test("all fields are populated", () => {
     const wrapper = shallow(<Book book={testBook} />);
-    expect(wrapper.find("#author").text()).toBe(`Author: ${testBook.author}`);
-    expect(wrapper.find("#isbn").text()).toBe(`ISBN: ${testBook.isbn}`);
-    expect(wrapper.find("#publishDate").text()).toBe(
+    expect(wrapper.find("#author1").text()).toBe(`Author: ${testBook.author}`);
+    expect(wrapper.find("#isbn1").text()).toBe(`ISBN: ${testBook.isbn}`);
+    expect(wrapper.find("#publishDate1").text()).toBe(
       `Publish Date: ${testBook.publishDate}`
     );
   });
