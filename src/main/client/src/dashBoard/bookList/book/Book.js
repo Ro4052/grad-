@@ -40,7 +40,9 @@ export default class Book extends Component {
               value={book.id}
               onClick={this.props.handleCheck}
             />
-            <label htmlFor={book.id}>{book.title}</label>
+            <label htmlFor={book.id} className={styles.bookFieldBreak}>
+              {book.title}
+            </label>
           </h3>
         ) : (
           <h3
