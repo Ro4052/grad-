@@ -8,7 +8,7 @@ export default class Book extends Component {
     return (
       <li className={styles.book}>
         {this.props.deleteMode ? (
-          <h3>
+          <h3 id={`bookTitle${book.id}`}>
             <input
               id={book.id}
               className={styles.checkBox}
@@ -19,14 +19,18 @@ export default class Book extends Component {
             <label htmlFor={book.id}>{book.title}</label>
           </h3>
         ) : (
-          <h3 className={styles.bookField}>{book.title}</h3>
+          <h3 id={`bookTitle${book.id}`} className={styles.bookField}>
+            {book.title}
+          </h3>
         )}
         <div className={styles.bookDetails}>
-          <div id="isbn">ISBN: {book.isbn}</div>
-          <div id="author" className={styles.bookField}>
+          <div id={`isbn${book.id}`}>ISBN: {book.isbn}</div>
+          <div id={`author${book.id}`} className={styles.bookField}>
             Author: {book.author}
           </div>
-          <div id="publishDate">Publish Date: {book.publishDate}</div>
+          <div id={`publishDate${book.id}`}>
+            Publish Date: {book.publishDate}
+          </div>
         </div>
         {book.editState ? (
           <EditBook
