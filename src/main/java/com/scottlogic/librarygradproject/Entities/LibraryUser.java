@@ -1,4 +1,4 @@
-package com.scottlogic.librarygradproject;
+package com.scottlogic.librarygradproject.Entities;
 
 import lombok.Data;
 
