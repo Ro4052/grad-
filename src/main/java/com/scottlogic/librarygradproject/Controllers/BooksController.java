@@ -1,5 +1,7 @@
-package com.scottlogic.librarygradproject;
+package com.scottlogic.librarygradproject.Controllers;
 
+import com.scottlogic.librarygradproject.Entities.Book;
+import com.scottlogic.librarygradproject.Services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
