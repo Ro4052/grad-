@@ -4,6 +4,10 @@
   margin-bottom: 2em;
 }
 
+.bookDetails {
+  margin-bottom: 0.5em;
+}
+
 .bookFieldEllipsis {
   white-space: nowrap;
   overflow: hidden;
