@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "semantic-ui-react";
+import { Button, Popup } from "semantic-ui-react";
 
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
@@ -74,9 +74,15 @@ export default class Book extends Component {
             Publish Date: {book.publishDate}
           </div>
         </div>
-        <Button primary onClick={() => this.props.reserveBook(book.id)}>
-          Reserve
-        </Button>
+        <Popup
+          on="click"
+          trigger={
+            <Button primary onClick={() => this.props.reserveBook(book.id)}>
+              Reserve
+            </Button>
+          }
+          content={this.props.reservePopText}
+        />
         {book.editState ? (
           <EditBook
             updateBook={this.props.updateBook}
