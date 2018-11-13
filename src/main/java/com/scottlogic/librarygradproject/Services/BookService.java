@@ -1,9 +1,12 @@
-package com.scottlogic.librarygradproject;
+package com.scottlogic.librarygradproject.Services;
 
+import com.scottlogic.librarygradproject.Entities.Book;
+import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
+import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
+import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +61,7 @@ public class BookService {
 
     public void save(Book book) {
         Book newBook = validateBook(book);
-        bookRepo.save(newBook);
+        bookRepo.insert(newBook);
     }
 
     public void put(Book book) {

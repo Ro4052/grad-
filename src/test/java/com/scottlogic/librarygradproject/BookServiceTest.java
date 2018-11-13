@@ -1,5 +1,8 @@
 package com.scottlogic.librarygradproject;
 
+import com.scottlogic.librarygradproject.Entities.Book;
+import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
+import com.scottlogic.librarygradproject.Services.BookService;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -142,7 +145,6 @@ public class BookServiceTest {
         service.save(correctBook1);
         service.save(correctBook2);
 
-        List<Book> allBooks = service.findAll();
         Book book = service.findOne(2L);
         assertEquals(correctBook2, book);
     }
