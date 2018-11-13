@@ -10,7 +10,7 @@ const testBook = {
   publishDate: "1999"
 };
 
-describe("Book Validation Tests", () => {
+describe("Book Component Tests", () => {
   test("title matches test data", () => {
     const wrapper = shallow(<Book book={testBook} />);
     expect(wrapper.find("h3").text()).toBe(testBook.title);
@@ -23,5 +23,15 @@ describe("Book Validation Tests", () => {
     expect(wrapper.find("#publishDate1").text()).toBe(
       `Publish Date: ${testBook.publishDate}`
     );
+  });
+
+  test("reserveBook action called with the right ID", () => {
+    const reserveBook = jest.fn();
+    const wrapper = shallow(<Book book={testBook} reserveBook={reserveBook} />);
+    wrapper
+      .find("Button")
+      .first()
+      .simulate("click");
+    expect(reserveBook).toHaveBeenCalledWith(testBook.id);
   });
 });
