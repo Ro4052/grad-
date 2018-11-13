@@ -72,7 +72,6 @@ public class ReservationServiceTest {
         //Arrange
         long id = 1;
         bookService.save(book1);
-        System.out.println(res1);
         userService.add(correctUser);
 
         //Act
