@@ -6,6 +6,8 @@ import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class ReservationService {
 
     private final ReservationRepository resRepo;
@@ -25,10 +27,14 @@ public class ReservationService {
     }
 
     public void reserve(long bookId) {
-        String username = "Not Boss"; //sessions[token].username;
+        String username = "Boss"; //sessions[token].username;
         validateReservation(bookId, username);
         Reservation reservation = Reservation.builder().bookId(bookId).username(username).build();
         resRepo.save(reservation);
+    }
+
+    public List<Reservation> findAll() {
+        return resRepo.findAll();
     }
 
 }

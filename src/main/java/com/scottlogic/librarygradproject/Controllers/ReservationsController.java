@@ -21,7 +21,7 @@ public class ReservationsController {
     }
 
     @RequestMapping(value = "/reserve/{bookId}", method = RequestMethod.POST)
-    public void reserve(@PathVariable long bookId) {
+    public void post(@PathVariable long bookId) {
         reservationService.reserve(bookId);
     }
 }
