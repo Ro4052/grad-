@@ -57,7 +57,7 @@ export const deleteBook = bookIds => (dispatch, getState) => {
 
 export const reserveBook = bookId => dispatch => {
   // Reset popup text
-  dispatch(reserveText(""));
+  dispatch(reserveText("Loading..."));
   axios
     .post(`/api/reserve/${bookId}`)
     .then(() => {
