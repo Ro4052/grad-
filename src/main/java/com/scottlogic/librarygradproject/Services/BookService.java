@@ -61,7 +61,7 @@ public class BookService {
 
     public void save(Book book) {
         Book newBook = validateBook(book);
-        bookRepo.save(newBook);
+        bookRepo.insert(newBook);
     }
 
     public void put(Book book) {
