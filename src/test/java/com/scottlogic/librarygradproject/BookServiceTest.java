@@ -155,6 +155,8 @@ public class BookServiceTest {
         service.save(correctBook1);
         service.save(correctBook2);
         List<Book> books = service.findAll();
+        System.out.println(correctBook1.getTitle());
+        System.out.println(books.get(0).getTitle());
         assertArrayEquals(new Book[]{correctBook1, correctBook2}, books.toArray());
     }
 
