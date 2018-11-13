@@ -23,7 +23,9 @@ public class UserServiceTest {
     @Autowired
     UserService service;
 
-    LibraryUser user1 = new LibraryUser("TestUser");
+    LibraryUser user1 = new LibraryUser("TestUser 1");
+    LibraryUser user2 = new LibraryUser("TestUser 2");
+    LibraryUser user3 = new LibraryUser("TestUser 3");
 
     @Test
     public void add_user() {
@@ -35,7 +37,9 @@ public class UserServiceTest {
     @Test
     public void find_One_User() {
         service.add(user1);
-        LibraryUser user = service.findOne("TestUser");
+        service.add(user2);
+        service.add(user3);
+        LibraryUser user = service.findOne("TestUser 1");
         assertEquals(user1, user);
     }
 
