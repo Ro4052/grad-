@@ -11,7 +11,8 @@ public class LibraryUser {
     @Id
     private String username;
 
-    public LibraryUser() { }
+    public LibraryUser() {
+    }
 
     public LibraryUser(String username) {
         this.username = username;

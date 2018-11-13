@@ -145,7 +145,6 @@ public class BookServiceTest {
         service.save(correctBook1);
         service.save(correctBook2);
 
-        List<Book> allBooks = service.findAll();
         Book book = service.findOne(2L);
         assertEquals(correctBook2, book);
     }

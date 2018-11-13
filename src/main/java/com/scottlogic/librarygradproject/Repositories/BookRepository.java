@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Transactional
@@ -18,3 +19,4 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     public void insert(@Param("newBook") Book newBook);
 
 }
+
