@@ -24,4 +24,11 @@ public class ReservationsController {
     public void post(@PathVariable long bookId) {
         reservationService.reserve(bookId);
     }
+
+    @RequestMapping(value = "/reserve/{reservationId}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable long reservationId) { reservationService.delete(reservationId); }
+
+    // get all
+
+    // get one
 }
