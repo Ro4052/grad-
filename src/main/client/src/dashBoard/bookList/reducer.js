@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const types = {
   GET_BOOKS: "bookList/GET_BOOKS",
-  EDIT_STATE: "bookList/EDIT_STATE",
   RESERVE_TEXT: "bookList/RESERVE_TEXT"
 };
 
