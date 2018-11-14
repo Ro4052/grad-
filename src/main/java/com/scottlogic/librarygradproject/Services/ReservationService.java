@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 
 public class ReservationService {
 
@@ -53,5 +54,10 @@ public class ReservationService {
         } catch (EmptyResultDataAccessException e) {
             throw new ReservationNotFoundException(reservationId);
         }
+    }
+
+    public Reservation findOne(long reservationId) {
+        Optional<Reservation> reservationToGet = Optional.ofNullable(resRepo.findOne(reservationId));
+        return reservationToGet.orElseThrow(() -> new ReservationNotFoundException(reservationId));
     }
 }
