@@ -52,6 +52,31 @@ jobs:
           name: Run Client Tests
           command: cd src/main/client && set CI=true && npm run test
 
+  e2e_test:
+    docker:
+      - image: circleci/node:8
+        environment:
+          TEST_DATABASE_URL: postgresql://localhost:5432/postgres
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: node-dependencies-{{ checksum "src/main/client/package.json" }}
+
+      - run:
+          name: Setup Node Dependencies
+          command: cd src/main/client && npm install
+
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: node-dependencies-{{ checksum "src/main/client/package.json" }}
+
+      - run:
+          name: Run Client Tests
+          command: cd src/main/client && set CI=true && npm run test
+
 workflows:
   version: 2
   test_all:
