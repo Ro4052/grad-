@@ -32,4 +32,31 @@ public class ReservationsControllerTest {
         verify(reservationService).reserve(id);
     }
 
+    @Test
+    public void delete_calls_Repo_delete() {
+        //Act
+        controller.delete(1);
+
+        //Assert
+        verify(reservationService).delete(1);
+    }
+
+    @Test
+    public void get_calls_Repo_findOne() {
+        //Act
+        controller.get(1);
+
+        //Assert
+        verify(reservationService).findOne(1);
+    }
+
+    @Test
+    public void getAll_calls_Repo_findAll() {
+        //Act
+        controller.getAll();
+
+        //Assert
+        verify(reservationService).findAll();
+    }
+
 }
