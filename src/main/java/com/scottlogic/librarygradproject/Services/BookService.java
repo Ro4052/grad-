@@ -61,7 +61,10 @@ public class BookService {
 
     public void save(Book book) {
         Book newBook = validateBook(book);
-        bookRepo.insert(newBook);
+        if (newBook.getId() != 0) {
+            throw new IncorrectBookFormatException();
+        }
+        bookRepo.save(newBook);
     }
 
     public void put(Book book) {
