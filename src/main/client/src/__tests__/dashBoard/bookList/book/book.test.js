@@ -31,4 +31,11 @@ describe("Book Component Tests", () => {
     shallow(wrapper.find("Popup").props().trigger).simulate("click");
     expect(reserveBook).toHaveBeenCalledWith(testBook.id);
   });
+
+  test("popup has the right text", () => {
+    const wrapper = shallow(
+      <Book book={testBook} reservePopText="Test text" />
+    );
+    expect(wrapper.find("Popup").props().content).toBe("Test text");
+  });
 });
