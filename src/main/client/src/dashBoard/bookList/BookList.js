@@ -13,7 +13,9 @@ export class BookList extends Component {
           {this.props.books
             .filter(book =>
               this.props.searchString.length > 0
-                ? book.title.includes(this.props.searchString)
+                ? book.title
+                    .toLowerCase()
+                    .includes(this.props.searchString.toLowerCase())
                 : book
             )
             .map(book => (
