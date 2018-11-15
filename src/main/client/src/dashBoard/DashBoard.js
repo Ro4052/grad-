@@ -74,7 +74,6 @@ class DashBoard extends Component {
         />
         <BookList
           searchString={this.state.searchString}
-          books={this.props.books}
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
         />
@@ -84,14 +83,10 @@ class DashBoard extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  books: state.bookList.books
-});
-
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...bookListActions }, dispatch);
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(DashBoard);

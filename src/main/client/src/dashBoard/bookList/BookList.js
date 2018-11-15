@@ -24,6 +24,8 @@ export class BookList extends Component {
                 editStateChange={this.props.editStateChange}
                 key={book.id}
                 book={book}
+                reserveBook={this.props.reserveBook}
+                reservePopText={this.props.reservePopText}
               />
             ))}
         </ul>
@@ -32,10 +34,15 @@ export class BookList extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  books: state.bookList.books,
+  reservePopText: state.bookList.reservePopText
+});
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...bookListActions }, dispatch);
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(BookList);
