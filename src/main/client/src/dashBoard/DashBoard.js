@@ -16,7 +16,6 @@ class DashBoard extends Component {
     this.state = {
       deleteMode: false,
       deleteList: [],
-      refinedList: [],
       searchString: ""
     };
     this.handleCheck = this.handleCheck.bind(this);
@@ -39,10 +38,7 @@ class DashBoard extends Component {
 
   handleChange(e) {
     this.setState({
-      searchString: e.target.value,
-      refinedList: this.props.books.filter(book =>
-        e.target.value.length > 0 ? book.title.includes(e.target.value) : book
-      )
+      searchString: e.target.value
     });
   }
 
@@ -77,11 +73,8 @@ class DashBoard extends Component {
           searchValue={this.state.searchValue}
         />
         <BookList
-          books={
-            this.state.refinedList.length || this.state.searchString.length > 0
-              ? this.state.refinedList
-              : this.props.books
-          }
+          searchString={this.state.searchString}
+          books={this.props.books}
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
         />

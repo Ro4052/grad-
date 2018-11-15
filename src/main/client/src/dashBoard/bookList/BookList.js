@@ -10,31 +10,32 @@ class BookList extends Component {
     return (
       <div className={styles.bookListContainer}>
         <ul className={styles.bookList}>
-          {this.props.books.map(book => (
-            <Book
-              deleteMode={this.props.deleteMode}
-              handleCheck={this.props.handleCheck}
-              updateBook={this.props.updateBook}
-              editStateChange={this.props.editStateChange}
-              key={book.id}
-              book={book}
-            />
-          ))}
+          {this.props.books
+            .filter(book =>
+              this.props.searchString.length > 0
+                ? book.title.includes(this.props.searchString)
+                : book
+            )
+            .map(book => (
+              <Book
+                deleteMode={this.props.deleteMode}
+                handleCheck={this.props.handleCheck}
+                updateBook={this.props.updateBook}
+                editStateChange={this.props.editStateChange}
+                key={book.id}
+                book={book}
+              />
+            ))}
         </ul>
       </div>
     );
   }
 }
 
-// const mapStateToProps = state => ({
-//   books: state.bookList.books
-// });
-
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...bookListActions }, dispatch);
 
 export default connect(
-  // mapStateToProps,
   null,
   mapDispatchToProps
 )(BookList);
