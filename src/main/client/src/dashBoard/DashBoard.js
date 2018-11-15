@@ -15,10 +15,13 @@ class DashBoard extends Component {
     super(props);
     this.state = {
       deleteMode: false,
-      deleteList: []
+      deleteList: [],
+      refinedList: [],
+      searchString: ""
     };
     this.handleCheck = this.handleCheck.bind(this);
     this.toggleSelectMode = this.toggleSelectMode.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleCheck(event) {
@@ -32,6 +35,15 @@ class DashBoard extends Component {
   toggleSelectMode() {
     this.setState({ deleteMode: !this.state.deleteMode });
     this.setState({ deleteList: [] });
+  }
+
+  handleChange(e) {
+    this.setState({
+      searchString: e.target.value,
+      refinedList: this.props.books.filter(book =>
+        e.target.value.length > 0 ? book.title.includes(e.target.value) : book
+      )
+    });
   }
 
   render() {
@@ -60,8 +72,16 @@ class DashBoard extends Component {
             />
           </div>
         </div>
-        <SearchBar books={this.props.books} />
+        <SearchBar
+          handleChange={this.handleChange}
+          searchValue={this.state.searchValue}
+        />
         <BookList
+          books={
+            this.state.refinedList.length || this.state.searchString.length > 0
+              ? this.state.refinedList
+              : this.props.books
+          }
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
         />

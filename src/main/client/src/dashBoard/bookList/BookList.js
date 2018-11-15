@@ -26,14 +26,15 @@ class BookList extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  books: state.bookList.filteredBooks
-});
+// const mapStateToProps = state => ({
+//   books: state.bookList.books
+// });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...bookListActions }, dispatch);
 
 export default connect(
-  mapStateToProps,
+  // mapStateToProps,
+  null,
   mapDispatchToProps
 )(BookList);
