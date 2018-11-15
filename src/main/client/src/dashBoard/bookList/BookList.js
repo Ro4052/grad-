@@ -5,7 +5,7 @@ import * as bookListActions from "./reducer";
 import { bindActionCreators } from "redux";
 import styles from "./BookList.module.css";
 
-class BookList extends Component {
+export class BookList extends Component {
   render() {
     return (
       <div className={styles.bookListContainer}>
