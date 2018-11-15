@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Button, Popup } from "semantic-ui-react";
+
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
 
@@ -38,7 +40,9 @@ export default class Book extends Component {
               value={book.id}
               onClick={this.props.handleCheck}
             />
-            <label htmlFor={book.id}>{book.title}</label>
+            <label htmlFor={book.id} className={styles.bookFieldBreak}>
+              {book.title}
+            </label>
           </h3>
         ) : (
           <h3
@@ -70,6 +74,15 @@ export default class Book extends Component {
             Publish Date: {book.publishDate}
           </div>
         </div>
+        <Popup
+          on="click"
+          trigger={
+            <Button primary onClick={() => this.props.reserveBook(book.id)}>
+              Reserve
+            </Button>
+          }
+          content={this.props.reservePopText}
+        />
         {book.editState ? (
           <EditBook
             updateBook={this.props.updateBook}
@@ -77,9 +90,9 @@ export default class Book extends Component {
             editStateChange={this.props.editStateChange}
           />
         ) : (
-          <button onClick={() => this.props.editStateChange(book.id)}>
+          <Button onClick={() => this.props.editStateChange(book.id)}>
             Edit
-          </button>
+          </Button>
         )}
       </li>
     );
