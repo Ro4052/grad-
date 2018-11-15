@@ -27,7 +27,7 @@ class BookList extends Component {
 }
 
 const mapStateToProps = state => ({
-  books: state.bookList.books
+  books: state.bookList.filteredBooks
 });
 
 const mapDispatchToProps = dispatch =>

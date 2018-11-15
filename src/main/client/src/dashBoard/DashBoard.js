@@ -8,6 +8,7 @@ import * as bookListActions from "./bookList/reducer";
 import { bindActionCreators } from "redux";
 import { Button } from "semantic-ui-react";
 import scottLogicLogo from "../common/SL_primary_AW_POS_LO_RGB.jpg";
+import SearchBar from "./searchBar/SearchBar";
 
 class DashBoard extends Component {
   constructor(props) {
@@ -59,6 +60,7 @@ class DashBoard extends Component {
             />
           </div>
         </div>
+        <SearchBar books={this.props.books} />
         <BookList
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
@@ -69,10 +71,14 @@ class DashBoard extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  books: state.bookList.books
+});
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...bookListActions }, dispatch);
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(DashBoard);
