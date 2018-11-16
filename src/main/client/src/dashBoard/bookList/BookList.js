@@ -7,7 +7,6 @@ import styles from "./BookList.module.css";
 
 export class BookList extends Component {
   render() {
-    const searchBy = this.props.searchBy;
     return (
       <div className={styles.bookListContainer}>
         <ul className={styles.bookList}>
@@ -15,12 +14,22 @@ export class BookList extends Component {
             .filter(book => {
               book.all = `${book.title} ${book.author} ${book.isbn} ${
                 book.publishDate
-              }`; //find a better way to do this
-              return this.props.searchString.length > 0
-                ? book[searchBy]
-                    .toLowerCase()
-                    .includes(this.props.searchString.toLowerCase())
-                : book;
+              }`;
+              if (this.props.searchBy !== "publishDate") {
+                return this.props.searchString.length > 0
+                  ? book[this.props.searchBy]
+                      .toLowerCase()
+                      .includes(this.props.searchString.toLowerCase())
+                  : book;
+              } else {
+                const lowerDate = Number(this.props.lowerDate) || 0;
+                const upperDate =
+                  Number(this.props.upperDate) || new Date().getFullYear();
+                return (
+                  Number(book.publishDate) > lowerDate &&
+                  Number(book.publishDate) < upperDate
+                );
+              }
             })
             .map(book => (
               <Book

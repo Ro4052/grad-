@@ -17,12 +17,16 @@ class DashBoard extends Component {
       deleteMode: false,
       deleteList: [],
       searchString: "",
+      lowerDate: "",
+      upperDate: "",
       searchBy: "all"
     };
     this.handleCheck = this.handleCheck.bind(this);
     this.toggleSelectMode = this.toggleSelectMode.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSearchByChange = this.handleSearchByChange.bind(this);
+    this.handleLowerDateChange = this.handleLowerDateChange.bind(this);
+    this.handleUpperDateChange = this.handleUpperDateChange.bind(this);
   }
 
   handleCheck(event) {
@@ -44,8 +48,19 @@ class DashBoard extends Component {
     });
   }
 
+  handleLowerDateChange(e) {
+    this.setState({
+      lowerDate: e.target.value
+    });
+  }
+
+  handleUpperDateChange(e) {
+    this.setState({
+      upperDate: e.target.value
+    });
+  }
+
   handleSearchByChange(e) {
-    console.log(e.target.value);
     this.setState({
       searchBy: e.target.value
     });
@@ -78,14 +93,20 @@ class DashBoard extends Component {
           </div>
         </div>
         <SearchBar
-          // searchBySelection={this.props.searchBySelection}
           handleSearchByChange={this.handleSearchByChange}
           handleChange={this.handleChange}
+          handleLowerDateChange={this.handleLowerDateChange}
+          handleUpperDateChange={this.handleUpperDateChange}
           searchValue={this.state.searchValue}
+          upperDate={this.state.upperDate}
+          lowerDate={this.state.lowerDate}
+          searchBy={this.state.searchBy}
         />
         <BookList
           searchBy={this.state.searchBy}
           searchString={this.state.searchString}
+          upperDate={this.state.upperDate}
+          lowerDate={this.state.lowerDate}
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
         />

@@ -22,6 +22,25 @@
   outline: none;
 }
 
+.dateEntry {
+  width: 20%;
+  height: 100%;
+  border-radius: 1.25em;
+  border: solid 1px grey;
+  text-align: center;
+  font-size: 1.5em;
+  margin: 0em 2em 0em 0.5em;
+}
+
+.dateLabel {
+  font-size: 1.25em;
+  align-self: center;
+}
+
+.dateSearchContainer {
+  width: 33em;
+}
+
 .dropdownContainer {
   height: 100%;
 }
