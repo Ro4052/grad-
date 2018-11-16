@@ -55,7 +55,7 @@ public class ReservationServiceTest {
     @Test(expected = BookNotFoundException.class)
     public void invalid_bookId_throws_exception() {
         //Arrange
-        long id = 10;
+        long id = 10L;
         userService.add(correctUser);
 
         //Act

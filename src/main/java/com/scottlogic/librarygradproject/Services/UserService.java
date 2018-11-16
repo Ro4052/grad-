@@ -22,7 +22,7 @@ public class UserService {
     }
 
     public LibraryUser findOne(String username) {
-        Optional<LibraryUser> User = Optional.ofNullable(userRepo.findOne(username));
+        Optional<LibraryUser> User = userRepo.findById(username);
         return User.orElseThrow(() -> new UserNotFoundException(username));
     }
 

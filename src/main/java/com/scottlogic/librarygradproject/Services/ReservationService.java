@@ -50,14 +50,14 @@ public class ReservationService {
 
     public void delete(long reservationId) {
         try {
-            resRepo.delete(reservationId);
+            resRepo.deleteById(reservationId);
         } catch (EmptyResultDataAccessException e) {
             throw new ReservationNotFoundException(reservationId);
         }
     }
 
     public Reservation findOne(long reservationId) {
-        Optional<Reservation> reservationToGet = Optional.ofNullable(resRepo.findOne(reservationId));
+        Optional<Reservation> reservationToGet = resRepo.findById(reservationId);
         return reservationToGet.orElseThrow(() -> new ReservationNotFoundException(reservationId));
     }
 }

@@ -8,6 +8,7 @@ import * as bookListActions from "./bookList/reducer";
 import { bindActionCreators } from "redux";
 import { Button } from "semantic-ui-react";
 import scottLogicLogo from "../common/SL_primary_AW_POS_LO_RGB.jpg";
+import axios from "axios";
 
 class DashBoard extends Component {
   constructor(props) {
@@ -58,6 +59,8 @@ class DashBoard extends Component {
               deleteBook={this.props.deleteBook}
             />
           </div>
+          <a href={process.env.REACT_APP_LOGIN}>Login</a>
+          <button onClick={() => axios.post("/logout")}>Logout</button>
         </div>
         <BookList
           deleteMode={this.state.deleteMode}
