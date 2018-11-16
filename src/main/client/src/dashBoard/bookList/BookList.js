@@ -7,17 +7,21 @@ import styles from "./BookList.module.css";
 
 export class BookList extends Component {
   render() {
+    const searchBy = this.props.searchBy;
     return (
       <div className={styles.bookListContainer}>
         <ul className={styles.bookList}>
           {this.props.books
-            .filter(book =>
-              this.props.searchString.length > 0
-                ? book.title
+            .filter(book => {
+              book.all = `${book.title} ${book.author} ${book.isbn} ${
+                book.publishDate
+              }`; //find a better way to do this
+              return this.props.searchString.length > 0
+                ? book[searchBy]
                     .toLowerCase()
                     .includes(this.props.searchString.toLowerCase())
-                : book
-            )
+                : book;
+            })
             .map(book => (
               <Book
                 deleteMode={this.props.deleteMode}

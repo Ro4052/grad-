@@ -16,11 +16,13 @@ class DashBoard extends Component {
     this.state = {
       deleteMode: false,
       deleteList: [],
-      searchString: ""
+      searchString: "",
+      searchBy: "all"
     };
     this.handleCheck = this.handleCheck.bind(this);
     this.toggleSelectMode = this.toggleSelectMode.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleSearchByChange = this.handleSearchByChange.bind(this);
   }
 
   handleCheck(event) {
@@ -39,6 +41,13 @@ class DashBoard extends Component {
   handleChange(e) {
     this.setState({
       searchString: e.target.value
+    });
+  }
+
+  handleSearchByChange(e) {
+    console.log(e.target.value);
+    this.setState({
+      searchBy: e.target.value
     });
   }
 
@@ -69,10 +78,13 @@ class DashBoard extends Component {
           </div>
         </div>
         <SearchBar
+          // searchBySelection={this.props.searchBySelection}
+          handleSearchByChange={this.handleSearchByChange}
           handleChange={this.handleChange}
           searchValue={this.state.searchValue}
         />
         <BookList
+          searchBy={this.state.searchBy}
           searchString={this.state.searchString}
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
