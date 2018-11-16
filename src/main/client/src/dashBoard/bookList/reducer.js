@@ -2,7 +2,8 @@ import axios from "axios";
 
 export const types = {
   GET_BOOKS: "bookList/GET_BOOKS",
-  RESERVE_TEXT: "bookList/RESERVE_TEXT"
+  RESERVE_TEXT: "bookList/RESERVE_TEXT",
+  CHECK_TEXT: "booklist/CHECK_TEXT"
 };
 
 const INITIAL_STATE = {
@@ -18,6 +19,11 @@ const getBooksAction = books => ({
 
 const reserveText = text => ({
   type: types.RESERVE_TEXT,
+  text
+});
+
+const checkBookText = text => ({
+  type: types.CHECK_TEXT,
   text
 });
 
@@ -69,6 +75,10 @@ export const reserveBook = bookId => dispatch => {
     });
 };
 
+export const checkBook = bookId => dispatch => {
+  dispatch(checkBookText("Loading..."));
+};
+
 // Reducers
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -76,6 +86,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, books: action.books };
     case types.RESERVE_TEXT:
       return { ...state, reservePopText: action.text };
+    case types.CHECK_TEXT:
+      return { ...state, checkBookPopText: action.text };
     default:
       return state;
   }
