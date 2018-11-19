@@ -83,6 +83,7 @@ export default class Book extends Component {
             </Button>
           }
           content={this.props.reservePopText}
+          hideOnScroll
         />
         {book.editState ? (
           <EditBook
@@ -104,6 +105,7 @@ export default class Book extends Component {
             </Button>
           }
           content={this.props.checkBookPopText}
+          hideOnScroll
         />
       </li>
     );
