@@ -6,6 +6,7 @@
 }
 
 .navBar {
+  height: 5em;
   display: flex;
   justify-content: space-between;
   flex: auto;
@@ -28,6 +29,8 @@
 }
 
 .logo {
-  width: 20%;
-  height: 20%;
+  height: auto;
+  width: auto;
+  max-width: 20%;
+  max-height: 80%;
 }
