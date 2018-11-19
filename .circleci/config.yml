@@ -35,7 +35,6 @@ jobs:
           path: target/library-grad-project-1.0-SNAPSHOT.jar
 
       - persist_to_workspace:
-          root: .
           path: target/library-grad-project-1.0-SNAPSHOT.jar
 
   test_node:
