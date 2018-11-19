@@ -16,6 +16,8 @@ src/main/client/node_modules/
 src/main/client/node/
 src/main/client/build/
 src/main/resources/application-dev.properties
+src/main/java/com/scottlogic/librarygradproject/Controllers/MainController.java
 
 # Node
 node_modules/
+src/main/client/.env
