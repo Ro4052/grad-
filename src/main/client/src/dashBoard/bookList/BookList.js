@@ -16,7 +16,8 @@ export class BookList extends Component {
                 book.publishDate
               }`;
               if (this.props.searchBy !== "publishDate") {
-                return this.props.searchString.length > 0
+                return this.props.searchString.length > 0 &&
+                  book[this.props.searchBy].length
                   ? book[this.props.searchBy]
                       .toLowerCase()
                       .includes(this.props.searchString.toLowerCase())
@@ -26,8 +27,9 @@ export class BookList extends Component {
                 const upperDate =
                   Number(this.props.upperDate) || new Date().getFullYear();
                 return (
-                  Number(book.publishDate) > lowerDate &&
-                  Number(book.publishDate) < upperDate
+                  (Number(book.publishDate) > lowerDate &&
+                    Number(book.publishDate) < upperDate) ||
+                  book.publishDate.length === 0
                 );
               }
             })
