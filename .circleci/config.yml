@@ -54,28 +54,35 @@ jobs:
 
   e2e_test:
     docker:
-      - image: circleci/node:8
-        environment:
-          TEST_DATABASE_URL: postgresql://localhost:5432/postgres
+      docker:
+        - image: circleci/openjdk:8-jdk-browsers
 
-    steps:
-      - checkout
+      steps:
+        - checkout
 
-      - restore_cache:
-          key: node-dependencies-{{ checksum "src/main/client/package.json" }}
+        - restore_cache:
+            key: maven-dependencies-{{ checksum "pom.xml" }}
 
-      - run:
-          name: Setup Node Dependencies
-          command: cd src/main/client && npm install
+        - run:
+            name: Setup Maven Dependencies
+            command: mvn dependency:go-offline
 
-      - save_cache:
-          paths:
-            - ./node_modules
-          key: node-dependencies-{{ checksum "src/main/client/package.json" }}
+        - save_cache:
+            paths:
+              - ~/.m2
+            key: maven-dependencies-{{ checksum "pom.xml" }}
 
-      - run:
-          name: Run Client Tests
-          command: cd src/main/client && set CI=true && npm run test
+        # Compile the jar
+        - run:
+            name: Compile JAR file
+            command: mvn compile
+
+        # Run the jar - parallel
+        - run:
+            name: Run JAR file
+            command: MAVEN_TEST=true java -jar .\library-grad-project-1.0-SNAPSHOT.jar
+
+      # Run e2e tests - parallel
 
 workflows:
   version: 2
