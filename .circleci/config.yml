@@ -4,8 +4,13 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
 
+    working_directory: ~/maven-workspace
+
     steps:
       - checkout
+
+      - attach_workspace:
+          at: ~/maven-workspace
 
       - restore_cache:
           key: maven-dependencies-{{ checksum "pom.xml" }}
@@ -29,12 +34,19 @@ jobs:
       - store_artifacts:
           path: target/library-grad-project-1.0-SNAPSHOT.jar
 
+      - persist_to_workspace:
+          root: .
+          path: target/library-grad-project-1.0-SNAPSHOT.jar
+
   test_node:
     docker:
       - image: circleci/node:8
 
     steps:
       - checkout
+
+      - attach_workspace:
+          at: ~/maven-workspace
 
       - restore_cache:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}
@@ -55,6 +67,8 @@ jobs:
   e2e_test:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
+
+    working_directory: ~/maven-workspace
 
     steps:
       - checkout
