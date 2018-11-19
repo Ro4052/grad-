@@ -56,6 +56,9 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
 
+    steps:
+      - checkout
+
       # Run the jar - parallel
       - run:
           name: Run JAR file
