@@ -54,33 +54,32 @@ jobs:
 
   e2e_test:
     docker:
-      docker:
-        - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/openjdk:8-jdk-browsers
 
-      steps:
-        - checkout
+    steps:
+      - checkout
 
-        - restore_cache:
-            key: maven-dependencies-{{ checksum "pom.xml" }}
+      - restore_cache:
+          key: maven-dependencies-{{ checksum "pom.xml" }}
 
-        - run:
-            name: Setup Maven Dependencies
-            command: mvn dependency:go-offline
+      - run:
+          name: Setup Maven Dependencies
+          command: mvn dependency:go-offline
 
-        - save_cache:
-            paths:
-              - ~/.m2
-            key: maven-dependencies-{{ checksum "pom.xml" }}
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: maven-dependencies-{{ checksum "pom.xml" }}
 
-        # Compile the jar
-        - run:
-            name: Compile JAR file
-            command: mvn compile
+      # Compile the jar
+      - run:
+          name: Compile JAR file
+          command: mvn compile
 
-        # Run the jar - parallel
-        - run:
-            name: Run JAR file
-            command: MAVEN_TEST=true java -jar .\library-grad-project-1.0-SNAPSHOT.jar
+      # Run the jar - parallel
+      - run:
+          name: Run JAR file
+          command: MAVEN_TEST=true java -jar .\library-grad-project-1.0-SNAPSHOT.jar
 
       # Run e2e tests - parallel
 
