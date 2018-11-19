@@ -4,6 +4,7 @@ import { Icon } from "semantic-ui-react";
 
 class SearchBar extends Component {
   render() {
+    const date = new Date().getFullYear();
     return (
       <div className={styles.container}>
         <Icon name="search" size="large" />
@@ -31,18 +32,22 @@ class SearchBar extends Component {
             <label className={styles.dateLabel}>From:</label>
             <input
               placeholder="----"
+              type="number"
               className={styles.dateEntry}
               onChange={this.props.handleLowerDateChange}
               value={this.props.lowerDate}
-              maxLength="4"
+              max={date}
+              min={0}
             />
             <label className={styles.dateLabel}>To:</label>
             <input
-              placeholder={new Date().getFullYear()}
+              placeholder={date}
+              type="number"
               className={styles.dateEntry}
               onChange={this.props.handleUpperDateChange}
               value={this.props.upperDate}
-              maxLength="4"
+              max={date}
+              min={0}
             />
           </div>
         )}

@@ -18,7 +18,7 @@ class DashBoard extends Component {
       deleteList: [],
       searchString: "",
       lowerDate: "",
-      upperDate: "",
+      upperDate: new Date().getFullYear(),
       searchBy: "all"
     };
     this.handleCheck = this.handleCheck.bind(this);
@@ -49,15 +49,33 @@ class DashBoard extends Component {
   }
 
   handleLowerDateChange(e) {
-    this.setState({
-      lowerDate: e.target.value
-    });
+    const date = new Date().getFullYear();
+    if (/[1234567890]/g.test(e.target.value) || e.target.value === "") {
+      if (e.target.value <= date) {
+        this.setState({
+          lowerDate: e.target.value
+        });
+      } else {
+        this.setState({
+          lowerDate: date
+        });
+      }
+    }
   }
 
   handleUpperDateChange(e) {
-    this.setState({
-      upperDate: e.target.value
-    });
+    const date = new Date().getFullYear();
+    if (/[1234567890]/g.test(e.target.value) || e.target.value === "") {
+      if (e.target.value <= date) {
+        this.setState({
+          upperDate: e.target.value
+        });
+      } else {
+        this.setState({
+          upperDate: date
+        });
+      }
+    }
   }
 
   handleSearchByChange(e) {

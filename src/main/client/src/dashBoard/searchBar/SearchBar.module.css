@@ -16,7 +16,8 @@
   font-size: 1.5em;
 }
 
-.searchBar:focus {
+.searchBar:focus,
+.dateEntry:focus {
   box-shadow: 0 0 0 1px #2185d0;
   border: none;
   outline: none;
