@@ -27,7 +27,7 @@ jobs:
           path: target/surefire-reports
 
       - store_artifacts:
-          path: /target/library-grad-project-1.0-SNAPSHOT.jar
+          path: target/library-grad-project-1.0-SNAPSHOT.jar
 
   test_node:
     docker:
@@ -62,7 +62,7 @@ jobs:
       # Run the jar - parallel
       - run:
           name: Run JAR file
-          command: MAVEN_TEST=true java -jar /target/library-grad-project-1.0-SNAPSHOT.jar
+          command: MAVEN_TEST=true java -jar target/library-grad-project-1.0-SNAPSHOT.jar
 
       # Run e2e tests - parallel
 
