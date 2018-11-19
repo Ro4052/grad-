@@ -27,7 +27,11 @@ jobs:
           path: target/surefire-reports
 
       - store_artifacts:
-          path: /target
+          path: /target/grad-library-project-1.0-SNAPSHOT.jar
+          destination: artifact-file
+
+      - store_artifacts:
+          path: /target/artifacts
 
   test_node:
     docker:
