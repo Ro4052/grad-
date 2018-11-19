@@ -45,8 +45,16 @@ public class ReservationServiceTest {
         res1.setId(1);
         res2 = new Reservation(2L, "Boss", 1L);
         res2.setId(2);
-        correctUser = new LibraryUser("Boss");
-        invalidUser = new LibraryUser("Not Boss");
+        correctUser = LibraryUser.builder()
+                .username("Boss")
+                .name("boss")
+                .avatarUrl("")
+                .build();
+        invalidUser = LibraryUser.builder()
+                .username("Not Boss")
+                .name("not boss")
+                .avatarUrl("")
+                .build();
 
         bookService.save(book1);
         bookService.save(book2);

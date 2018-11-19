@@ -23,9 +23,21 @@ public class UserServiceTest {
     @Autowired
     UserService service;
 
-    LibraryUser user1 = new LibraryUser("TestUser 1");
-    LibraryUser user2 = new LibraryUser("TestUser 2");
-    LibraryUser user3 = new LibraryUser("TestUser 3");
+    LibraryUser user1 = LibraryUser.builder()
+            .username("TestUser 1")
+            .name("testuser 1")
+            .avatarUrl("")
+            .build();
+    LibraryUser user2 = LibraryUser.builder()
+            .username("TestUser 2")
+            .name("testuser 2")
+            .avatarUrl("")
+            .build();
+    LibraryUser user3 = LibraryUser.builder()
+            .username("TestUser 3")
+            .name("testuser 3")
+            .avatarUrl("")
+            .build();
 
     @Test
     public void add_user() {

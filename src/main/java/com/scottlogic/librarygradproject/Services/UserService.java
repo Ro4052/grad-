@@ -4,8 +4,10 @@ import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
 import com.scottlogic.librarygradproject.Repositories.LibraryUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class UserService {
@@ -28,6 +30,16 @@ public class UserService {
 
     public void add(LibraryUser user) {
         userRepo.save(user);
+    }
+
+    public LibraryUser loggedIn(OAuth2Authentication authentication) {
+        Map<String, String> userDetails = (Map<String, String>) authentication.getUserAuthentication().getDetails();
+        LibraryUser newUser = LibraryUser.builder()
+                .username(userDetails.get("login"))
+                .name(userDetails.get("name"))
+                .avatarUrl(userDetails.get("avatar_url"))
+                .build();
+        return userRepo.save(newUser);
     }
 }
 
