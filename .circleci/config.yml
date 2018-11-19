@@ -28,6 +28,8 @@ jobs:
           name: Run Server Tests
           command: mvn package
 
+      - run: ls
+
       - store_test_results:
           path: target/surefire-reports
 
