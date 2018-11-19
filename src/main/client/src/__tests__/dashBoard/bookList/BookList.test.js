@@ -1,9 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import BookList from "../../../dashBoard/bookList/BookList";
-import configureStore from "redux-mock-store";
-
-const mockStore = configureStore();
+import { BookList } from "../../../dashBoard/bookList/BookList";
 
 const testBook1 = {
   title: "Harry Potter and the Philosopher's Stone",
@@ -20,37 +17,30 @@ const testBook2 = {
   publishDate: "1954"
 };
 
-const initialState = { bookList: { books: [] } };
-let store;
-
-const createStore = books => {
-  const state = initialState;
-  state.bookList.books = books;
-  return (store = mockStore(state));
-};
+const searchString = "";
 
 describe("Testing the book list", () => {
   test("book list is empty when there is no books", () => {
     const books = [];
-    store = createStore(books);
-    const wrapper = shallow(<BookList books={books} store={store} />);
-    const component = wrapper.dive();
-    expect(component.find("ul").children().length).toEqual(0);
+    const wrapper = shallow(
+      <BookList books={books} searchString={searchString} />
+    );
+    expect(wrapper.find("ul").children().length).toEqual(0);
   });
 
   test("book list is length 1 when 1 book is passed in", () => {
     const books = [testBook1];
-    store = createStore(books);
-    const wrapper = shallow(<BookList store={store} />);
-    const component = wrapper.dive();
-    expect(component.find("ul").children().length).toEqual(1);
+    const wrapper = shallow(
+      <BookList books={books} searchString={searchString} />
+    );
+    expect(wrapper.find("ul").children().length).toEqual(1);
   });
 
   test("book list is length 2 when 2 books are passed in", () => {
     const books = [testBook1, testBook2];
-    store = createStore(books);
-    const wrapper = shallow(<BookList books={books} store={store} />);
-    const component = wrapper.dive();
-    expect(component.find("ul").children().length).toEqual(2);
+    const wrapper = shallow(
+      <BookList books={books} searchString={searchString} />
+    );
+    expect(wrapper.find("ul").children().length).toEqual(2);
   });
 });
