@@ -69,8 +69,6 @@ jobs:
       - attach_workspace:
           at: ~/maven-workspace
 
-      - run: cd target && ls
-
       # Run the jar - parallel
       - run:
           name: Run JAR file
