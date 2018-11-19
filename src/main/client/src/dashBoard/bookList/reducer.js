@@ -77,11 +77,16 @@ export const reserveBook = bookId => dispatch => {
 
 export const checkBook = bookId => dispatch => {
   dispatch(checkBookText("Loading..."));
-  axios.get(`/api/reserve/check/${bookId}`).then(res => {
-    res.data
-      ? dispatch(checkBookText(`There are ${res.data} reservations`))
-      : dispatch(checkBookText("Available"));
-  });
+  axios
+    .get(`/api/reserve/check/${bookId}`)
+    .then(res => {
+      res.data
+        ? dispatch(checkBookText(`There are ${res.data} reservations`))
+        : dispatch(checkBookText("Available"));
+    })
+    .catch(() => {
+      dispatch(checkBookText("Something went wrong"));
+    });
 };
 
 // Reducers
