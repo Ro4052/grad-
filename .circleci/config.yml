@@ -21,14 +21,13 @@ jobs:
 
       - run:
           name: Run Server Tests
-          command: mvn test
+          command: mvn package
 
       - store_test_results:
           path: target/surefire-reports
 
       - store_artifacts:
-          path: target/grad-library-project-0.0.1-SNAPSHOT.jar
-          destination: e2e_test
+          path: target/grad-library-project-1.0-SNAPSHOT.jar
 
   test_node:
     docker:
@@ -63,7 +62,7 @@ jobs:
       # Run the jar - parallel
       - run:
           name: Run JAR file
-          command: MAVEN_TEST=true java -jar target/grad-library-project-0.0.1-SNAPSHOT.jar
+          command: MAVEN_TEST=true java -jar target/grad-library-project-1.0-SNAPSHOT.jar
 
       # Run e2e tests - parallel
 
