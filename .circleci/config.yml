@@ -89,3 +89,4 @@ workflows:
     jobs:
       - test_maven
       - test_node
+      - e2e_test
