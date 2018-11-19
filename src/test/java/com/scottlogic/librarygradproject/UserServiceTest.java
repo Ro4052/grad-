@@ -7,10 +7,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
+import java.io.Serializable;
+import java.security.Principal;
+import java.util.*;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -20,13 +28,16 @@ import static org.junit.Assert.assertEquals;
 @DataJpaTest
 public class UserServiceTest {
 
+
+
+
     @Autowired
     UserService service;
 
     LibraryUser user1 = LibraryUser.builder()
             .username("TestUser 1")
             .name("testuser 1")
-            .avatarUrl("")
+            .avatarUrl("avatar_url")
             .build();
     LibraryUser user2 = LibraryUser.builder()
             .username("TestUser 2")
@@ -53,6 +64,15 @@ public class UserServiceTest {
         service.add(user3);
         LibraryUser user = service.findOne("TestUser 1");
         assertEquals(user1, user);
+    }
+
+    @Test
+    public void loggedIn_User_Works() {
+        OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
+        OAuth2Authentication authentication = helper.getOauthTestAuthentication();
+        service.loggedIn(authentication);
+        assertArrayEquals(new LibraryUser[] {user1}, service.findAll().toArray());
+
     }
 
     @Test (expected = UserNotFoundException.class)
