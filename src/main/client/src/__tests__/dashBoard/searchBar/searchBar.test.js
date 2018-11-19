@@ -41,66 +41,10 @@ describe("Search Bar renders with range selection for publish date search option
     expect(wrapper.find(".dateSearchContainer").exists()).toBe(true);
   });
 
-  test("there is two date input fields when searching by publish date", () => {
+  test("there is two date input fields with labels when searching by publish date", () => {
     const searchBy = "publishDate";
     const wrapper = shallow(<SearchBar searchBy={searchBy} />);
-    expect(wrapper.find(".dateEntry").length).toEqual(2);
+    expect(wrapper.find("DateSearch").length).toEqual(2);
     expect(wrapper.find(".dateLabel").length).toEqual(2);
-  });
-
-  test("the upper date field is auto populated with the current year", () => {
-    const searchBy = "publishDate";
-    const upperDate = new Date().getFullYear();
-    const wrapper = shallow(
-      <SearchBar searchBy={searchBy} upperDate={upperDate} />
-    );
-    expect(
-      wrapper
-        .find(".dateSearchContainer")
-        .childAt(3)
-        .props().value
-    ).toEqual(new Date().getFullYear());
-  });
-
-  test("the upper date field has a placeholder of the current year", () => {
-    const searchBy = "publishDate";
-    const upperDate = new Date().getFullYear();
-    const wrapper = shallow(
-      <SearchBar searchBy={searchBy} upperDate={upperDate} />
-    );
-    expect(
-      wrapper
-        .find(".dateSearchContainer")
-        .childAt(3)
-        .props().placeholder
-    ).toEqual(new Date().getFullYear());
-  });
-
-  test("the lower date field is auto populated with an empty string", () => {
-    const searchBy = "publishDate";
-    const lowerDate = "";
-    const wrapper = shallow(
-      <SearchBar searchBy={searchBy} lowerDate={lowerDate} />
-    );
-    expect(
-      wrapper
-        .find(".dateSearchContainer")
-        .childAt(1)
-        .props().value
-    ).toEqual("");
-  });
-
-  test("the lower date field has a placeholder of '----'", () => {
-    const searchBy = "publishDate";
-    const lowerDate = "";
-    const wrapper = shallow(
-      <SearchBar searchBy={searchBy} lowerDate={lowerDate} />
-    );
-    expect(
-      wrapper
-        .find(".dateSearchContainer")
-        .childAt(1)
-        .props().placeholder
-    ).toEqual("----");
   });
 });
