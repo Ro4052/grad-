@@ -20,7 +20,7 @@ const testBook2 = {
   publishDate: "1954"
 };
 
-const initialState = { bookList: { books: [] } };
+const initialState = { bookList: { books: [] }, login: { loggedIn: true } };
 let store;
 
 const createStore = books => {

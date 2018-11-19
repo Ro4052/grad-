@@ -27,7 +27,9 @@ describe("Book Component Tests", () => {
 
   test("reserveBook action called with the right ID", () => {
     const reserveBook = jest.fn();
-    const wrapper = shallow(<Book book={testBook} reserveBook={reserveBook} />);
+    const wrapper = shallow(
+      <Book book={testBook} reserveBook={reserveBook} loggedIn={true} />
+    );
     shallow(wrapper.find("Popup").props().trigger).simulate("click");
     expect(reserveBook).toHaveBeenCalledWith(testBook.id);
   });
