@@ -50,22 +50,9 @@ export const loginUser = () => dispatch => {
   dispatch(loginUserAction);
 };
 
-export const loading = () => dispatch => {
-  dispatch({
-    type: types.LOADING
-  });
-};
-
 export const logOut = () => dispatch => {
-  axios
-    .post("/logout")
-    .then(() => {
-      dispatch(logOutAction());
-      console.log("TEST");
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  dispatch(logOutAction());
+  axios.post("/logout");
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -77,9 +64,6 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loggedIn: true, user: action.userData };
 
     case types.LOGIN_USER:
-      return { ...state, loggingIn: true };
-
-    case types.LOADING:
       return { ...state, loggingIn: true };
 
     case types.LOGOUT:

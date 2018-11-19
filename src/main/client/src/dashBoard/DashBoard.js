@@ -45,6 +45,10 @@ class DashBoard extends Component {
           />
           <h1 className={styles.pageHeader}> Grad Library App </h1>
           <div className={styles.navBtns}>
+            <div id="username">
+              {this.props.loggedIn &&
+                `Welcome ${this.props.user.name || this.props.user.username}`}
+            </div>
             <Button
               className={styles.selectBookBtn}
               size="small"
@@ -65,16 +69,21 @@ class DashBoard extends Component {
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
         />
-        <AddBook />
+        {this.props.loggedIn && <AddBook />}
       </div>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  user: state.login.user,
+  loggedIn: state.login.loggedIn
+});
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...bookListActions }, dispatch);
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(DashBoard);

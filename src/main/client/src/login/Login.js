@@ -9,29 +9,35 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <Button
-          className={styles.logBtns}
-          positive
-          size="small"
-          onClick={this.props.loginUser}
-          content="Login"
-        />
-        {/* <a href={process.env.REACT_APP_LOGIN}>Login</a> */}
-        <Button
-          className={styles.logBtns}
-          negative
-          onClick={this.props.logOut}
-          content="Logout"
-        />
+        {this.props.loggedIn ? (
+          <Button
+            className={styles.logBtns}
+            negative
+            onClick={this.props.logOut}
+            content="Logout"
+          />
+        ) : (
+          <Button
+            className={styles.logBtns}
+            positive
+            size="small"
+            onClick={this.props.loginUser}
+            content="Login"
+          />
+        )}
       </div>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  loggedIn: state.login.loggedIn
+});
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...loginActions }, dispatch);
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Login);
