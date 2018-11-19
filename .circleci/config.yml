@@ -66,8 +66,6 @@ jobs:
     steps:
       - checkout
 
-      - run: cd target && ls
-
       - attach_workspace:
           at: ~/maven-workspace
 
