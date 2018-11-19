@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import styles from "./SearchBar.module.css";
 import { Icon } from "semantic-ui-react";
+import DateSearch from "./dateSearch/DateSearch";
 
 class SearchBar extends Component {
   render() {
-    const date = new Date().getFullYear();
     return (
       <div className={styles.container}>
         <Icon name="search" size="large" />
@@ -30,24 +30,17 @@ class SearchBar extends Component {
         ) : (
           <div className={styles.dateSearchContainer}>
             <label className={styles.dateLabel}>From:</label>
-            <input
-              placeholder="----"
-              type="number"
-              className={styles.dateEntry}
-              onChange={this.props.handleLowerDateChange}
+            <DateSearch
+              handleDateChange={this.props.handleDateChange}
+              id="lowerDate"
               value={this.props.lowerDate}
-              max={date}
-              min={0}
+              placeholder="----"
             />
             <label className={styles.dateLabel}>To:</label>
-            <input
-              placeholder={date}
-              type="number"
-              className={styles.dateEntry}
-              onChange={this.props.handleUpperDateChange}
+            <DateSearch
+              handleDateChange={this.props.handleDateChange}
+              id="upperDate"
               value={this.props.upperDate}
-              max={date}
-              min={0}
             />
           </div>
         )}

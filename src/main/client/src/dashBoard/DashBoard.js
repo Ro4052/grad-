@@ -25,8 +25,7 @@ class DashBoard extends Component {
     this.toggleSelectMode = this.toggleSelectMode.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSearchByChange = this.handleSearchByChange.bind(this);
-    this.handleLowerDateChange = this.handleLowerDateChange.bind(this);
-    this.handleUpperDateChange = this.handleUpperDateChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   handleCheck(event) {
@@ -48,31 +47,16 @@ class DashBoard extends Component {
     });
   }
 
-  handleLowerDateChange(e) {
+  handleDateChange(e) {
     const date = new Date().getFullYear();
     if (/[1234567890]/g.test(e.target.value) || e.target.value === "") {
       if (e.target.value <= date) {
         this.setState({
-          lowerDate: e.target.value
+          [e.target.id]: e.target.value
         });
       } else {
         this.setState({
-          lowerDate: date
-        });
-      }
-    }
-  }
-
-  handleUpperDateChange(e) {
-    const date = new Date().getFullYear();
-    if (/[1234567890]/g.test(e.target.value) || e.target.value === "") {
-      if (e.target.value <= date) {
-        this.setState({
-          upperDate: e.target.value
-        });
-      } else {
-        this.setState({
-          upperDate: date
+          [e.target.id]: date
         });
       }
     }
@@ -113,8 +97,7 @@ class DashBoard extends Component {
         <SearchBar
           handleSearchByChange={this.handleSearchByChange}
           handleChange={this.handleChange}
-          handleLowerDateChange={this.handleLowerDateChange}
-          handleUpperDateChange={this.handleUpperDateChange}
+          handleDateChange={this.handleDateChange}
           searchValue={this.state.searchValue}
           upperDate={this.state.upperDate}
           lowerDate={this.state.lowerDate}
