@@ -81,7 +81,7 @@ export const checkBook = bookId => dispatch => {
     .get(`/api/reserve/check/${bookId}`)
     .then(res => {
       res.data
-        ? dispatch(checkBookText(`There are ${res.data} reservations`))
+        ? dispatch(checkBookText(`Number of reservations: ${res.data}`))
         : dispatch(checkBookText("Available"));
     })
     .catch(() => {
