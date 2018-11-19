@@ -34,19 +34,12 @@ jobs:
       - store_artifacts:
           path: target/library-grad-project-1.0-SNAPSHOT.jar
 
-      - persist_to_workspace:
-          root: /root/project
-          path: target/library-grad-project-1.0-SNAPSHOT.jar
-
   test_node:
     docker:
       - image: circleci/node:8
 
     steps:
       - checkout
-
-      - attach_workspace:
-          at: ~/maven-workspace
 
       - restore_cache:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}
@@ -72,6 +65,9 @@ jobs:
 
     steps:
       - checkout
+
+      - attach_workspace:
+          at: ~/maven-workspace
 
       # Run the jar - parallel
       - run:
