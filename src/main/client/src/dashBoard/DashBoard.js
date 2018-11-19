@@ -4,11 +4,11 @@ import BookList from "./bookList/BookList";
 import AddBook from "./addBook/AddBook";
 import DeleteBookModal from "../common/modals/DeleteBookModal";
 import { connect } from "react-redux";
-import * as bookListActions from "./bookList/reducer";
 import { bindActionCreators } from "redux";
 import { Button } from "semantic-ui-react";
 import scottLogicLogo from "../common/SL_primary_AW_POS_LO_RGB.jpg";
-import axios from "axios";
+import * as bookListActions from "./bookList/reducer";
+import Login from "../login/Login";
 
 class DashBoard extends Component {
   constructor(props) {
@@ -59,8 +59,7 @@ class DashBoard extends Component {
               deleteBook={this.props.deleteBook}
             />
           </div>
-          <a href={process.env.REACT_APP_LOGIN}>Login</a>
-          <button onClick={() => axios.post("/logout")}>Logout</button>
+          <Login />
         </div>
         <BookList
           deleteMode={this.state.deleteMode}
