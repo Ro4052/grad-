@@ -4,10 +4,11 @@ import BookList from "./bookList/BookList";
 import AddBook from "./addBook/AddBook";
 import DeleteBookModal from "../common/modals/DeleteBookModal";
 import { connect } from "react-redux";
-import * as bookListActions from "./bookList/reducer";
 import { bindActionCreators } from "redux";
 import { Button } from "semantic-ui-react";
 import scottLogicLogo from "../common/SL_primary_AW_POS_LO_RGB.jpg";
+import * as bookListActions from "./bookList/reducer";
+import Login from "../login/Login";
 import SearchBar from "./searchBar/SearchBar";
 
 class DashBoard extends Component {
@@ -82,21 +83,27 @@ class DashBoard extends Component {
             className={styles.logo}
           />
           <h1 className={styles.pageHeader}> Grad Library App </h1>
-          <div className={styles.navBtns}>
-            <Button
-              className={styles.selectBookBtn}
-              size="small"
-              onClick={this.toggleSelectMode}
-            >
-              Select Books
-            </Button>
-            <DeleteBookModal
-              deleteMode={this.state.deleteMode}
-              toggleSelectMode={this.toggleSelectMode}
-              deleteList={this.state.deleteList}
-              deleteBook={this.props.deleteBook}
-            />
-          </div>
+          {this.props.loggedIn && (
+            <div className={styles.navBtns}>
+              <div id="displayName">
+                Welcome {this.props.user.name || this.props.user.userId}
+              </div>
+              <Button
+                className={styles.selectBookBtn}
+                size="small"
+                onClick={this.toggleSelectMode}
+              >
+                Select Books
+              </Button>
+              <DeleteBookModal
+                deleteMode={this.state.deleteMode}
+                toggleSelectMode={this.toggleSelectMode}
+                deleteList={this.state.deleteList}
+                deleteBook={this.props.deleteBook}
+              />
+            </div>
+          )}
+          <Login />
         </div>
         <SearchBar
           handleSearchByChange={this.handleSearchByChange}
@@ -115,16 +122,21 @@ class DashBoard extends Component {
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
         />
-        <AddBook />
+        {this.props.loggedIn && <AddBook />}
       </div>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  user: state.login.user,
+  loggedIn: state.login.loggedIn
+});
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...bookListActions }, dispatch);
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(DashBoard);
