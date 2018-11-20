@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button } from "semantic-ui-react";
-import styles from "./Login.module.css";
 import * as loginActions from "../login/reducer";
 
 class Login extends Component {
@@ -11,7 +10,6 @@ class Login extends Component {
       <div>
         {this.props.loggedIn ? (
           <Button
-            className={styles.logBtns}
             negative
             size="small"
             onClick={this.props.logOut}
@@ -19,7 +17,6 @@ class Login extends Component {
           />
         ) : (
           <Button
-            className={styles.logBtns}
             positive
             size="small"
             onClick={this.props.loginUser}
