@@ -1,10 +1,10 @@
 package com.scottlogic.librarygradproject;
 
 import com.scottlogic.librarygradproject.Controllers.ReservationsController;
-import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Services.ReservationService;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -13,9 +13,12 @@ public class ReservationsControllerTest {
 
     ReservationService reservationService;
     ReservationsController controller;
+    OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
+    OAuth2Authentication authentication;
 
     @Before
     public void before_each_test() {
+        authentication = helper.getOauthTestAuthentication();
         reservationService = mock(ReservationService.class);
         controller = new ReservationsController(reservationService);
     }
@@ -26,10 +29,10 @@ public class ReservationsControllerTest {
         long id = 1;
 
         //Act
-        controller.post(id);
+        controller.post(id, authentication);
 
         //Assert
-        verify(reservationService).reserve(id);
+        verify(reservationService).reserve(id, authentication);
     }
 
     @Test

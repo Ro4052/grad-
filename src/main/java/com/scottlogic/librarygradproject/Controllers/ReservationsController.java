@@ -4,6 +4,7 @@ import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,8 +25,8 @@ public class ReservationsController {
     }
 
     @RequestMapping(value = "/reserve/{bookId}", method = RequestMethod.POST)
-    public void post(@PathVariable long bookId) {
-        reservationService.reserve(bookId);
+    public void post(@PathVariable long bookId, OAuth2Authentication authentication) {
+        reservationService.reserve(bookId, authentication);
     }
 
     @RequestMapping(value = "/reserve/{reservationId}", method = RequestMethod.DELETE)
