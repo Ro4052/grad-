@@ -6,23 +6,18 @@ import * as loginActions from "../login/reducer";
 
 class Login extends Component {
   render() {
+    const { loggedIn, logOut, loginUser } = this.props;
+    const onClick = loggedIn ? logOut : loginUser;
+    const content = loggedIn ? "Logout" : "Login";
     return (
       <div>
-        {this.props.loggedIn ? (
-          <Button
-            negative
-            size="small"
-            onClick={this.props.logOut}
-            content="Logout"
-          />
-        ) : (
-          <Button
-            positive
-            size="small"
-            onClick={this.props.loginUser}
-            content="Login"
-          />
-        )}
+        <Button
+          positive={!loggedIn}
+          negative={loggedIn}
+          size="small"
+          onClick={onClick}
+          content={content}
+        />
       </div>
     );
   }
