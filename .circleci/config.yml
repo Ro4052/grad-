@@ -70,7 +70,7 @@ jobs:
       # Run the jar - parallel
       - run:
           name: Run JAR file
-          command: MAVEN_TEST=true java -jar target/library-grad-project-1.0-SNAPSHOT.jar
+          command: MAVEN_PROD=true MAVEN_TEST=true java -jar target/library-grad-project-1.0-SNAPSHOT.jar
 
       # Run e2e tests - parallel
 
