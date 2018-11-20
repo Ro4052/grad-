@@ -2,10 +2,13 @@ package com.scottlogic.librarygradproject.cucumber.steps;
 
 
 import com.scottlogic.librarygradproject.Controllers.BooksController;
+import com.scottlogic.librarygradproject.Controllers.ReservationsController;
 import com.scottlogic.librarygradproject.Entities.Book;
 import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
 import com.scottlogic.librarygradproject.Services.BookService;
+import com.scottlogic.librarygradproject.Services.ReservationService;
+import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,9 @@ public class Stepdefs implements En {
 
     @Autowired
     BookService bookService;
-
+    ReservationService resService;
     BooksController controller;
+    ReservationsController rescontroller;
     Book newBook;
     int repoLength;
     long id;
@@ -289,6 +293,38 @@ public class Stepdefs implements En {
             long ne = -1;
             long ne2 = -2;
             try {controller.delete(Arrays.asList(ne,ne2));} catch  (BookNotFoundException e) {}
+        });
+        Given("^an empty reservation table exists$", () -> {
+            resService.deleteAll();
+            rescontroller = new ReservationsController(resService);
+        });
+        When("^a reservation is made on a book by an authorised user$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+        Then("^that reservation is added to the database$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+        When("^a reservation is made on a book by an unauthorised user$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+        Then("^that reservation is not added to the database$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+        When("^an availability check is made on a book$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+        Then("^the status of the book should be displayed as available$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+        Then("^the status of the book should be reserved with a queue of (\\d+)$", (Integer arg0) -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
         });
     }
 }
