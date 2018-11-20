@@ -50,13 +50,17 @@ class DashBoard extends Component {
   handleDateChange(e) {
     const date = new Date().getFullYear();
     if (/[1234567890]/g.test(e.target.value) || e.target.value === "") {
-      if (e.target.value <= date) {
+      if (e.target.value <= date && e.target.value >= 0) {
         this.setState({
           [e.target.id]: e.target.value
         });
-      } else {
+      } else if (e.target.value > date) {
         this.setState({
           [e.target.id]: date
+        });
+      } else if (e.target.value < 0) {
+        this.setState({
+          [e.target.id]: 0
         });
       }
     }
