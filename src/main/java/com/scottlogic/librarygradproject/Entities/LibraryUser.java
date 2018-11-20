@@ -11,16 +11,16 @@ import javax.persistence.Id;
 @Builder
 public class LibraryUser {
     @Id
-    private String username;
+    private String userId;
     private String name;
     private String avatarUrl;
 
     public LibraryUser() {
     }
 
-    public LibraryUser(String username, String name, String avatarUrl) {
+    public LibraryUser(String userId, String name, String avatarUrl) {
 
-        this.username = username;
+        this.userId = userId;
         this.name = name;
         this.avatarUrl = avatarUrl;
     }

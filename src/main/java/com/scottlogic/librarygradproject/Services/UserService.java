@@ -36,7 +36,7 @@ public class UserService {
         System.out.println("TEST");
         Map<String, String> userDetails = (Map<String, String>) authentication.getUserAuthentication().getDetails();
         LibraryUser newUser = LibraryUser.builder()
-                .username(userDetails.get("login"))
+                .userId(userDetails.get("login"))
                 .name(userDetails.get("name"))
                 .avatarUrl(userDetails.get("avatar_url"))
                 .build();

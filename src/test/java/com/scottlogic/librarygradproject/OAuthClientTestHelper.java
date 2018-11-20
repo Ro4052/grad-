@@ -14,12 +14,12 @@ import java.util.*;
 
 public class OAuthClientTestHelper {
 
-    private String username;
+    private String userId;
     private String name;
     private String avatarUrl;
 
-    public OAuthClientTestHelper(String username, String name, String avatarUrl) {
-        this.username = username;
+    public OAuthClientTestHelper(String userId, String name, String avatarUrl) {
+        this.userId = userId;
         this.name = name;
         this.avatarUrl = avatarUrl;
     }
@@ -28,15 +28,13 @@ public class OAuthClientTestHelper {
         private LibraryUser user;
 
         OAuthUser(LibraryUser user) {
-
             this.user = user;
         }
 
         @Override
         public String getName() {
-            return this.user.getUsername();
+            return this.user.getUserId();
         }
-
     }
 
     private OAuth2Request getOauth2Request () {
@@ -60,14 +58,14 @@ public class OAuthClientTestHelper {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("Everything");
 
         LibraryUser userPrincipal = LibraryUser.builder()
-                .username(username)
+                .userId(userId)
                 .name(name)
                 .avatarUrl(avatarUrl)
                 .build();
 
         HashMap<String, String> details = new HashMap<String, String>();
         details.put("name", name);
-        details.put("login", username);
+        details.put("login", userId);
         details.put("avatar_url", avatarUrl);
 
         OAuthUser oAuthUser = new OAuthUser(userPrincipal);
@@ -78,7 +76,6 @@ public class OAuthClientTestHelper {
 
         return token;
     }
-
 
     public OAuth2Authentication getOauthTestAuthentication() {
         return new OAuth2Authentication(getOauth2Request(), getAuthentication());

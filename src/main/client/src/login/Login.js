@@ -13,6 +13,7 @@ class Login extends Component {
           <Button
             className={styles.logBtns}
             negative
+            size="small"
             onClick={this.props.logOut}
             content="Logout"
           />

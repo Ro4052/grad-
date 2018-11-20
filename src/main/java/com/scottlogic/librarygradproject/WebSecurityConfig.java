@@ -1,6 +1,5 @@
 package com.scottlogic.librarygradproject;
 
-
 import com.allanditzel.springframework.security.web.csrf.CsrfTokenResponseHeaderBindingFilter;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
@@ -17,16 +16,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-
 @Configuration
 @EnableOAuth2Sso
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
 
         http
                 .authorizeRequests()
@@ -40,7 +35,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
         http.addFilterAfter(new CsrfTokenResponseHeaderBindingFilter(), CsrfFilter.class);
     }
-
 }
-
-

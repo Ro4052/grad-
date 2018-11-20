@@ -46,12 +46,12 @@ public class ReservationServiceTest {
         res2 = new Reservation(2L, "Boss", 1L);
         res2.setId(2);
         correctUser = LibraryUser.builder()
-                .username("Boss")
+                .userId("Boss")
                 .name("boss")
                 .avatarUrl("")
                 .build();
         invalidUser = LibraryUser.builder()
-                .username("Not Boss")
+                .userId("Not Boss")
                 .name("not boss")
                 .avatarUrl("")
                 .build();
@@ -63,7 +63,7 @@ public class ReservationServiceTest {
     @Test(expected = BookNotFoundException.class)
     public void invalid_bookId_throws_exception() {
         //Arrange
-        long id = 10L;
+        long id = 10;
         userService.add(correctUser);
 
         //Act

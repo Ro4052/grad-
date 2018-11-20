@@ -28,24 +28,21 @@ import static org.junit.Assert.assertEquals;
 @DataJpaTest
 public class UserServiceTest {
 
-
-
-
     @Autowired
     UserService service;
 
     LibraryUser user1 = LibraryUser.builder()
-            .username("TestUser 1")
+            .userId("TestUser 1")
             .name("testuser 1")
             .avatarUrl("avatar_url")
             .build();
     LibraryUser user2 = LibraryUser.builder()
-            .username("TestUser 2")
+            .userId("TestUser 2")
             .name("testuser 2")
             .avatarUrl("")
             .build();
     LibraryUser user3 = LibraryUser.builder()
-            .username("TestUser 3")
+            .userId("TestUser 3")
             .name("testuser 3")
             .avatarUrl("")
             .build();

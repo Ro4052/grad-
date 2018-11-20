@@ -45,9 +45,9 @@ class DashBoard extends Component {
           />
           <h1 className={styles.pageHeader}> Grad Library App </h1>
           <div className={styles.navBtns}>
-            <div id="username">
+            <div id="displayName">
               {this.props.loggedIn &&
-                `Welcome ${this.props.user.name || this.props.user.username}`}
+                `Welcome ${this.props.user.name || this.props.user.userId}`}
             </div>
             <Button
               className={styles.selectBookBtn}

@@ -162,22 +162,7 @@ public class BookServiceTest {
     public void get_Throws_Invalid_Id() {
         service.save(correctBook1);
         service.save(correctBook2);
-        service.findAll().forEach(book -> System.out.println(book.getId()));
-        Book book = service.findOne(1L);
-        System.out.println(book.getId());
-        System.out.println(book.getTitle());
-        System.out.println(book.getAuthor());
-        System.out.println(book.getPublishDate());
-        book = service.findOne(2L);
-        System.out.println(book.getId());
-        System.out.println(book.getTitle());
-        System.out.println(book.getAuthor());
-        System.out.println(book.getPublishDate());
-        book = service.findOne(4L);
-        System.out.println(book.getId());
-        System.out.println(book.getTitle());
-        System.out.println(book.getAuthor());
-        System.out.println(book.getPublishDate());
+        service.findOne(4L);
     }
 
 
