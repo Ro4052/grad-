@@ -22,9 +22,9 @@ public class ReservationService {
         this.userService = userService;
     }
 
-    private void validateReservation(long bookId, String username) {
+    private void validateReservation(long bookId, String userId) {
         bookService.findOne(bookId);
-        userService.findOne(username);
+        userService.findOne(userId);
     }
 
     public long checkReservation(long bookId) {
@@ -32,14 +32,14 @@ public class ReservationService {
     }
 
     public void reserve(long bookId) {
-        String username = "Boss"; //sessions[token].username;
-        validateReservation(bookId, username);
+        String userId = "Boss"; //sessions[token].username;
+        validateReservation(bookId, userId);
         long nextInQueue = resRepo.findLatestQueue(bookId) + 1;
 //        if (nextInQueue == 1) {
 //             check if book is borrowed - if it is not then borrow the book
 //        }
 //        else
-        Reservation reservation = Reservation.builder().bookId(bookId).username(username).queuePosition(nextInQueue).build();
+        Reservation reservation = Reservation.builder().bookId(bookId).userId(userId).queuePosition(nextInQueue).build();
         resRepo.save(reservation);
     }
 
@@ -49,14 +49,18 @@ public class ReservationService {
 
     public void delete(long reservationId) {
         try {
-            resRepo.delete(reservationId);
+            resRepo.deleteById(reservationId);
         } catch (EmptyResultDataAccessException e) {
             throw new ReservationNotFoundException(reservationId);
         }
     }
 
+    public void deleteAll() {
+        this.resRepo.deleteAll();
+    }
+
     public Reservation findOne(long reservationId) {
-        Optional<Reservation> reservationToGet = Optional.ofNullable(resRepo.findOne(reservationId));
+        Optional<Reservation> reservationToGet = resRepo.findById(reservationId);
         return reservationToGet.orElseThrow(() -> new ReservationNotFoundException(reservationId));
     }
 }

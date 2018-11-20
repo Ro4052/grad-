@@ -16,7 +16,8 @@ export class BookList extends Component {
                 book.publishDate
               }`;
               if (this.props.searchBy !== "publishDate") {
-                return this.props.searchString.length > 0
+                return this.props.searchString.length > 0 &&
+                  book[this.props.searchBy].length
                   ? book[this.props.searchBy]
                       .toLowerCase()
                       .includes(this.props.searchString.toLowerCase())
@@ -26,8 +27,9 @@ export class BookList extends Component {
                 const upperDate =
                   Number(this.props.upperDate) || new Date().getFullYear();
                 return (
-                  Number(book.publishDate) > lowerDate &&
-                  Number(book.publishDate) < upperDate
+                  (Number(book.publishDate) >= lowerDate &&
+                    Number(book.publishDate) <= upperDate) ||
+                  book.publishDate.length === 0
                 );
               }
             })
@@ -43,6 +45,7 @@ export class BookList extends Component {
                 reservePopText={this.props.reservePopText}
                 checkBook={this.props.checkBook}
                 checkBookPopText={this.props.availability}
+                loggedIn={this.props.loggedIn}
               />
             ))}
         </ul>
@@ -54,6 +57,7 @@ export class BookList extends Component {
 const mapStateToProps = state => ({
   books: state.bookList.books,
   reservePopText: state.bookList.reservePopText,
+  loggedIn: state.login.loggedIn,
   availability: state.bookList.checkBookPopText
 });
 
