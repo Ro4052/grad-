@@ -83,25 +83,26 @@ class DashBoard extends Component {
             className={styles.logo}
           />
           <h1 className={styles.pageHeader}> Grad Library App </h1>
-          <div className={styles.navBtns}>
-            <div id="displayName">
-              {this.props.loggedIn &&
-                `Welcome ${this.props.user.name || this.props.user.userId}`}
+          {this.props.loggedIn && (
+            <div className={styles.navBtns}>
+              <div id="displayName">
+                Welcome {this.props.user.name || this.props.user.userId}
+              </div>
+              <Button
+                className={styles.selectBookBtn}
+                size="small"
+                onClick={this.toggleSelectMode}
+              >
+                Select Books
+              </Button>
+              <DeleteBookModal
+                deleteMode={this.state.deleteMode}
+                toggleSelectMode={this.toggleSelectMode}
+                deleteList={this.state.deleteList}
+                deleteBook={this.props.deleteBook}
+              />
             </div>
-            <Button
-              className={styles.selectBookBtn}
-              size="small"
-              onClick={this.toggleSelectMode}
-            >
-              Select Books
-            </Button>
-            <DeleteBookModal
-              deleteMode={this.state.deleteMode}
-              toggleSelectMode={this.toggleSelectMode}
-              deleteList={this.state.deleteList}
-              deleteBook={this.props.deleteBook}
-            />
-          </div>
+          )}
           <Login />
         </div>
         <SearchBar
