@@ -16,21 +16,21 @@ public class Borrow {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "borrow_sequence")
     private long id;
     private long bookId;
-    private String username;
+    private String userId;
     private Date borrowDate;
     private boolean isActive;
 
     public Borrow() {}
 
-    public Borrow(long bookId, String username, Date borrowDate, boolean isActive) {
+    public Borrow(long bookId, String userId, Date borrowDate, boolean isActive) {
         this.bookId = bookId;
-        this.username = username;
+        this.userId = userId;
         this.borrowDate = borrowDate;
         this.isActive = isActive;
     }
 
     public static class BorrowBuilder {
-        public Borrow build() { return new Borrow(this.bookId, this.username, this.borrowDate, this.isActive); }
+        public Borrow build() { return new Borrow(this.bookId, this.userId, this.borrowDate, this.isActive); }
     }
 
 }
