@@ -60,6 +60,10 @@ public class ReservationService {
         }
     }
 
+    public void deleteAll() {
+        this.resRepo.deleteAll();
+    }
+
     public Reservation findOne(long reservationId) {
         Optional<Reservation> reservationToGet = resRepo.findById(reservationId);
         return reservationToGet.orElseThrow(() -> new ReservationNotFoundException(reservationId));
