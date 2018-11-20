@@ -1,4 +1,4 @@
-import styles from "../src/dashBoard/DashBoard.module.css";
+// import styles from "../src/dashBoard/DashBoard.module.css";
 const puppeteer = require("puppeteer");
 
 let browser;
@@ -10,8 +10,8 @@ beforeAll(async () => {
     //args: ['--disable-dev-shm-usage'],
   });
   page = await browser.newPage();
-  await page.goto("https://bristol-library-dev.herokuapp.com/");
-  await page.waitForSelector(styles.pageHeader);
+  await page.goto("http://localhost:8090/");
+  // await page.waitForSelector(styles.pageHeader);
 });
 
 afterAll(async () => {
