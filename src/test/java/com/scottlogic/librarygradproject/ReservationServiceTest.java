@@ -132,4 +132,40 @@ public class ReservationServiceTest {
         assertArrayEquals(new Reservation[]{res1 , res2}, reservations.toArray());
     }
 
+    @Test
+    public void check_returns_correct_number_single_reservation() {
+        //Arrange
+        userService.add(correctUser);
+        reservationService.reserve(res1.getBookId());
+
+        //Act
+        long reservationNumber = reservationService.checkReservation(res1.getBookId());
+
+        //Assert
+        assertEquals(1L, reservationNumber);
+    }
+
+    @Test
+    public void check_returns_correct_number_multiple_reservation() {
+        //Arrange
+        userService.add(correctUser);
+        reservationService.reserve(res1.getBookId());
+        reservationService.reserve(res1.getBookId());
+
+        //Act
+        long reservationNumber = reservationService.checkReservation(res1.getBookId());
+
+        //Assert
+        assertEquals(2L, reservationNumber);
+    }
+
+    @Test
+    public void check_returns_correct_number_no_reservation() {
+        //Act
+        long reservationNumber = reservationService.checkReservation(res1.getBookId());
+
+        //Assert
+        assertEquals(0L, reservationNumber);
+    }
+
 }

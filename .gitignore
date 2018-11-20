@@ -21,3 +21,4 @@ src/main/java/com/scottlogic/librarygradproject/Controllers/MainController.java
 
 # Node
 node_modules/
+src/main/client/.env

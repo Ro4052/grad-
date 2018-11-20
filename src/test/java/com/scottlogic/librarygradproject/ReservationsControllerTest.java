@@ -59,4 +59,16 @@ public class ReservationsControllerTest {
         verify(reservationService).findAll();
     }
 
+    @Test
+    public void check_calls_Repo_CheckReservations() {
+        //Arrange
+        long bookId = 1;
+
+        //Act
+        controller.check(bookId);
+
+        //Assert
+        verify(reservationService).checkReservation(bookId);
+    }
+
 }

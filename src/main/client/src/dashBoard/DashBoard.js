@@ -9,16 +9,24 @@ import { Button } from "semantic-ui-react";
 import scottLogicLogo from "../common/SL_primary_AW_POS_LO_RGB.jpg";
 import * as bookListActions from "./bookList/reducer";
 import Login from "../login/Login";
+import SearchBar from "./searchBar/SearchBar";
 
 class DashBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       deleteMode: false,
-      deleteList: []
+      deleteList: [],
+      searchString: "",
+      lowerDate: "",
+      upperDate: new Date().getFullYear(),
+      searchBy: "all"
     };
     this.handleCheck = this.handleCheck.bind(this);
     this.toggleSelectMode = this.toggleSelectMode.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSearchByChange = this.handleSearchByChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   handleCheck(event) {
@@ -32,6 +40,33 @@ class DashBoard extends Component {
   toggleSelectMode() {
     this.setState({ deleteMode: !this.state.deleteMode });
     this.setState({ deleteList: [] });
+  }
+
+  handleChange(e) {
+    this.setState({
+      searchString: e.target.value
+    });
+  }
+
+  handleDateChange(e) {
+    const date = new Date().getFullYear();
+    if (/[1234567890]/g.test(e.target.value) || e.target.value === "") {
+      if (e.target.value <= date) {
+        this.setState({
+          [e.target.id]: e.target.value
+        });
+      } else {
+        this.setState({
+          [e.target.id]: date
+        });
+      }
+    }
+  }
+
+  handleSearchByChange(e) {
+    this.setState({
+      searchBy: e.target.value
+    });
   }
 
   render() {
@@ -65,7 +100,20 @@ class DashBoard extends Component {
           </div>
           <Login />
         </div>
+        <SearchBar
+          handleSearchByChange={this.handleSearchByChange}
+          handleChange={this.handleChange}
+          handleDateChange={this.handleDateChange}
+          searchValue={this.state.searchValue}
+          upperDate={this.state.upperDate}
+          lowerDate={this.state.lowerDate}
+          searchBy={this.state.searchBy}
+        />
         <BookList
+          searchBy={this.state.searchBy}
+          searchString={this.state.searchString}
+          upperDate={this.state.upperDate}
+          lowerDate={this.state.lowerDate}
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
         />

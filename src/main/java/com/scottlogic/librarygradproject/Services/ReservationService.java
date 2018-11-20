@@ -32,6 +32,10 @@ public class ReservationService {
         userService.findOne(userId);
     }
 
+    public long checkReservation(long bookId) {
+        return resRepo.findLatestQueue(bookId);
+    }
+
     public void reserve(long bookId) {
         String userId = "Boss"; //sessions[token].username;
         validateReservation(bookId, userId);
