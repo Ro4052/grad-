@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import styles from "./SearchBar.module.css";
-import { Icon } from "semantic-ui-react";
 import DateSearch from "./dateSearch/DateSearch";
 
 class SearchBar extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <Icon name="search" size="large" />
         <div className={styles.dropdownContainer}>
           <select
             className={styles.dropdown}
