@@ -43,6 +43,7 @@ export class BookList extends Component {
                 reservePopText={this.props.reservePopText}
                 checkBook={this.props.checkBook}
                 checkBookPopText={this.props.availability}
+                loggedIn={this.props.loggedIn}
               />
             ))}
         </ul>
