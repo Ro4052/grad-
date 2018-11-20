@@ -83,15 +83,6 @@
 
     <profiles>
         <profile>
-            <id>dev</id>
-            <properties>
-                <spring.profiles.active>dev</spring.profiles.active>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
             <id>prod</id>
             <build>
                 <plugins>
@@ -159,17 +150,6 @@
             <activation>
                 <property>
                     <name>env.MAVEN_PROD</name>
-                </property>
-            </activation>
-        </profile>
-        <profile>
-            <id>test</id>
-            <properties>
-                <spring.profiles.active>test</spring.profiles.active>
-            </properties>
-            <activation>
-                <property>
-                    <name>env.MAVEN_TEST</name>
                 </property>
             </activation>
         </profile>
