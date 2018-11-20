@@ -80,6 +80,8 @@ jobs:
             - ./node_modules
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
+      - run: echo $PATH
+
       # Run the JAR and e2e tests - Forked
       - run:
           name: Run JAR file
