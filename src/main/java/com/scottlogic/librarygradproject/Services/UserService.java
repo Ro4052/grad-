@@ -33,14 +33,12 @@ public class UserService {
     }
 
     public LibraryUser loggedIn(OAuth2Authentication authentication) {
-        System.out.println("TEST");
         Map<String, String> userDetails = (Map<String, String>) authentication.getUserAuthentication().getDetails();
         LibraryUser newUser = LibraryUser.builder()
                 .userId(userDetails.get("login"))
                 .name(userDetails.get("name"))
                 .avatarUrl(userDetails.get("avatar_url"))
                 .build();
-        System.out.println("TEST");
         return userRepo.save(newUser);
     }
 }
