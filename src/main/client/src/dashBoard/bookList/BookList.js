@@ -27,8 +27,8 @@ export class BookList extends Component {
                 const upperDate =
                   Number(this.props.upperDate) || new Date().getFullYear();
                 return (
-                  (Number(book.publishDate) > lowerDate &&
-                    Number(book.publishDate) < upperDate) ||
+                  (Number(book.publishDate) >= lowerDate &&
+                    Number(book.publishDate) <= upperDate) ||
                   book.publishDate.length === 0
                 );
               }
