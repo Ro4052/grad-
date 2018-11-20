@@ -40,7 +40,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: node-dependencies-v2-{{ checksum "src/main/client/package.json" }}
+          key: node-dependencies-{{ checksum "src/main/client/package.json" }}
 
       - run:
           name: Setup Node Dependencies
@@ -49,7 +49,7 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: node-dependencies-v2-{{ checksum "src/main/client/package.json" }}
+          key: node-dependencies-{{ checksum "src/main/client/package.json" }}
 
       - run:
           name: Run Client Tests
