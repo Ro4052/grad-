@@ -43,6 +43,8 @@ export class BookList extends Component {
                 book={book}
                 reserveBook={this.props.reserveBook}
                 reservePopText={this.props.reservePopText}
+                checkBook={this.props.checkBook}
+                checkBookPopText={this.props.availability}
               />
             ))}
         </ul>
@@ -53,7 +55,8 @@ export class BookList extends Component {
 
 const mapStateToProps = state => ({
   books: state.bookList.books,
-  reservePopText: state.bookList.reservePopText
+  reservePopText: state.bookList.reservePopText,
+  availability: state.bookList.checkBookPopText
 });
 
 const mapDispatchToProps = dispatch =>
