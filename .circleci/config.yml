@@ -53,7 +53,7 @@ jobs:
 
       - run:
           name: Run Client Tests
-          command: cd src/main/client && set CI=true && npm run test
+          command: cd src/main/client && npm run test
 
   e2e_test:
     docker:
@@ -83,7 +83,7 @@ jobs:
       # Run the JAR and e2e tests - Forked
       - run:
           name: Run JAR file
-          command: MAVEN_PROD=true SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar & cd src/main/client && npm run test:e2e
+          command: MAVEN_PROD=true SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar
 
 workflows:
   version: 2
