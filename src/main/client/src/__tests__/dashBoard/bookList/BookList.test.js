@@ -17,14 +17,6 @@ const testBook2 = {
   publishDate: "1954"
 };
 
-// const initialState = { bookList: { books: [] }, login: { loggedIn: true } };
-// let store;
-
-// const createStore = books => {
-//   const state = initialState;
-//   state.bookList.books = books;
-//   return (store = mockStore(state));
-// };
 const searchString = "";
 
 describe("Testing the book list", () => {
