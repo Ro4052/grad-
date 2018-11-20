@@ -1,16 +1,11 @@
 package com.scottlogic.librarygradproject.Services;
 
-import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
-import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.jpa.repository.Query;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 

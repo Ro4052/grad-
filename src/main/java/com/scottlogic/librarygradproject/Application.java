@@ -1,6 +1,7 @@
 package com.scottlogic.librarygradproject;
 
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
+import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.LibraryUserRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import com.scottlogic.librarygradproject.Services.BookService;
