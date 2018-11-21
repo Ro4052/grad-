@@ -22,7 +22,9 @@ public class BorrowController {
     }
 
     @RequestMapping(value = "/borrow/{bookId}", method = RequestMethod.POST)
-    public void post(@PathVariable long bookId, OAuth2Authentication authentication) { borrowService.borrow(bookId, authentication); }
+    public void post(@PathVariable long bookId, OAuth2Authentication authentication) {
+        borrowService.borrow(bookId, authentication);
+    }
 
     @RequestMapping(value = "/borrow", method = RequestMethod.GET)
     public List<Borrow> getAll() { return borrowService.findAll(); }
@@ -31,5 +33,8 @@ public class BorrowController {
     public Borrow get(@PathVariable long borrowId) { return borrowService.get(borrowId); }
 
     @RequestMapping(value = "/borrow/{borrowId}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable long borrowId) {borrowService.delete(borrowId);}
+    public void delete(@PathVariable long borrowId) {borrowService.delete(borrowId); }
+
+    @RequestMapping(value = "/borrow/check/{bookId}", method = RequestMethod.GET)
+    public boolean check(@PathVariable long bookId) { return borrowService.check(bookId); }
 }

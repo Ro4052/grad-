@@ -15,14 +15,17 @@ public class BorrowService {
 
     private final BorrowRepository borrowRepository;
     private final UserService userService;
+    private final BookService bookService;
 
     @Autowired
-    public BorrowService(BorrowRepository borrowRepository, UserService userService) {
+    public BorrowService(BorrowRepository borrowRepository, UserService userService, BookService bookService) {
         this.borrowRepository = borrowRepository;
         this.userService = userService;
+        this.bookService = bookService;
     }
 
     public void borrow(long bookId, OAuth2Authentication authentication) {
+        bookService.findOne(bookId);
         String userId = userService.loggedIn(authentication).getUserId();
         Date date = new Date();
         Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(date).build();
@@ -44,5 +47,10 @@ public class BorrowService {
         } catch (EmptyResultDataAccessException e) {
             throw new BorrowNotFoundException(borrowId);
         }
+    }
+
+    public boolean check(long bookId) {
+        bookService.findOne(bookId);
+        return borrowRepository.isBookBorrowed(bookId);
     }
 }
