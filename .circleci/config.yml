@@ -79,10 +79,16 @@ jobs:
             - ./node_modules
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
-      # Run the JAR and e2e tests - Forked
+      # Run the JAR and e2e tests
       - run:
           name: Run JAR file
-          command: MAVEN_PROD=true SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar & cd src/main/client && npm run test:e2e
+          command: MAVEN_PROD=true SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar
+          background: true
+
+      # Run the tests
+      - run:
+          name: Run the e2e Tests
+          command: cd src/main/client && npm run test:e2e
 
 workflows:
   version: 2
