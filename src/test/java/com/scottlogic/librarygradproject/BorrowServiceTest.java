@@ -39,7 +39,7 @@ public class BorrowServiceTest {
     private OAuth2Authentication authentication;
     private OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
     private Book book1, book2;
-    private Borrow borrow1, borrow2;
+    private Borrow borrow1, borrow2, borrow3, borrow4;
 
     @Before
     public void before_Each_Test() {
@@ -52,6 +52,10 @@ public class BorrowServiceTest {
         borrow1.setId(1);
         borrow2 = new Borrow(2, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));
         borrow2.setId(2);
+        borrow3 = new Borrow(2, "TestUser 1", LocalDate.now().minusDays(8), true, LocalDate.now().minusDays(1));
+        borrow3.setId(3);
+        borrow4 = new Borrow(2, "TestUser 1", LocalDate.now().minusDays(8), false, LocalDate.now().minusDays(1));
+        borrow4.setId(4);
     }
 
     @Test(expected = BookNotFoundException.class)
@@ -137,6 +141,20 @@ public class BorrowServiceTest {
 
         //Act
         borrowService.delete(invalidBorrowId);
+    }
+
+    @Test
+    public void update_Borrowed_Updates_Repo() {
+        borrowService.save(borrow1);
+        borrowService.save(borrow2);
+        borrowService.save(borrow3);
+        borrowService.save(borrow4);
+        List<Long> ids = borrowService.updateBorrowed(LocalDate.now());
+        assertTrue(borrowService.findOne(1).isActive() == true);
+        assertTrue(borrowService.findOne(2).isActive() == true);
+        assertTrue(borrowService.findOne(3).isActive() == false);
+        assertTrue(borrowService.findOne(4).isActive() == false);
+        assertArrayEquals(new Long[] {2L}, ids.toArray());
     }
 
 

@@ -1,10 +1,7 @@
 package com.scottlogic.librarygradproject.Tasks;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.time.LocalDate;
+import com.scottlogic.librarygradproject.Services.BorrowService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,19 +9,22 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ScheduledTasks {
+public class BorrowUpdateTask {
+
+    private final BorrowService borrowService;
 
     @Bean
     public TaskScheduler taskScheduler() {
         return new ConcurrentTaskScheduler();
     }
 
-    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+    public BorrowUpdateTask(BorrowService borrowService) {
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        this.borrowService = borrowService;
+    }
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void reportCurrentTime() {
-        log.info("The time is now {}", dateFormat.format(new Date()));
+        borrowService.updateBorrowed(LocalDate.now());
     }
 }
