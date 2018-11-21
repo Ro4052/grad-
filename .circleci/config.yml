@@ -86,7 +86,7 @@ jobs:
 
       - run:
           name: Storing local IP address
-          command: node -p "require('ip').address()" > logs/ip.log
+          command: mkdir logs && node -p "require('ip').address()" > logs/ip.log
 
       - run:
           name: Waiting for server to start
