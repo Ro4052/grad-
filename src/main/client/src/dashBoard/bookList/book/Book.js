@@ -78,9 +78,11 @@ export default class Book extends Component {
           id="reservePopup"
           on="click"
           trigger={
-            <Button primary onClick={() => this.props.reserveBook(book.id)}>
-              Reserve
-            </Button>
+            this.props.loggedIn && (
+              <Button primary onClick={() => this.props.reserveBook(book.id)}>
+                Reserve
+              </Button>
+            )
           }
           content={this.props.reservePopText}
           hideOnScroll
@@ -92,9 +94,11 @@ export default class Book extends Component {
             editStateChange={this.props.editStateChange}
           />
         ) : (
-          <Button onClick={() => this.props.editStateChange(book.id)}>
-            Edit
-          </Button>
+          this.props.loggedIn && (
+            <Button onClick={() => this.props.editStateChange(book.id)}>
+              Edit
+            </Button>
+          )
         )}
         <Popup
           id="availablePopup"

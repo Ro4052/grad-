@@ -13,11 +13,6 @@ describe("Search Bar renders as default", () => {
     expect(wrapper.find("select").children().length).toEqual(5);
   });
 
-  test("there is a search icon rendered", () => {
-    const wrapper = shallow(<SearchBar />);
-    expect(wrapper.find("Icon").exists()).toBe(true);
-  });
-
   test("there is a search input field", () => {
     const wrapper = shallow(<SearchBar />);
     expect(wrapper.find(".searchBar").exists()).toBe(true);
