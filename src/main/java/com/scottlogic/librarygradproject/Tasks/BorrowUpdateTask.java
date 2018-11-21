@@ -23,7 +23,7 @@ public class BorrowUpdateTask {
         this.borrowService = borrowService;
     }
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void reportCurrentTime() {
         borrowService.updateBorrowed(LocalDate.now());
     }
