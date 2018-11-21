@@ -43,9 +43,11 @@ class DashBoard extends Component {
   }
 
   handleChange(e) {
-    this.setState({
-      searchString: e.target.value
-    });
+    if (e.target.value[0] !== " ") {
+      this.setState({
+        searchString: e.target.value
+      });
+    }
   }
 
   handleDateChange(e) {
@@ -109,7 +111,7 @@ class DashBoard extends Component {
           handleSearchByChange={this.handleSearchByChange}
           handleChange={this.handleChange}
           handleDateChange={this.handleDateChange}
-          searchValue={this.state.searchValue}
+          searchString={this.state.searchString}
           upperDate={this.state.upperDate}
           lowerDate={this.state.lowerDate}
           searchBy={this.state.searchBy}
