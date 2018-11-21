@@ -30,11 +30,11 @@ public class BorrowController {
     public List<Borrow> getAll() { return borrowService.findAll(); }
 
     @RequestMapping(value = "/borrow/{borrowId}", method = RequestMethod.GET)
-    public Borrow get(@PathVariable long borrowId) { return borrowService.get(borrowId); }
+    public Borrow get(@PathVariable long borrowId) { return borrowService.findOne(borrowId); }
 
     @RequestMapping(value = "/borrow/{borrowId}", method = RequestMethod.DELETE)
     public void delete(@PathVariable long borrowId) {borrowService.delete(borrowId); }
 
     @RequestMapping(value = "/borrow/check/{bookId}", method = RequestMethod.GET)
-    public boolean check(@PathVariable long bookId) { return borrowService.check(bookId); }
+    public boolean check(@PathVariable long bookId) { return borrowService.isBorrowed(bookId); }
 }

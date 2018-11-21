@@ -37,20 +37,26 @@ public class BorrowControllerTest {
 
     @Test
     public void delete_calls_repo_delete() {
+        //Arrange
+        long borrowId = 1;
+
         //Act
-        borrowController.delete(1);
+        borrowController.delete(borrowId);
 
         //Assert
-        verify(borrowService).delete(1);
+        verify(borrowService).delete(borrowId);
     }
 
     @Test
     public void get_calls_repo_get() {
+        //Arrange
+        long borrowId = 1;
+
         //Act
-        borrowController.get(1);
+        borrowController.get(borrowId);
 
         //Assert
-        verify(borrowService).get(1);
+        verify(borrowService).findOne(borrowId);
     }
 
     @Test
@@ -64,10 +70,13 @@ public class BorrowControllerTest {
 
     @Test
     public void check_calls_repo_check() {
+        //Arrange
+        long bookId = 1;
+
         //Act
-        borrowController.check(1);
+        borrowController.check(bookId);
 
         //Assert
-        verify(borrowService).check(1);
+        verify(borrowService).isBorrowed(bookId);
     }
 }

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Builder
@@ -17,20 +18,22 @@ public class Borrow {
     private long id;
     private long bookId;
     private String userId;
-    private Date borrowDate;
+    private LocalDate borrowDate;
     private boolean isActive;
+    private LocalDate returnDate;
 
     public Borrow() {}
 
-    public Borrow(long bookId, String userId, Date borrowDate, boolean isActive) {
+    public Borrow(long bookId, String userId, LocalDate borrowDate, boolean isActive, LocalDate returnDate) {
         this.bookId = bookId;
         this.userId = userId;
         this.borrowDate = borrowDate;
         this.isActive = isActive;
+        this.returnDate = returnDate;
     }
 
     public static class BorrowBuilder {
-        public Borrow build() { return new Borrow(this.bookId, this.userId, this.borrowDate, this.isActive); }
+        public Borrow build() { return new Borrow(this.bookId, this.userId, this.borrowDate, this.isActive, this.returnDate); }
     }
 
 }
