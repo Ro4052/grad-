@@ -86,7 +86,7 @@ jobs:
 
       - run:
           name: Storing local IP address
-          command: npm run store-ip
+          command: cd src/main/client && npm run store-ip
 
       - run:
           name: Waiting for server to start
