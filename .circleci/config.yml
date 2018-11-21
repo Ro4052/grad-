@@ -79,13 +79,19 @@ jobs:
             - ./node_modules
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
-      # Run the JAR and e2e tests
       - run:
           name: Run JAR file
           command: MAVEN_PROD=true SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar
           background: true
 
-      # Run the tests
+      - run:
+          name: Storing local IP address
+          command: node -p "require('ip').address()" > logs/ip.log
+
+      - run:
+          name: Waiting for server to start
+          command: wget --retry-connrefused --waitretry=2 -t 5 "http://$(cat logs/ip.log):9080" > /dev/null
+
       - run:
           name: Run the e2e Tests
           command: cd src/main/client && npm run test:e2e

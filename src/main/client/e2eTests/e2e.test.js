@@ -4,7 +4,7 @@ const puppeteer = require("puppeteer");
 let browser;
 let page;
 
-jest.setTimeout(30000);
+// jest.setTimeout(30000);
 
 beforeAll(async () => {
   browser = await puppeteer.launch({
