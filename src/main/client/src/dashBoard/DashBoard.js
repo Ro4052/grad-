@@ -43,7 +43,7 @@ class DashBoard extends Component {
   }
 
   handleChange(e) {
-    if (!(e.target.value.length > 0 && e.target.value === " ")) {
+    if (e.target.value[0] !== " ") {
       this.setState({
         searchString: e.target.value
       });
