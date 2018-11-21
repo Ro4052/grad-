@@ -207,6 +207,11 @@
                     </plugin>
                 </plugins>
             </build>
+            <activation>
+                <property>
+                    <name>env.MAVEN_TEST</name>
+                </property>
+            </activation>
         </profile>
     </profiles>
 

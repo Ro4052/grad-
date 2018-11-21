@@ -70,7 +70,7 @@ jobs:
       # Run the JAR and e2e tests - Forked
       - run:
           name: Run JAR file
-          command: SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar
+          command: MAVEN_TEST=true SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar
 
 workflows:
   version: 2
