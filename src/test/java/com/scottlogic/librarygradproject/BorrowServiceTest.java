@@ -156,6 +156,4 @@ public class BorrowServiceTest {
         assertTrue(borrowService.findOne(4).isActive() == false);
         assertArrayEquals(new Long[] {2L}, ids.toArray());
     }
-
-
 }

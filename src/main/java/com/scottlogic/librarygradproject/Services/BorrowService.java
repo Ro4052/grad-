@@ -58,7 +58,6 @@ public class BorrowService {
         }
     }
 
-
     public boolean isBorrowed(long bookId) {
         bookService.findOne(bookId);
         return borrowRepository.isBookBorrowed(bookId);
@@ -75,7 +74,5 @@ public class BorrowService {
             });
         }
         return bookIds;
-
-
     }
 }
