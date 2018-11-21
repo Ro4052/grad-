@@ -90,7 +90,7 @@ jobs:
 
       - run:
           name: Waiting for server to start
-          command: wget --retry-connrefused --waitretry=2 -t 5 "http://$(cat logs/ip.log):8090" > /dev/null
+          command: wget --retry-connrefused --waitretry=2 -t 5 "http://$(cat src/main/client/logs/ip.log):8090" > /dev/null
 
       - run:
           name: Run the e2e Tests
