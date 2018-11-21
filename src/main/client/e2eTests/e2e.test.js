@@ -6,7 +6,7 @@ let page;
 
 beforeAll(async () => {
   browser = await puppeteer.launch({
-    headless: false
+    headless: true
     //args: ['--disable-dev-shm-usage'],
   });
   page = await browser.newPage();
