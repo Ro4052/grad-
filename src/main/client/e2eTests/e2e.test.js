@@ -4,6 +4,8 @@ const puppeteer = require("puppeteer");
 let browser;
 let page;
 
+jest.setTimeout(30000);
+
 beforeAll(async () => {
   browser = await puppeteer.launch({
     headless: true
@@ -15,7 +17,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // await browser.close();
+  await browser.close();
 });
 
 describe("Main page", () => {
