@@ -57,8 +57,7 @@ jobs:
 
   e2e_test:
     docker:
-      - image: circleci/node:8
-      - image: circleci/openjdk:8-jdk-browsers
+      - image: registry.e1dev.com/docker/jdk-node
 
     working_directory: ~/maven-workspace
 
