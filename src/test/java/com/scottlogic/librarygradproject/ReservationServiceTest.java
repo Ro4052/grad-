@@ -9,6 +9,7 @@ import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
 import com.scottlogic.librarygradproject.Services.BookService;
 import com.scottlogic.librarygradproject.Services.ReservationService;
 import com.scottlogic.librarygradproject.Services.UserService;
+import netscape.security.ForbiddenTargetException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,9 +46,9 @@ public class ReservationServiceTest {
         authentication = helper.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2002");
-        res1 = new Reservation(1L, "Boss", 1L);
+        res1 = new Reservation(1L, "TestUser 1", 1L);
         res1.setId(1);
-        res2 = new Reservation(2L, "Boss", 1L);
+        res2 = new Reservation(2L, "TestUser 1", 1L);
         res2.setId(2);
         correctUser = LibraryUser.builder()
                 .userId("Boss")
@@ -69,17 +70,6 @@ public class ReservationServiceTest {
         //Arrange
         long id = 10;
         userService.add(correctUser);
-
-        //Act
-        reservationService.reserve(id, authentication);
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void invalid_userId_throws_exception() {
-        //Arrange
-
-        long id = 1;
-        userService.add(invalidUser);
 
         //Act
         reservationService.reserve(id, authentication);
