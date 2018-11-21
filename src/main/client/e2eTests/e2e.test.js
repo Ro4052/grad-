@@ -17,6 +17,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await page.close();
   await browser.close();
 });
 
