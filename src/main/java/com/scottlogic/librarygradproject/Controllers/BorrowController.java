@@ -17,19 +17,24 @@ public class BorrowController {
     private final BorrowService borrowService;
 
     @Autowired
-    BorrowController(BorrowService borrowService) {
+    public BorrowController(BorrowService borrowService) {
         this.borrowService = borrowService;
     }
 
     @RequestMapping(value = "/borrow/{bookId}", method = RequestMethod.POST)
-    public void post(@PathVariable long bookId, OAuth2Authentication authentication) { borrowService.borrow(bookId, authentication); }
+    public void post(@PathVariable long bookId, OAuth2Authentication authentication) {
+        borrowService.borrow(bookId, authentication);
+    }
 
     @RequestMapping(value = "/borrow", method = RequestMethod.GET)
     public List<Borrow> getAll() { return borrowService.findAll(); }
 
     @RequestMapping(value = "/borrow/{borrowId}", method = RequestMethod.GET)
-    public Borrow get(@PathVariable long borrowId) { return borrowService.get(borrowId); }
+    public Borrow get(@PathVariable long borrowId) { return borrowService.findOne(borrowId); }
 
     @RequestMapping(value = "/borrow/{borrowId}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable long borrowId) {borrowService.delete(borrowId);}
+    public void delete(@PathVariable long borrowId) {borrowService.delete(borrowId); }
+
+    @RequestMapping(value = "/borrow/check/{bookId}", method = RequestMethod.GET)
+    public boolean check(@PathVariable long bookId) { return borrowService.isBorrowed(bookId); }
 }

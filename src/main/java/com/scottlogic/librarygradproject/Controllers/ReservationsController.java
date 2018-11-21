@@ -38,6 +38,6 @@ public class ReservationsController {
     @RequestMapping(value = "/reserve/{reservationId}", method = RequestMethod.GET)
     public Reservation get(@PathVariable long reservationId) { return reservationService.findOne(reservationId); }
 
-    @RequestMapping (value = "/reserve/check/{reservationId}", method = RequestMethod.GET)
-    public long check(@PathVariable long reservationId) { return reservationService.checkReservation(reservationId); }
+    @RequestMapping (value = "/reserve/check/{bookId}", method = RequestMethod.GET)
+    public long check(@PathVariable long bookId) { return reservationService.checkReservation(bookId); }
 }

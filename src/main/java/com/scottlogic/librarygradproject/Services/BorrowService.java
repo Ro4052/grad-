@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,17 +15,21 @@ public class BorrowService {
 
     private final BorrowRepository borrowRepository;
     private final UserService userService;
+    private final BookService bookService;
 
     @Autowired
-    public BorrowService(BorrowRepository borrowRepository, UserService userService) {
+    public BorrowService(BorrowRepository borrowRepository, UserService userService, BookService bookService) {
         this.borrowRepository = borrowRepository;
         this.userService = userService;
+        this.bookService = bookService;
     }
 
     public void borrow(long bookId, OAuth2Authentication authentication) {
+        bookService.findOne(bookId);
         String userId = userService.loggedIn(authentication).getUserId();
-        Date date = new Date();
-        Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(date).build();
+        LocalDate borrowDate = LocalDate.now();
+        LocalDate returnDate = LocalDate.now().plusDays(7);
+        Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(borrowDate).returnDate(returnDate).build();
         borrowRepository.save(loan);
     }
 
@@ -33,7 +37,7 @@ public class BorrowService {
         return borrowRepository.findAll();
     }
 
-    public Borrow get(long borrowId) {
+    public Borrow findOne(long borrowId) {
         Optional<Borrow> borrowToGet = borrowRepository.findById(borrowId);
         return borrowToGet.orElseThrow(() -> new BorrowNotFoundException(borrowId));
     }
@@ -44,5 +48,10 @@ public class BorrowService {
         } catch (EmptyResultDataAccessException e) {
             throw new BorrowNotFoundException(borrowId);
         }
+    }
+
+    public boolean isBorrowed(long bookId) {
+        bookService.findOne(bookId);
+        return borrowRepository.isBookBorrowed(bookId);
     }
 }

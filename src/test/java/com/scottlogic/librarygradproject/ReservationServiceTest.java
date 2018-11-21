@@ -5,7 +5,6 @@ import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
-import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
 import com.scottlogic.librarygradproject.Services.BookService;
 import com.scottlogic.librarygradproject.Services.ReservationService;
 import com.scottlogic.librarygradproject.Services.UserService;
@@ -45,20 +44,10 @@ public class ReservationServiceTest {
         authentication = helper.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2002");
-        res1 = new Reservation(1L, "Boss", 1L);
+        res1 = new Reservation(1L, "TestUser 1", 1L);
         res1.setId(1);
-        res2 = new Reservation(2L, "Boss", 1L);
+        res2 = new Reservation(2L, "TestUser 1", 1L);
         res2.setId(2);
-        correctUser = LibraryUser.builder()
-                .userId("Boss")
-                .name("boss")
-                .avatarUrl("")
-                .build();
-        invalidUser = LibraryUser.builder()
-                .userId("Not Boss")
-                .name("not boss")
-                .avatarUrl("")
-                .build();
 
         bookService.save(book1);
         bookService.save(book2);
@@ -67,33 +56,19 @@ public class ReservationServiceTest {
     @Test(expected = BookNotFoundException.class)
     public void invalid_bookId_throws_exception() {
         //Arrange
-        long id = 10;
-        userService.add(correctUser);
+        long invalidBookId = 10;
 
         //Act
-        reservationService.reserve(id, authentication);
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void invalid_userId_throws_exception() {
-        //Arrange
-
-        long id = 1;
-        userService.add(invalidUser);
-
-        //Act
-        reservationService.reserve(id, authentication);
+        reservationService.reserve(invalidBookId, authentication);
     }
 
     @Test
     public void valid_book_and_user_creates_reservation() {
-
         //Arrange
-        long id = 1;
-        userService.add(correctUser);
+        long bookId = 1;
 
         //Act
-        reservationService.reserve(id, authentication);
+        reservationService.reserve(bookId, authentication);
 
         //Assert
         List<Reservation> reservations = reservationService.findAll();
@@ -102,9 +77,7 @@ public class ReservationServiceTest {
 
     @Test
     public void get_with_valid_id_gets_reservation() {
-
         //Arrange
-        userService.add(correctUser);
         reservationService.reserve(res1.getBookId(), authentication);
         reservationService.reserve(res2.getBookId(), authentication);
 
@@ -118,17 +91,16 @@ public class ReservationServiceTest {
     @Test (expected = ReservationNotFoundException.class)
     public void get_with_invalid_id_throws_exception() {
         //Arrange
-        userService.add(correctUser);
         reservationService.reserve(res1.getBookId(), authentication);
+        long invalidReservationId = 10;
 
         //Act
-        reservationService.findOne(10);
+        reservationService.findOne(invalidReservationId);
     }
 
     @Test
     public void getAll_returns_all_reservations() {
         //Arrange
-        userService.add(correctUser);
         reservationService.reserve(res1.getBookId(), authentication);
         reservationService.reserve(res2.getBookId(), authentication);
 
@@ -142,7 +114,6 @@ public class ReservationServiceTest {
     @Test
     public void check_returns_correct_number_single_reservation() {
         //Arrange
-        userService.add(correctUser);
         reservationService.reserve(res1.getBookId(), authentication);
 
         //Act
@@ -155,7 +126,6 @@ public class ReservationServiceTest {
     @Test
     public void check_returns_correct_number_multiple_reservation() {
         //Arrange
-        userService.add(correctUser);
         reservationService.reserve(res1.getBookId(), authentication);
         reservationService.reserve(res1.getBookId(), authentication);
 
