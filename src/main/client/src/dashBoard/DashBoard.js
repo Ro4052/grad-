@@ -43,11 +43,9 @@ class DashBoard extends Component {
   }
 
   handleChange(e) {
-    if (e.target.value[0] !== " ") {
-      this.setState({
-        searchString: e.target.value
-      });
-    }
+    this.setState({
+      searchString: e.target.value.trimLeft()
+    });
   }
 
   handleDateChange(e) {
