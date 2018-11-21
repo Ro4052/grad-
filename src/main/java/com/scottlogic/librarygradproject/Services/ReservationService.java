@@ -1,16 +1,12 @@
 package com.scottlogic.librarygradproject.Services;
 
-import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
-import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +32,8 @@ public class ReservationService {
         return resRepo.findLatestQueue(bookId);
     }
 
-    public void reserve(long bookId) {
-        String userId = "Boss"; //sessions[token].username;
+    public void reserve(long bookId, OAuth2Authentication authentication) {
+        String userId = userService.loggedIn(authentication).getUserId();
         validateReservation(bookId, userId);
         long nextInQueue = resRepo.findLatestQueue(bookId) + 1;
 //        if (nextInQueue == 1) {

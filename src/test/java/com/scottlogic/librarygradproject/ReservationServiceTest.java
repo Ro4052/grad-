@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.Assert.*;
@@ -36,9 +37,12 @@ public class ReservationServiceTest {
     private Reservation res1, res2;
     private LibraryUser correctUser;
     private LibraryUser invalidUser;
+    private OAuth2Authentication authentication;
+    private OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
 
     @Before
     public void before_Each_Test() {
+        authentication = helper.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2002");
         res1 = new Reservation(1L, "Boss", 1L);
@@ -67,27 +71,29 @@ public class ReservationServiceTest {
         userService.add(correctUser);
 
         //Act
-        reservationService.reserve(id);
+        reservationService.reserve(id, authentication);
     }
 
     @Test(expected = UserNotFoundException.class)
     public void invalid_userId_throws_exception() {
         //Arrange
+
         long id = 1;
         userService.add(invalidUser);
 
         //Act
-        reservationService.reserve(id);
+        reservationService.reserve(id, authentication);
     }
 
     @Test
     public void valid_book_and_user_creates_reservation() {
+
         //Arrange
         long id = 1;
         userService.add(correctUser);
 
         //Act
-        reservationService.reserve(id);
+        reservationService.reserve(id, authentication);
 
         //Assert
         List<Reservation> reservations = reservationService.findAll();
@@ -96,10 +102,11 @@ public class ReservationServiceTest {
 
     @Test
     public void get_with_valid_id_gets_reservation() {
+
         //Arrange
         userService.add(correctUser);
-        reservationService.reserve(res1.getBookId());
-        reservationService.reserve(res2.getBookId());
+        reservationService.reserve(res1.getBookId(), authentication);
+        reservationService.reserve(res2.getBookId(), authentication);
 
         //Act
         Reservation reservation = reservationService.findOne(res1.getId());
@@ -112,7 +119,7 @@ public class ReservationServiceTest {
     public void get_with_invalid_id_throws_exception() {
         //Arrange
         userService.add(correctUser);
-        reservationService.reserve(res1.getBookId());
+        reservationService.reserve(res1.getBookId(), authentication);
 
         //Act
         reservationService.findOne(10);
@@ -122,8 +129,8 @@ public class ReservationServiceTest {
     public void getAll_returns_all_reservations() {
         //Arrange
         userService.add(correctUser);
-        reservationService.reserve(res1.getBookId());
-        reservationService.reserve(res2.getBookId());
+        reservationService.reserve(res1.getBookId(), authentication);
+        reservationService.reserve(res2.getBookId(), authentication);
 
         //Act
         List<Reservation> reservations = reservationService.findAll();
@@ -136,7 +143,7 @@ public class ReservationServiceTest {
     public void check_returns_correct_number_single_reservation() {
         //Arrange
         userService.add(correctUser);
-        reservationService.reserve(res1.getBookId());
+        reservationService.reserve(res1.getBookId(), authentication);
 
         //Act
         long reservationNumber = reservationService.checkReservation(res1.getBookId());
@@ -149,8 +156,8 @@ public class ReservationServiceTest {
     public void check_returns_correct_number_multiple_reservation() {
         //Arrange
         userService.add(correctUser);
-        reservationService.reserve(res1.getBookId());
-        reservationService.reserve(res1.getBookId());
+        reservationService.reserve(res1.getBookId(), authentication);
+        reservationService.reserve(res1.getBookId(), authentication);
 
         //Act
         long reservationNumber = reservationService.checkReservation(res1.getBookId());
