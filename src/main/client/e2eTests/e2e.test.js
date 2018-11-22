@@ -12,7 +12,7 @@ beforeAll(async () => {
     //args: ['--disable-dev-shm-usage'],
   });
   page = await browser.newPage();
-  await page.goto(`http://${require("ip").address()}:8090/`);
+  await page.goto(`http://${require("ip").address()}:3000/`);
   // await page.waitForSelector(styles.pageHeader);
 });
 
