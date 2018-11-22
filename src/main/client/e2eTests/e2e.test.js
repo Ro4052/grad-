@@ -7,18 +7,21 @@ let page;
 // jest.setTimeout(30000);
 
 beforeAll(async () => {
-  browser = await puppeteer.launch({
-    headless: true
-    //args: ['--disable-dev-shm-usage'],
-  });
+  // browser = await puppeteer.launch({
+  //   headless: false
+  //   //args: ['--disable-dev-shm-usage'],
+  // });
+  browser = await puppeteer.launch();
   page = await browser.newPage();
-  await page.goto(`http://${require("ip").address()}:3000/`);
+  await page.goto(`http://${require("ip").address()}:3000/`, {
+    waitUntil: "networkidle2"
+  });
   // await page.waitForSelector(styles.pageHeader);
 });
 
-// afterAll(async () => {
-//   await browser.close();
-// });
+afterAll(async () => {
+  await browser.close();
+});
 
 describe("Main page", () => {
   it('should display "Grad Library App" text on page', async () => {

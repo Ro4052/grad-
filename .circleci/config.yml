@@ -16,7 +16,7 @@ jobs:
           key: maven-dependencies-{{ checksum "pom.xml" }}
 
       - run:
-          name: Setup Maven Dependencies
+          name: Setting Up Maven Dependencies
           command: mvn dependency:go-offline
 
       - save_cache:
@@ -25,7 +25,7 @@ jobs:
           key: maven-dependencies-{{ checksum "pom.xml" }}
 
       - run:
-          name: Run Server Tests
+          name: Running Server Unint Tests
           command: mvn package
 
       - persist_to_workspace:
@@ -43,7 +43,7 @@ jobs:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
       - run:
-          name: Setup Node Dependencies
+          name: Setting Up Node Dependencies
           command: cd src/main/client && npm install
 
       - save_cache:
@@ -52,7 +52,7 @@ jobs:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
       - run:
-          name: Run Client Tests
+          name: Running Client Unit Tests
           command: cd src/main/client && npm run test
 
   e2e_test:
@@ -71,7 +71,7 @@ jobs:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
       - run:
-          name: Setup Node Dependencies
+          name: Setting Up Node Dependencies
           command: cd src/main/client && npm install
 
       - save_cache:
@@ -80,12 +80,12 @@ jobs:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
       - run:
-          name: Run JAR file
+          name: Running JAR file
           command: SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar
           background: true
 
       - run:
-          name: Serve front-end
+          name: Serving front-end
           command: cd src/main/client && npm run start
           background: true
 
@@ -95,14 +95,14 @@ jobs:
 
       - run:
           name: Waiting for server to start
-          command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):8080/api/books"
+          command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):8080/api/books" > /dev/null
 
       - run:
           name: Waiting for front-end to start
-          command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):3000"
+          command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):3000" > /dev/null
 
       - run:
-          name: Run the e2e Tests
+          name: Running e2e Tests
           command: cd src/main/client && npm run test:e2e
 
 workflows:
