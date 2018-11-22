@@ -145,15 +145,19 @@ public class BorrowServiceTest {
 
     @Test
     public void update_Borrowed_Updates_Repo() {
-        borrowService.save(borrow1);
-        borrowService.save(borrow2);
-        borrowService.save(borrow3);
-        borrowService.save(borrow4);
+        borrowService.borrow(borrow1.getBookId(), authentication);
+        borrowService.borrow(borrow2.getBookId(), authentication);
+        borrowService.borrow(borrow3.getBookId(), authentication);
+        borrowService.borrow(borrow4.getBookId(), authentication);
+        borrowService.findOne(3).setBorrowDate(borrow3.getBorrowDate());
+        borrowService.findOne(3).setReturnDate(borrow3.getReturnDate());
+        borrowService.findOne(4).setBorrowDate(borrow4.getBorrowDate());
+        borrowService.findOne(4).setReturnDate(borrow4.getReturnDate());
+        borrowService.findOne(4).setActive(false);
+        System.out.println(borrowService.findAll());
+        borrow3.setActive(false);
         List<Long> ids = borrowService.updateBorrowed(LocalDate.now());
-        assertTrue(borrowService.findOne(1).isActive() == true);
-        assertTrue(borrowService.findOne(2).isActive() == true);
-        assertTrue(borrowService.findOne(3).isActive() == false);
-        assertTrue(borrowService.findOne(4).isActive() == false);
+        assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3, borrow4}, borrowService.findAll().toArray());
         assertArrayEquals(new Long[] {2L}, ids.toArray());
     }
 }

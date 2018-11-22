@@ -37,10 +37,6 @@ public class BorrowService {
         borrowRepository.save(loan);
     }
 
-    public void save(Borrow borrow) {
-        borrowRepository.save(borrow);
-    }
-
     public List<Borrow> findAll() {
         return borrowRepository.findAll();
     }
