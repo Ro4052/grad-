@@ -23,7 +23,7 @@ class SearchBar extends Component {
             className={styles.searchBar}
             placeholder="Search"
             onChange={this.props.handleChange}
-            value={this.props.searchValue}
+            value={this.props.searchString}
           />
         ) : (
           <div className={styles.dateSearchContainer}>

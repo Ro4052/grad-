@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    @Query(value = "SELECT COALESCE ((SELECT max(queue_position) FROM public.reservation WHERE book_id = :bookId), 0)", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM public.reservation WHERE book_id = :bookId", nativeQuery = true)
     long findLatestQueue(@Param("bookId") long bookId);
 
 }
