@@ -87,6 +87,7 @@ jobs:
       - run:
           name: Serve front-end
           command: cd src/main/client && npm run start
+          background: true
 
       - run:
           name: Storing local IP address
@@ -95,6 +96,10 @@ jobs:
       - run:
           name: Waiting for server to start
           command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):8080/api/books"
+
+      - run:
+          name: Waiting for front-end to start
+          command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):3000"
 
       - run:
           name: Run the e2e Tests
