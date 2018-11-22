@@ -6,8 +6,6 @@ import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
