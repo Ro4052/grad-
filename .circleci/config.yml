@@ -80,6 +80,10 @@ jobs:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
       - run:
+          name: Build front-end
+          command: cd src/main/client && npm run build
+
+      - run:
           name: Run JAR file
           command: MAVEN_PROD=true SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar
           background: true
@@ -90,7 +94,7 @@ jobs:
 
       - run:
           name: Waiting for server to start
-          command: wget --retry-connrefused --wait=10 -t 20 "http://$(cat src/main/client/logs/ip.log):8090/api/books"
+          command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):8090/api/books"
 
       - run:
           name: Run the e2e Tests
