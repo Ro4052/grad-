@@ -82,19 +82,16 @@ jobs:
       - run:
           name: Run JAR file
           command: MAVEN_PROD=true SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar
-          background: true
-
-      - run:
-          name: Storing local IP address
-          command: cd src/main/client && npm run store-ip
-
-      - run:
-          name: Waiting for server to start
-          command: wget --retry-connrefused --waitretry=10 -t 3 "http://$(cat src/main/client/logs/ip.log):8090"
-
-      - run:
-          name: Run the e2e Tests
-          command: cd src/main/client && npm run test:e2e
+      #     background: true
+      # - run:
+      #     name: Storing local IP address
+      #     command: cd src/main/client && npm run store-ip
+      # - run:
+      #     name: Waiting for server to start
+      #     command: wget --retry-connrefused --waitretry=10 -t 3 "http://$(cat src/main/client/logs/ip.log):8090"
+      # - run:
+      #     name: Run the e2e Tests
+      #     command: cd src/main/client && npm run test:e2e
 
 workflows:
   version: 2
