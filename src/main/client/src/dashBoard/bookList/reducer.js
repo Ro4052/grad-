@@ -84,11 +84,13 @@ export const borrowBook = bookId => dispatch => {
 export const checkBook = bookId => dispatch => {
   dispatch(popupText("Loading..."));
   axios
-    .get(`/api/reserve/check/${bookId}`)
+    .get(`/api/borrow/check/${bookId}`)
     .then(res => {
-      res.data
-        ? dispatch(popupText(`Number of reservations: ${res.data}`))
-        : dispatch(popupText("Available"));
+      if (res.data) {
+        axios.get(`/api/reserve/check/${bookId}`).then(res => {
+          dispatch(popupText(`Number of reservations: ${res.data}`));
+        });
+      } else dispatch(popupText("Available"));
     })
     .catch(() => {
       dispatch(popupText("Something went wrong"));

@@ -1,6 +1,7 @@
 package com.scottlogic.librarygradproject.Services;
 
 import com.scottlogic.librarygradproject.Entities.Borrow;
+import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
 import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,14 @@ public class BorrowService {
     }
 
     public void borrow(long bookId, OAuth2Authentication authentication) {
-        bookService.findOne(bookId);
-        String userId = userService.loggedIn(authentication).getUserId();
-        LocalDate borrowDate = LocalDate.now();
-        LocalDate returnDate = LocalDate.now().plusDays(7);
-        Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(borrowDate).returnDate(returnDate).build();
-        borrowRepository.save(loan);
+        if (this.isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
+        else {
+            String userId = userService.loggedIn(authentication).getUserId();
+            LocalDate borrowDate = LocalDate.now();
+            LocalDate returnDate = LocalDate.now().plusDays(7);
+            Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(borrowDate).returnDate(returnDate).build();
+            borrowRepository.save(loan);
+        }
     }
 
     public List<Borrow> findAll() {
