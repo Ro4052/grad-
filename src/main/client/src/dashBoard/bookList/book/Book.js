@@ -75,6 +75,17 @@ export default class Book extends Component {
           </div>
         </div>
         <Popup
+          id="availablePopup"
+          on="click"
+          trigger={
+            <Button onClick={() => this.props.checkBook(book.id)}>
+              Check Availability
+            </Button>
+          }
+          content={this.props.popupText}
+          hideOnScroll
+        />
+        <Popup
           id="reservePopup"
           on="click"
           trigger={
@@ -84,7 +95,21 @@ export default class Book extends Component {
               </Button>
             )
           }
-          content={this.props.reservePopText}
+          content={this.props.popupText}
+          hideOnScroll
+        />
+        <Popup
+          id="borrowPopup"
+          on="click"
+          trigger={
+            <Button
+              color="green"
+              onClick={() => this.props.borrowBook(book.id)}
+            >
+              Borrow
+            </Button>
+          }
+          content={this.props.popupText}
           hideOnScroll
         />
         {book.editState ? (
@@ -100,17 +125,6 @@ export default class Book extends Component {
             </Button>
           )
         )}
-        <Popup
-          id="availablePopup"
-          on="click"
-          trigger={
-            <Button onClick={() => this.props.checkBook(book.id)}>
-              Check Availability
-            </Button>
-          }
-          content={this.props.checkBookPopText}
-          hideOnScroll
-        />
       </li>
     );
   }

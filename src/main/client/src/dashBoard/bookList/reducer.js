@@ -2,13 +2,12 @@ import axios from "axios";
 
 export const types = {
   GET_BOOKS: "bookList/GET_BOOKS",
-  RESERVE_TEXT: "bookList/RESERVE_TEXT",
-  CHECK_TEXT: "booklist/CHECK_TEXT"
+  POPUP_TEXT: "bookList/POPUP_TEXT"
 };
 
 const INITIAL_STATE = {
   books: [],
-  reservePopText: ""
+  popupText: ""
 };
 
 // Actions
@@ -17,13 +16,8 @@ const getBooksAction = books => ({
   books
 });
 
-const reserveText = text => ({
-  type: types.RESERVE_TEXT,
-  text
-});
-
-const checkBookText = text => ({
-  type: types.CHECK_TEXT,
+const popupText = text => ({
+  type: types.POPUP_TEXT,
   text
 });
 
@@ -62,30 +56,42 @@ export const deleteBook = bookIds => (dispatch, getState) => {
 
 export const reserveBook = bookId => dispatch => {
   // Reset popup text
-  dispatch(reserveText("Loading..."));
+  dispatch(popupText("Loading..."));
   axios
     .post(`/api/reserve/${bookId}`)
     .then(() => {
       // Success popup text
-      dispatch(reserveText("Reservation successful!"));
+      dispatch(popupText("Reservation successful!"));
     })
     .catch(() => {
       // Failure popup text
-      dispatch(reserveText("Reservation failed"));
+      dispatch(popupText("Reservation failed"));
+    });
+};
+
+export const borrowBook = bookId => dispatch => {
+  dispatch(popupText("Loading..."));
+  axios
+    .post(`/api/borrow/${bookId}`)
+    .then(() => {
+      dispatch(popupText("Book successfully borrowed!"));
+    })
+    .catch(() => {
+      dispatch(popupText("Book cannot be borrowed at this time"));
     });
 };
 
 export const checkBook = bookId => dispatch => {
-  dispatch(checkBookText("Loading..."));
+  dispatch(popupText("Loading..."));
   axios
     .get(`/api/reserve/check/${bookId}`)
     .then(res => {
       res.data
-        ? dispatch(checkBookText(`Number of reservations: ${res.data}`))
-        : dispatch(checkBookText("Available"));
+        ? dispatch(popupText(`Number of reservations: ${res.data}`))
+        : dispatch(popupText("Available"));
     })
     .catch(() => {
-      dispatch(checkBookText("Something went wrong"));
+      dispatch(popupText("Something went wrong"));
     });
 };
 
@@ -94,10 +100,8 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.GET_BOOKS:
       return { ...state, books: action.books };
-    case types.RESERVE_TEXT:
-      return { ...state, reservePopText: action.text };
-    case types.CHECK_TEXT:
-      return { ...state, checkBookPopText: action.text };
+    case types.POPUP_TEXT:
+      return { ...state, popupText: action.text };
     default:
       return state;
   }

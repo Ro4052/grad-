@@ -42,9 +42,9 @@ export class BookList extends Component {
                 key={book.id}
                 book={book}
                 reserveBook={this.props.reserveBook}
-                reservePopText={this.props.reservePopText}
+                popupText={this.props.popupText}
                 checkBook={this.props.checkBook}
-                checkBookPopText={this.props.availability}
+                borrowBook={this.props.borrowBook}
                 loggedIn={this.props.loggedIn}
               />
             ))}
@@ -56,9 +56,8 @@ export class BookList extends Component {
 
 const mapStateToProps = state => ({
   books: state.bookList.books,
-  reservePopText: state.bookList.reservePopText,
-  loggedIn: state.login.loggedIn,
-  availability: state.bookList.checkBookPopText
+  popupText: state.bookList.popupText,
+  loggedIn: state.login.loggedIn
 });
 
 const mapDispatchToProps = dispatch =>
