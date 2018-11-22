@@ -4,15 +4,21 @@ package com.scottlogic.librarygradproject.cucumber.steps;
 import com.scottlogic.librarygradproject.Controllers.BooksController;
 import com.scottlogic.librarygradproject.Controllers.ReservationsController;
 import com.scottlogic.librarygradproject.Entities.Book;
+import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
+import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
+import com.scottlogic.librarygradproject.OAuthClientTestHelper;
 import com.scottlogic.librarygradproject.Services.BookService;
 import com.scottlogic.librarygradproject.Services.ReservationService;
+import com.scottlogic.librarygradproject.Services.UserService;
 import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +31,10 @@ public class Stepdefs implements En {
 
     @Autowired
     BookService bookService;
+    @Autowired
     ReservationService resService;
+    @Autowired
+    UserService userService;
     BooksController controller;
     ReservationsController rescontroller;
     Book newBook;
@@ -36,6 +45,13 @@ public class Stepdefs implements En {
     Book existingBook;
     Book existingBook2;
     Book existingBook3;
+    LibraryUser user1 = LibraryUser.builder()
+            .userId("Boss")
+            .name("Boss")
+            .avatarUrl("avatar_url")
+            .build();
+    OAuthClientTestHelper helper = new OAuthClientTestHelper("Boss", "Boss", "avatar_url");
+    OAuth2Authentication authentication = helper.getOauthTestAuthentication();
     public Stepdefs() {
 
         Given("a book repository exists", () -> {
@@ -245,16 +261,18 @@ public class Stepdefs implements En {
             controller.delete(id);
         });
         Then("^That book is deleted$", () -> {
+            boolean failed = false;
             try {
                 bookService.findOne(id);
             }
-            catch (BookNotFoundException e) {}
+            catch (BookNotFoundException e) {failed = true;}
+            assertEquals(failed, true);
             assertEquals(repoLength-1,controller.getAll().size());
         });
         When("^A delete request is received for a book that does not exist$", () -> {
             repoLength = controller.getAll().size();
             try {
-                controller.delete(7);
+                controller.delete(-1);
             }
             catch (BookNotFoundException e) {}
         });
@@ -282,49 +300,41 @@ public class Stepdefs implements En {
             assertEquals(repoLength, controller.getAll().size());
         });
         Then("^existing books should be deleted$", () -> {
+            boolean failed = false;
             try {
                 bookService.findOne(id);
             }
-            catch (BookNotFoundException e) {}
+            catch (BookNotFoundException e) {failed = true;}
+            assertEquals(failed, true);
             assertEquals(repoLength-1,controller.getAll().size());
         });
         When("^A delete request is received for multiple books, none of which exist$", () -> {
             repoLength = controller.getAll().size();
             long ne = -1;
             long ne2 = -2;
-            try {controller.delete(Arrays.asList(ne,ne2));} catch  (BookNotFoundException e) {}
+            boolean failed = false;
+            try {controller.delete(Arrays.asList(ne,ne2));} catch  (BookNotFoundException e) {failed = true;}
+            assertEquals(failed, true);
         });
         Given("^an empty reservation table exists$", () -> {
             resService.deleteAll();
             rescontroller = new ReservationsController(resService);
         });
         When("^a reservation is made on a book by an authorised user$", () -> {
-            // Write code here that turns the phrase above into concrete actions
-            throw new PendingException();
+           rescontroller.post(id,authentication);
         });
         Then("^that reservation is added to the database$", () -> {
-            // Write code here that turns the phrase above into concrete actions
-            throw new PendingException();
+          assertEquals(resService.checkReservation(id),1);
         });
-        When("^a reservation is made on a book by an unauthorised user$", () -> {
-            // Write code here that turns the phrase above into concrete actions
-            throw new PendingException();
-        });
-        Then("^that reservation is not added to the database$", () -> {
-            // Write code here that turns the phrase above into concrete actions
-            throw new PendingException();
-        });
-        When("^an availability check is made on a book$", () -> {
-            // Write code here that turns the phrase above into concrete actions
-            throw new PendingException();
-        });
-        Then("^the status of the book should be displayed as available$", () -> {
-            // Write code here that turns the phrase above into concrete actions
-            throw new PendingException();
+
+        Then("^the status of the book should be available$", () -> {
+            assertEquals(rescontroller.check(id),0);
         });
         Then("^the status of the book should be reserved with a queue of (\\d+)$", (Integer arg0) -> {
-            // Write code here that turns the phrase above into concrete actions
-            throw new PendingException();
+            assertEquals(rescontroller.check(id), arg0.longValue());
+        });
+        And("^a user table with one user exists$", () -> {
+            userService.add(user1);
         });
     }
 }
