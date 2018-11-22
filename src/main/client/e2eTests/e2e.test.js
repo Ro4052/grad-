@@ -7,11 +7,10 @@ let page;
 // jest.setTimeout(30000);
 
 beforeAll(async () => {
-  // browser = await puppeteer.launch({
-  //   headless: false
-  //   //args: ['--disable-dev-shm-usage'],
-  // });
-  browser = await puppeteer.launch();
+  browser = await puppeteer.launch({
+    headless: false
+    //args: ['--disable-dev-shm-usage'],
+  });
   page = await browser.newPage();
   await page.goto(`http://${require("ip").address()}:3000/`, {
     waitUntil: "networkidle2"
