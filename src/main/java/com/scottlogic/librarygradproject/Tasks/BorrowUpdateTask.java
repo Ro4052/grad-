@@ -24,7 +24,7 @@ public class BorrowUpdateTask {
     }
 
     @Scheduled(cron = "0 0 0 * * *")
-    public void reportCurrentTime() {
+    public void checkExpiredBorrows() {
         borrowService.updateBorrowed(LocalDate.now());
     }
 }
