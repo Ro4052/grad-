@@ -19,7 +19,6 @@ public class BorrowUpdateTask {
     }
 
     public BorrowUpdateTask(BorrowService borrowService) {
-
         this.borrowService = borrowService;
     }
 

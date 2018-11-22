@@ -154,7 +154,6 @@ public class BorrowServiceTest {
         borrowService.findOne(4).setBorrowDate(borrow4.getBorrowDate());
         borrowService.findOne(4).setReturnDate(borrow4.getReturnDate());
         borrowService.findOne(4).setActive(false);
-        System.out.println(borrowService.findAll());
         borrow3.setActive(false);
         List<Long> ids = borrowService.updateBorrowed(LocalDate.now());
         assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3, borrow4}, borrowService.findAll().toArray());
