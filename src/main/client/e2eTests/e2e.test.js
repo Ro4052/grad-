@@ -16,9 +16,9 @@ beforeAll(async () => {
   // await page.waitForSelector(styles.pageHeader);
 });
 
-afterAll(async () => {
-  await browser.close();
-});
+// afterAll(async () => {
+//   await browser.close();
+// });
 
 describe("Main page", () => {
   it('should display "Grad Library App" text on page', async () => {
