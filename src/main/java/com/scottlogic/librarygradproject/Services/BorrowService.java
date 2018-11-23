@@ -73,8 +73,9 @@ public class BorrowService {
         borrowToReturn.setActive(false);
         long bookId = borrowToReturn.getBookId();
         List<Reservation> reservations = reservationRepository.findAllByBookId(bookId);
+        int nextInQueue = reservationRepository.findNextInQueue(bookId);
         reservations.forEach(reservation -> {
-            if (reservation.getQueuePosition() == 1) {
+            if (reservation.getQueuePosition() == nextInQueue) {
                 if (isBorrowed(bookId)) {
                     throw new BookAlreadyBorrowedException(reservation.getBookId());
                 }
