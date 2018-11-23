@@ -3,6 +3,7 @@ package com.scottlogic.librarygradproject.Services;
 import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
+import com.scottlogic.librarygradproject.Exceptions.BookAlreadyReturnedException;
 import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
@@ -65,7 +66,12 @@ public class BorrowService {
     @Transactional
     public void bookReturned(long borrowId) {
         Borrow borrowToReturn = findOne(borrowId);
-        borrowToReturn.setActive(false);
+        if (borrowToReturn.isActive()) {
+            borrowToReturn.setActive(false);
+        }
+        else {
+            throw new BookAlreadyReturnedException(borrowId);
+        }
         long bookId = borrowToReturn.getBookId();
         List<Reservation> reservations = reservationRepository.findAllByBookId(bookId);
         Iterator<Reservation> i = reservations.iterator();
