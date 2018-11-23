@@ -186,7 +186,6 @@ public class BorrowServiceTest {
         borrowService.bookReturned(1);
     }
 
-
 //  can't create a new borrow if one already exists after a book is returned
     @Test (expected = BookAlreadyBorrowedException.class)
     public void bookReturned_Two_Active_Borrows_Throws() {
@@ -200,7 +199,6 @@ public class BorrowServiceTest {
         borrowService.bookReturned(1L);
 
     }
-
 
 //  no reservation for the book and an active borrow ->
 //  inactivate borrow, do nothing to reservations table
