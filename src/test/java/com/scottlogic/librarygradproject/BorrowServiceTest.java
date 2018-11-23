@@ -3,6 +3,7 @@ package com.scottlogic.librarygradproject;
 import com.scottlogic.librarygradproject.Entities.Book;
 import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
+import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
 import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
@@ -129,6 +130,21 @@ public class BorrowServiceTest {
         assertFalse(borrowService.isBorrowed(bookId));
     }
 
+    @Test
+    public void delete_with_valid_borrowId_deletes_loan() {
+        //Arrange
+        long borrowToDeleteId = 1;
+        borrowService.borrow(book1.getId(), authentication);
+        borrowService.borrow(book2.getId(), authentication);
+
+        //Act
+        borrowService.delete(borrowToDeleteId);
+        List<Borrow> loans = borrowService.findAll();
+
+        //Assert
+        assertArrayEquals(new Borrow[] {borrow2}, loans.toArray());
+    }
+
     @Test (expected = BorrowNotFoundException.class)
     public void delete_with_invalid_borrowId_throws_exception() {
         //Arrange
@@ -139,5 +155,12 @@ public class BorrowServiceTest {
         borrowService.delete(invalidBorrowId);
     }
 
+    @Test (expected = BookAlreadyBorrowedException.class)
+    public void borrow_with_already_borrowed_bookId_throws_exception() {
+        //Arrange
+        borrowService.borrow(book1.getId(), authentication);
 
+        //Act
+        borrowService.borrow(book1.getId(), authentication);
+    }
 }
