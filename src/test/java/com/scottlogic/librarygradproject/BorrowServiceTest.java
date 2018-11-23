@@ -39,6 +39,7 @@ public class BorrowServiceTest {
 
     private OAuth2Authentication authentication;
     private OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
+
     private Book book1, book2, book3, book4;
     private Borrow borrow1, borrow2, borrow3, borrow4;
 
