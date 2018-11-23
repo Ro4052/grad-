@@ -8,6 +8,7 @@ import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
 import com.scottlogic.librarygradproject.Services.BookService;
 import com.scottlogic.librarygradproject.Services.BorrowService;
+import com.scottlogic.librarygradproject.Services.ReservationService;
 import com.scottlogic.librarygradproject.Services.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +36,8 @@ public class BorrowServiceTest {
     private BookService bookService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ReservationService reservationService;
 
     private OAuth2Authentication authentication;
     private OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
@@ -143,20 +146,62 @@ public class BorrowServiceTest {
         borrowService.delete(invalidBorrowId);
     }
 
+//  Three reservations for a book and an active borrow ->
+//  inactivate, delete first reservation and create new borrow and amend queue position
     @Test
-    public void update_Borrowed_Updates_Repo() {
-        borrowService.borrow(borrow1.getBookId(), authentication);
-        borrowService.borrow(borrow2.getBookId(), authentication);
-        borrowService.borrow(borrow3.getBookId(), authentication);
-        borrowService.borrow(borrow4.getBookId(), authentication);
-        borrowService.findOne(3).setBorrowDate(borrow3.getBorrowDate());
-        borrowService.findOne(3).setReturnDate(borrow3.getReturnDate());
-        borrowService.findOne(4).setBorrowDate(borrow4.getBorrowDate());
-        borrowService.findOne(4).setReturnDate(borrow4.getReturnDate());
-        borrowService.findOne(4).setActive(false);
-        borrow3.setActive(false);
-        List<Long> ids = borrowService.updateBorrowed(LocalDate.now());
-        assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3, borrow4}, borrowService.findAll().toArray());
-        assertArrayEquals(new Long[] {2L}, ids.toArray());
+    public void bookReturned_Multiple_Reservations_Pending() {
+        //Arrange
+        reservationService.reserve(book1.getId(), authentication);
+        reservationService.reserve(book1.getId(), authentication);
+        reservationService.reserve(book1.getId(), authentication);
+        borrowService.borrow(book1.getId(), authentication);
+
+        //Act
+        borrowService.bookReturned(1L);
+        borrow1.setActive(false);
+        borrow2.setBookId(1);
+
+        //Assert
+        assertFalse(borrowService.findOne(1L).isActive());
+        assertEquals(2, reservationService.findAll().size());
+        assertEquals(reservationService.findOne(2L).getQueuePosition(), 1);
+        assertEquals(reservationService.findOne(3L).getQueuePosition(), 2);
+        assertArrayEquals(new Borrow[] {borrow1, borrow2}, borrowService.findAll().toArray());
     }
+
+//    two reservation for a book and no active borrows ->
+//    throw an exception
+
+//  no reservation for the book and an active borrow ->
+//  inactivate borrow, do nothing to reservations table
+    @Test
+    public void bookReturned_No_Reservations_Pending() {
+        //Arrange
+        reservationService.reserve(book2.getId(), authentication);
+        borrowService.borrow(book1.getId(), authentication);
+
+        //Act
+        borrowService.bookReturned(1L);
+
+        //Assert
+        assertEquals(1, reservationService.findAll().size());
+        assertFalse(borrowService.findOne(1L).isActive());
+    }
+
+//    @Test
+//    public void update_Borrowed_Updates_Repo() {
+//        borrowService.borrow(borrow1.getBookId(), authentication);
+//        borrowService.borrow(borrow2.getBookId(), authentication);
+//        borrowService.borrow(borrow3.getBookId(), authentication);
+//        borrowService.borrow(borrow4.getBookId(), authentication);
+//        borrowService.findOne(3).setBorrowDate(borrow3.getBorrowDate());
+//        borrowService.findOne(3).setReturnDate(borrow3.getReturnDate());
+//        borrowService.findOne(4).setBorrowDate(borrow4.getBorrowDate());
+//        borrowService.findOne(4).setReturnDate(borrow4.getReturnDate());
+//        borrowService.findOne(4).setActive(false);
+//        borrow3.setActive(false);
+//        List<Long> ids = borrowService.updateBorrowed(LocalDate.now());
+//        assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3, borrow4}, borrowService.findAll().toArray());
+//        assertArrayEquals(new Long[] {2L}, ids.toArray());
+//    }
 }
