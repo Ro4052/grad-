@@ -10,10 +10,12 @@ export default class Book extends Component {
     super(props);
     this.state = {
       fullTitle: false,
-      fullAuthor: false
+      fullAuthor: false,
+      availabilityChecked: false
     };
     this.toggleTitle = this.toggleTitle.bind(this);
     this.toggleAuthor = this.toggleAuthor.bind(this);
+    this.checkAvailability = this.checkAvailability.bind(this);
   }
 
   toggleTitle() {
@@ -28,8 +30,21 @@ export default class Book extends Component {
     });
   }
 
+  checkAvailability(bookId) {
+    this.setState({
+      availabilityChecked: true
+    });
+    this.props.checkBook(bookId);
+  }
+
   render() {
     const { book } = this.props;
+    let request;
+    let colour;
+    let buttonText;
+    request = book.isAvailable ? this.props.borrowBook : this.props.reserveBook;
+    colour = book.isAvailable ? "green" : "blue";
+    buttonText = book.isAvailable ? "Borrow" : "Reserve";
     return (
       <li className={styles.book}>
         {this.props.deleteMode ? (
@@ -75,26 +90,32 @@ export default class Book extends Component {
             Publish Date: {book.publishDate}
           </div>
         </div>
-        <RequestButton
-          buttonText="Check Availability"
-          request={this.props.checkBook}
-          bookId={book.id}
-          popupText={this.props.popupText}
-        />
-        <RequestButton
-          buttonText="Reserve"
-          request={this.props.reserveBook}
-          bookId={book.id}
-          popupText={this.props.popupText}
-          colour={"blue"}
-        />
-        <RequestButton
-          buttonText="Borrow"
-          request={this.props.borrowBook}
-          bookId={book.id}
-          popupText={this.props.popupText}
-          colour={"green"}
-        />
+        {this.state.availabilityChecked ? (
+          <div>
+            <RequestButton
+              buttonText={buttonText}
+              request={request}
+              bookId={book.id}
+              popupText={this.props.popupText}
+              colour={colour}
+            />
+            {/* <RequestButton
+              buttonText="Borrow"
+              request={this.props.borrowBook}
+              bookId={book.id}
+              popupText={this.props.popupText}
+              colour={"green"}
+            /> */}
+          </div>
+        ) : (
+          <RequestButton
+            buttonText="Check Availability"
+            request={this.checkAvailability}
+            bookId={book.id}
+            popupText={this.props.popupText}
+          />
+        )}
+
         {book.editState ? (
           <EditBook
             updateBook={this.props.updateBook}

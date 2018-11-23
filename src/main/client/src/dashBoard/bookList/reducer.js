@@ -38,6 +38,15 @@ export const editStateChange = id => (dispatch, getState) => {
   dispatch(getBooksAction(newBooks));
 };
 
+export const bookIsAvailable = id => (dispatch, getState) => {
+  console.log("in here");
+  const newBooks = getState().bookList.books.map(book => {
+    console.log(book);
+    return book.id === id ? { ...book, isAvailable: true } : book;
+  });
+  dispatch(getBooksAction(newBooks));
+};
+
 export const updateBook = updatedBook => (dispatch, getState) => {
   axios.put(`/api/books/${updatedBook.id}`, updatedBook);
   const newBooks = getState().bookList.books.map(book => {
@@ -90,7 +99,10 @@ export const checkBook = bookId => dispatch => {
         axios.get(`/api/reserve/check/${bookId}`).then(res => {
           dispatch(popupText(`Number of reservations: ${res.data}`));
         });
-      } else dispatch(popupText("Available"));
+      } else {
+        dispatch(popupText("Available"));
+        dispatch(bookIsAvailable(bookId));
+      }
     })
     .catch(() => {
       dispatch(popupText("Something went wrong"));
