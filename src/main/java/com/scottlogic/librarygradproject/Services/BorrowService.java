@@ -2,6 +2,7 @@ package com.scottlogic.librarygradproject.Services;
 
 import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
+import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
 import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
@@ -82,7 +83,7 @@ public class BorrowService {
                     reservationRepository.delete(reservation);
                 }
                 else {
-                    // throw book already borrowed exception
+                    throw new BookAlreadyBorrowedException(reservation.getBookId());
                 }
             }
             else {
