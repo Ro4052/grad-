@@ -39,12 +39,22 @@ export default class Book extends Component {
 
   render() {
     const { book } = this.props;
-    let request;
-    let colour;
-    let buttonText;
-    request = book.isAvailable ? this.props.borrowBook : this.props.reserveBook;
-    colour = book.isAvailable ? "green" : "blue";
-    buttonText = book.isAvailable ? "Borrow" : "Reserve";
+    let request, colour, buttonText;
+    request = this.state.availabilityChecked
+      ? book.isAvailable
+        ? this.props.borrowBook
+        : this.props.reserveBook
+      : this.checkAvailability;
+    colour = this.state.availabilityChecked
+      ? book.isAvailable
+        ? "green"
+        : "blue"
+      : null;
+    buttonText = this.state.availabilityChecked
+      ? book.isAvailable
+        ? "Borrow"
+        : "Reserve"
+      : "Check Availability";
     return (
       <li className={styles.book}>
         {this.props.deleteMode ? (
@@ -90,32 +100,13 @@ export default class Book extends Component {
             Publish Date: {book.publishDate}
           </div>
         </div>
-        {this.state.availabilityChecked ? (
-          <div>
-            <RequestButton
-              buttonText={buttonText}
-              request={request}
-              bookId={book.id}
-              popupText={this.props.popupText}
-              colour={colour}
-            />
-            {/* <RequestButton
-              buttonText="Borrow"
-              request={this.props.borrowBook}
-              bookId={book.id}
-              popupText={this.props.popupText}
-              colour={"green"}
-            /> */}
-          </div>
-        ) : (
-          <RequestButton
-            buttonText="Check Availability"
-            request={this.checkAvailability}
-            bookId={book.id}
-            popupText={this.props.popupText}
-          />
-        )}
-
+        <RequestButton
+          request={request}
+          colour={colour}
+          buttonText={buttonText}
+          bookId={book.id}
+          popupText={this.props.popupText}
+        />
         {book.editState ? (
           <EditBook
             updateBook={this.props.updateBook}
