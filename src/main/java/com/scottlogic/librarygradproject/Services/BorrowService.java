@@ -1,18 +1,17 @@
 package com.scottlogic.librarygradproject.Services;
 
 import com.scottlogic.librarygradproject.Entities.Borrow;
+import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
+import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class BorrowService {
@@ -20,12 +19,15 @@ public class BorrowService {
     private final BorrowRepository borrowRepository;
     private final UserService userService;
     private final BookService bookService;
+    private final ReservationRepository reservationRepository;
 
     @Autowired
-    public BorrowService(BorrowRepository borrowRepository, UserService userService, BookService bookService) {
+    public BorrowService(BorrowRepository borrowRepository, UserService userService, BookService bookService,
+                         ReservationRepository reservationRepository) {
         this.borrowRepository = borrowRepository;
         this.userService = userService;
         this.bookService = bookService;
+        this.reservationRepository = reservationRepository;
     }
 
     public void borrow(long bookId, OAuth2Authentication authentication) {
@@ -60,7 +62,6 @@ public class BorrowService {
     }
 
     @Transactional
-    @Modifying
     public List<Long> updateBorrowed(LocalDate currentDate) {
         List<Long> bookIds = new ArrayList<>();
         try (Stream<Borrow> borrows = borrowRepository.findActiveBorrows(currentDate)) {
@@ -69,6 +70,12 @@ public class BorrowService {
                 borrow.setActive(false);
             });
         }
+        Map<String, String> newBorrows = new HashMap<>();
+        try (Stream<Reservation> reservations = reservationRepository.findMatchingReservations(bookIds)) {
+            reservations.forEach(reservation)
+        }
         return bookIds;
     }
+
+
 }
