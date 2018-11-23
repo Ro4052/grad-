@@ -1,5 +1,6 @@
 package com.scottlogic.librarygradproject.Services;
 
+import com.scottlogic.librarygradproject.Entities.Book;
 import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
@@ -66,36 +67,30 @@ public class BorrowService {
     @Transactional
     public void bookReturned(long borrowId) {
         Borrow borrowToReturn = findOne(borrowId);
-        if (borrowToReturn.isActive()) {
-            borrowToReturn.setActive(false);
-        }
-        else {
+        if (!borrowToReturn.isActive()) {
             throw new BookAlreadyReturnedException(borrowId);
         }
+        borrowToReturn.setActive(false);
         long bookId = borrowToReturn.getBookId();
         List<Reservation> reservations = reservationRepository.findAllByBookId(bookId);
-        Iterator<Reservation> i = reservations.iterator();
-        while (i.hasNext()) {
-            Reservation reservation = i.next();
+        reservations.forEach(reservation -> {
             if (reservation.getQueuePosition() == 1) {
-                if (!isBorrowed(bookId)) {
-                    borrowRepository.save(Borrow.builder()
-                            .bookId(bookId)
-                            .userId(reservation.getUserId())
-                            .isActive(true)
-                            .borrowDate(LocalDate.now())
-                            .returnDate(LocalDate.now().plusDays(7))
-                            .build());
-                    reservationRepository.delete(reservation);
-                }
-                else {
+                if (isBorrowed(bookId)) {
                     throw new BookAlreadyBorrowedException(reservation.getBookId());
                 }
+                borrowRepository.save(Borrow.builder()
+                        .bookId(bookId)
+                        .userId(reservation.getUserId())
+                        .isActive(true)
+                        .borrowDate(LocalDate.now())
+                        .returnDate(LocalDate.now().plusDays(7))
+                        .build());
+                reservationRepository.delete(reservation);
             }
             else {
                 reservation.setQueuePosition(reservation.getQueuePosition() - 1);
             }
-        }
+        });
     }
 
     @Transactional
