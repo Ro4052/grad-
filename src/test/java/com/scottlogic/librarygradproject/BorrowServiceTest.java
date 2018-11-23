@@ -188,6 +188,5 @@ public class BorrowServiceTest {
         List<Long> ids = borrowService.updateBorrowed(LocalDate.now());
         assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3, borrow4}, borrowService.findAll().toArray());
         assertArrayEquals(new Long[] {3L}, ids.toArray());
-
     }
 }
