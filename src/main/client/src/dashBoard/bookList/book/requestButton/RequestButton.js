@@ -8,6 +8,7 @@ export default class RequestButton extends Component {
         on="hover"
         trigger={
           <Button
+            id="variableButton"
             onClick={() => this.props.request(this.props.bookId)}
             color={this.props.colour}
           >

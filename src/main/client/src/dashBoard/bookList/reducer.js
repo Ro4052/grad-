@@ -107,6 +107,7 @@ export const checkBook = bookId => dispatch => {
   axios
     .get(`/api/borrow/check/${bookId}`)
     .then(res => {
+      console.log(res);
       if (res.data) {
         axios.get(`/api/reserve/check/${bookId}`).then(res => {
           dispatch(
