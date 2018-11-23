@@ -42,7 +42,7 @@ export class BookList extends Component {
                 key={book.id}
                 book={book}
                 reserveBook={this.props.reserveBook}
-                popupText={this.props.popupText}
+                popupText={book.popupText}
                 checkBook={this.props.checkBook}
                 borrowBook={this.props.borrowBook}
                 loggedIn={this.props.loggedIn}
@@ -56,7 +56,6 @@ export class BookList extends Component {
 
 const mapStateToProps = state => ({
   books: state.bookList.books,
-  popupText: state.bookList.popupText,
   loggedIn: state.login.loggedIn
 });
 

@@ -1,13 +1,11 @@
 import axios from "axios";
 
 export const types = {
-  GET_BOOKS: "bookList/GET_BOOKS",
-  POPUP_TEXT: "bookList/POPUP_TEXT"
+  GET_BOOKS: "bookList/GET_BOOKS"
 };
 
 const INITIAL_STATE = {
-  books: [],
-  popupText: ""
+  books: []
 };
 
 // Actions
@@ -16,41 +14,58 @@ const getBooksAction = books => ({
   books
 });
 
-const popupText = text => ({
-  type: types.POPUP_TEXT,
-  text
-});
-
 // Action Creators
 export const getBooks = () => dispatch => {
   axios.get("/api/books").then(res => {
     const books = res.data.map(book => {
-      return { ...book, editState: false };
+      return {
+        ...book,
+        editState: false,
+        popupText: "click to check availability",
+        availabilityChecked: false,
+        isAvailable: undefined
+      };
     });
     dispatch(getBooksAction(books));
   });
 };
 
 export const editStateChange = id => (dispatch, getState) => {
+  console.log("toggling");
   const newBooks = getState().bookList.books.map(book => {
     return book.id === id ? { ...book, editState: !book.editState } : book;
   });
   dispatch(getBooksAction(newBooks));
 };
 
-export const bookIsAvailable = id => (dispatch, getState) => {
-  console.log("in here");
+export const isBookAvailable = (id, bool) => (dispatch, getState) => {
   const newBooks = getState().bookList.books.map(book => {
-    console.log(book);
-    return book.id === id ? { ...book, isAvailable: true } : book;
+    return book.id === id ? { ...book, isAvailable: bool } : book;
+  });
+  dispatch(getBooksAction(newBooks));
+};
+
+export const popupText = (text, id) => (dispatch, getState) => {
+  const newBooks = getState().bookList.books.map(book => {
+    return book.id === id ? { ...book, popupText: text } : book;
   });
   dispatch(getBooksAction(newBooks));
 };
 
 export const updateBook = updatedBook => (dispatch, getState) => {
+  console.log(updatedBook);
   axios.put(`/api/books/${updatedBook.id}`, updatedBook);
   const newBooks = getState().bookList.books.map(book => {
-    return book.id === updatedBook.id ? updatedBook : book;
+    console.log(book);
+    return book.id === updatedBook.id
+      ? {
+          ...updatedBook,
+          popupText: book.popupText,
+          availabilityChecked: book.availabilityChecked,
+          isAvailable: book.isAvailable,
+          editState: false
+        }
+      : book;
   });
   dispatch(getBooksAction(newBooks));
 };
@@ -65,47 +80,50 @@ export const deleteBook = bookIds => (dispatch, getState) => {
 
 export const reserveBook = bookId => dispatch => {
   // Reset popup text
-  dispatch(popupText("Loading..."));
+  dispatch(popupText("Loading...", bookId));
   axios
     .post(`/api/reserve/${bookId}`)
     .then(() => {
       // Success popup text
-      dispatch(popupText("Reservation successful!"));
+      dispatch(popupText("Reservation successful!", bookId));
     })
     .catch(() => {
       // Failure popup text
-      dispatch(popupText("Reservation failed"));
+      dispatch(popupText("Reservation failed", bookId));
     });
 };
 
 export const borrowBook = bookId => dispatch => {
-  dispatch(popupText("Loading..."));
+  dispatch(popupText("Loading...", bookId));
   axios
     .post(`/api/borrow/${bookId}`)
     .then(() => {
-      dispatch(popupText("Book successfully borrowed!"));
+      dispatch(popupText("Book successfully borrowed!", bookId));
     })
     .catch(() => {
-      dispatch(popupText("Book cannot be borrowed at this time"));
+      dispatch(popupText("Book cannot be borrowed at this time", bookId));
     });
 };
 
 export const checkBook = bookId => dispatch => {
-  dispatch(popupText("Loading..."));
+  dispatch(popupText("Loading...", bookId));
   axios
     .get(`/api/borrow/check/${bookId}`)
     .then(res => {
       if (res.data) {
         axios.get(`/api/reserve/check/${bookId}`).then(res => {
-          dispatch(popupText(`Number of reservations: ${res.data}`));
+          dispatch(
+            popupText(`Number of reservations: ${res.data}`, bookId, false)
+          );
+          dispatch(isBookAvailable(bookId, false));
         });
       } else {
-        dispatch(popupText("Available"));
-        dispatch(bookIsAvailable(bookId));
+        dispatch(popupText("Available", bookId, true));
+        dispatch(isBookAvailable(bookId, true));
       }
     })
     .catch(() => {
-      dispatch(popupText("Something went wrong"));
+      dispatch(popupText("Something went wrong", bookId));
     });
 };
 
@@ -114,8 +132,6 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.GET_BOOKS:
       return { ...state, books: action.books };
-    case types.POPUP_TEXT:
-      return { ...state, popupText: action.text };
     default:
       return state;
   }

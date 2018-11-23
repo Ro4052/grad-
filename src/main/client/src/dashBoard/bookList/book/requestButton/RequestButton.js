@@ -5,7 +5,7 @@ export default class RequestButton extends Component {
   render() {
     return (
       <Popup
-        on="click"
+        on="hover"
         trigger={
           <Button
             onClick={() => this.props.request(this.props.bookId)}
