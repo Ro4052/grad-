@@ -39,7 +39,6 @@ export default class Book extends Component {
 
   render() {
     const { book } = this.props;
-    console.log(book.isAvailable);
     let request, colour, buttonText;
     request = this.state.availabilityChecked
       ? book.isAvailable
