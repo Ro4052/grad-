@@ -38,8 +38,11 @@ export const editStateChange = id => (dispatch, getState) => {
 };
 
 export const isBookAvailable = (id, bool) => (dispatch, getState) => {
+  console.log(bool);
   const newBooks = getState().bookList.books.map(book => {
-    return book.id === id ? { ...book, isAvailable: bool } : book;
+    return book.id === id
+      ? { ...book, isAvailable: bool, availabilityChecked: true }
+      : book;
   });
   dispatch(getBooksAction(newBooks));
 };

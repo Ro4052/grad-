@@ -1,6 +1,5 @@
 package com.scottlogic.librarygradproject.Controllers;
 
-import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;

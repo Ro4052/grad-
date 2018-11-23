@@ -39,8 +39,8 @@ public class BorrowServiceTest {
 
     private OAuth2Authentication authentication;
     private OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
-    private Book book1, book2;
-    private Borrow borrow1, borrow2;
+    private Book book1, book2, book3, book4;
+    private Borrow borrow1, borrow2, borrow3, borrow4;
 
     @Before
     public void before_Each_Test() {
@@ -49,10 +49,18 @@ public class BorrowServiceTest {
         bookService.save(book1);
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
         bookService.save(book2);
+        book3 = new Book("0123456789", "Correct Book3", "Correct Author3", "2018");
+        bookService.save(book3);
+        book4 = new Book("0123456789", "Correct Book4", "Correct Author4", "2018");
+        bookService.save(book4);
         borrow1 = new Borrow(1, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));
         borrow1.setId(1);
         borrow2 = new Borrow(2, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));
         borrow2.setId(2);
+        borrow3 = new Borrow(3, "TestUser 1", LocalDate.now().minusDays(8), true, LocalDate.now().minusDays(1));
+        borrow3.setId(3);
+        borrow4 = new Borrow(4, "TestUser 1", LocalDate.now().minusDays(8), false, LocalDate.now().minusDays(1));
+        borrow4.setId(4);
     }
 
     @Test(expected = BookNotFoundException.class)
@@ -162,5 +170,22 @@ public class BorrowServiceTest {
 
         //Act
         borrowService.borrow(book1.getId(), authentication);
+    }
+
+    @Test
+    public void update_Borrowed_Updates_Repo() {
+        borrowService.borrow(borrow1.getBookId(), authentication);
+        borrowService.borrow(borrow2.getBookId(), authentication);
+        borrowService.borrow(borrow3.getBookId(), authentication);
+        borrowService.borrow(borrow4.getBookId(), authentication);
+        borrowService.findOne(3).setBorrowDate(borrow3.getBorrowDate());
+        borrowService.findOne(3).setReturnDate(borrow3.getReturnDate());
+        borrowService.findOne(4).setBorrowDate(borrow4.getBorrowDate());
+        borrowService.findOne(4).setReturnDate(borrow4.getReturnDate());
+        borrowService.findOne(4).setActive(false);
+        borrow3.setActive(false);
+        List<Long> ids = borrowService.updateBorrowed(LocalDate.now());
+        assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3, borrow4}, borrowService.findAll().toArray());
+        assertArrayEquals(new Long[] {3L}, ids.toArray());
     }
 }
