@@ -31,13 +31,11 @@ public class BorrowService {
 
     public void borrow(long bookId, OAuth2Authentication authentication) {
         if (this.isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
-        else {
-            String userId = userService.loggedIn(authentication).getUserId();
-            LocalDate borrowDate = LocalDate.now();
-            LocalDate returnDate = LocalDate.now().plusDays(7);
-            Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(borrowDate).returnDate(returnDate).build();
-            borrowRepository.save(loan);
-        }
+        String userId = userService.loggedIn(authentication).getUserId();
+        LocalDate borrowDate = LocalDate.now();
+        LocalDate returnDate = LocalDate.now().plusDays(7);
+        Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(borrowDate).returnDate(returnDate).build();
+        borrowRepository.save(loan);
     }
 
     public List<Borrow> findAll() {

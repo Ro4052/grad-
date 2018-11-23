@@ -15,7 +15,6 @@ export default class Book extends Component {
     };
     this.toggleTitle = this.toggleTitle.bind(this);
     this.toggleAuthor = this.toggleAuthor.bind(this);
-    // this.checkAvailability = this.checkAvailability.bind(this);
   }
 
   toggleTitle() {
@@ -30,16 +29,8 @@ export default class Book extends Component {
     });
   }
 
-  // checkAvailability(bookId) {
-  //   this.setState({
-  //     availabilityChecked: true
-  //   });
-  //   this.props.checkBook(bookId);
-  // }
-
   render() {
     const { book } = this.props;
-    // console.log(book);
     let request, colour, buttonText;
     request = book.availabilityChecked
       ? book.isAvailable
@@ -106,7 +97,7 @@ export default class Book extends Component {
           colour={colour}
           buttonText={buttonText}
           bookId={book.id}
-          popupText={this.props.popupText}
+          popupText={book.popupText}
         />
         {book.editState ? (
           <EditBook

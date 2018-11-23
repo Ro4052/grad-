@@ -35,14 +35,13 @@ export class BookList extends Component {
             })
             .map(book => (
               <Book
+                key={book.id}
                 deleteMode={this.props.deleteMode}
                 handleCheck={this.props.handleCheck}
                 updateBook={this.props.updateBook}
                 editStateChange={this.props.editStateChange}
-                key={book.id}
                 book={book}
                 reserveBook={this.props.reserveBook}
-                popupText={book.popupText}
                 checkBook={this.props.checkBook}
                 borrowBook={this.props.borrowBook}
                 loggedIn={this.props.loggedIn}

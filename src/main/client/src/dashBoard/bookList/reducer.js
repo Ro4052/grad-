@@ -38,7 +38,6 @@ export const editStateChange = id => (dispatch, getState) => {
 };
 
 export const isBookAvailable = (id, bool) => (dispatch, getState) => {
-  console.log(bool);
   const newBooks = getState().bookList.books.map(book => {
     return book.id === id
       ? { ...book, isAvailable: bool, availabilityChecked: true }
@@ -110,7 +109,6 @@ export const checkBook = bookId => dispatch => {
   axios
     .get(`/api/borrow/check/${bookId}`)
     .then(res => {
-      console.log(res);
       if (res.data) {
         axios.get(`/api/reserve/check/${bookId}`).then(res => {
           dispatch(
