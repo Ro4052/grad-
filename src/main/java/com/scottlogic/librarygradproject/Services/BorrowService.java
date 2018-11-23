@@ -62,20 +62,41 @@ public class BorrowService {
     }
 
     @Transactional
-    public List<Long> updateBorrowed(LocalDate currentDate) {
-        List<Long> bookIds = new ArrayList<>();
-        try (Stream<Borrow> borrows = borrowRepository.findActiveBorrows(currentDate)) {
-            borrows.forEach(borrow -> {
-                bookIds.add(borrow.getBookId());
-                borrow.setActive(false);
-            });
+    public void bookReturned(long borrowId) {
+        Borrow borrowToReturn = findOne(borrowId);
+        borrowToReturn.setActive(false);
+        long bookId = borrowToReturn.getBookId();
+        List<Reservation> reservations = reservationRepository.findAllByBookId(bookId);
+        Iterator<Reservation> i = reservations.iterator();
+        while (i.hasNext()) {
+            Reservation reservation = i.next();
+            if (reservation.getQueuePosition() == 1) {
+                if (!isBorrowed(bookId)) {
+                    borrowRepository.save(Borrow.builder()
+                            .bookId(bookId)
+                            .userId(reservation.getUserId())
+                            .isActive(true)
+                            .borrowDate(LocalDate.now())
+                            .returnDate(LocalDate.now().plusDays(7))
+                            .build());
+                    reservationRepository.delete(reservation);
+                }
+                else {
+                    // throw book already borrowed exception
+                }
+            }
+            else {
+                reservation.setQueuePosition(reservation.getQueuePosition() - 1);
+            }
         }
-        Map<String, String> newBorrows = new HashMap<>();
-        try (Stream<Reservation> reservations = reservationRepository.findMatchingReservations(bookIds)) {
-            reservations.forEach(reservation)
-        }
-        return bookIds;
     }
 
-
+    @Transactional
+    public void updateBorrowed(LocalDate currentDate) {
+        List<Long> borrowIds = new ArrayList<>();
+        try (Stream<Borrow> borrows = borrowRepository.findOverdueBorrows(currentDate)) {
+            borrows.forEach(borrow -> borrowIds.add(borrow.getId()));
+        }
+        borrowIds.forEach(id -> bookReturned(id));
+    }
 }

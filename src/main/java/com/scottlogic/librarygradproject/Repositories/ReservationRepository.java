@@ -15,6 +15,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query(value = "SELECT COUNT(*) FROM public.reservation WHERE book_id = :bookId", nativeQuery = true)
     long findLatestQueue(@Param("bookId") long bookId);
 
-    @Query(value = "SELECT * FROM public.reservation WHERE book_id IN (:bookIds)", nativeQuery = true)
-    Stream<Reservation> findMatchingReservations(@Param("bookIds") List<Long> bookIds);
+    List<Reservation> findAllByBookId(long bookId);
 }

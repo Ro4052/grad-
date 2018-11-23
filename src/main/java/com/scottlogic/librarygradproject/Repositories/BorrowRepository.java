@@ -16,5 +16,5 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
     boolean isBookBorrowed(@Param("bookId") long bookId);
 
     @Query(value = "SELECT * FROM public.borrow WHERE return_date < :date AND is_active = true", nativeQuery = true)
-    Stream<Borrow> findActiveBorrows(@Param("date") LocalDate date);
+    Stream<Borrow> findOverdueBorrows(@Param("date") LocalDate date);
 }
