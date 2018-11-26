@@ -109,7 +109,10 @@ export default class Book extends Component {
           />
         ) : (
           this.props.loggedIn && (
-            <Button onClick={() => this.props.editStateChange(book.id)}>
+            <Button
+              id="editButton"
+              onClick={() => this.props.editStateChange(book.id)}
+            >
               Edit
             </Button>
           )
