@@ -153,10 +153,10 @@ public class BorrowServiceTest {
     @Test
     public void bookReturned_Multiple_Reservations_Pending() {
         //Arrange
-        reservationService.reserve(book1.getId(), authentication);
-        reservationService.reserve(book1.getId(), authentication);
-        reservationService.reserve(book1.getId(), authentication);
         borrowService.borrow(book1.getId(), authentication);
+        reservationService.reserve(book1.getId(), authentication);
+        reservationService.reserve(book1.getId(), authentication);
+        reservationService.reserve(book1.getId(), authentication);
 
         //Act
         borrowService.bookReturned(1L);
@@ -192,8 +192,8 @@ public class BorrowServiceTest {
     @Test (expected = BookAlreadyBorrowedException.class)
     public void bookReturned_Two_Active_Borrows_Throws() {
         //Arrange
-        reservationService.reserve(book1.getId(), authentication);
         borrowService.borrow(book1.getId(), authentication);
+        reservationService.reserve(book1.getId(), authentication);
         borrowService.borrow(book2.getId(), authentication);
         borrowService.findOne(2L).setBookId(1L);
 
@@ -207,14 +207,12 @@ public class BorrowServiceTest {
     @Test
     public void bookReturned_No_Reservations_Pending() {
         //Arrange
-        reservationService.reserve(book2.getId(), authentication);
         borrowService.borrow(book1.getId(), authentication);
 
         //Act
         borrowService.bookReturned(1L);
 
         //Assert
-        assertEquals(1, reservationService.findAll().size());
         assertFalse(borrowService.findOne(1L).isActive());
     }
 

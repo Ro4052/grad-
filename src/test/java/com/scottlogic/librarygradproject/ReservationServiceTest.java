@@ -6,6 +6,7 @@ import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
 import com.scottlogic.librarygradproject.Services.BookService;
+import com.scottlogic.librarygradproject.Services.BorrowService;
 import com.scottlogic.librarygradproject.Services.ReservationService;
 import com.scottlogic.librarygradproject.Services.UserService;
 import org.junit.Before;
@@ -31,6 +32,8 @@ public class ReservationServiceTest {
     private BookService bookService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private BorrowService borrowService;
 
     private Book book1, book2;
     private Reservation res1, res2;
@@ -68,6 +71,7 @@ public class ReservationServiceTest {
         long bookId = 1;
 
         //Act
+        borrowService.borrow(bookId, authentication);
         reservationService.reserve(bookId, authentication);
 
         //Assert
@@ -78,6 +82,8 @@ public class ReservationServiceTest {
     @Test
     public void get_with_valid_id_gets_reservation() {
         //Arrange
+        borrowService.borrow(res1.getBookId(), authentication);
+        borrowService.borrow(res2.getBookId(), authentication);
         reservationService.reserve(res1.getBookId(), authentication);
         reservationService.reserve(res2.getBookId(), authentication);
 
@@ -91,6 +97,7 @@ public class ReservationServiceTest {
     @Test (expected = ReservationNotFoundException.class)
     public void get_with_invalid_id_throws_exception() {
         //Arrange
+        borrowService.borrow(res1.getBookId(), authentication);
         reservationService.reserve(res1.getBookId(), authentication);
         long invalidReservationId = 10;
 
@@ -101,6 +108,8 @@ public class ReservationServiceTest {
     @Test
     public void getAll_returns_all_reservations() {
         //Arrange
+        borrowService.borrow(res1.getBookId(), authentication);
+        borrowService.borrow(res2.getBookId(), authentication);
         reservationService.reserve(res1.getBookId(), authentication);
         reservationService.reserve(res2.getBookId(), authentication);
 
@@ -114,6 +123,7 @@ public class ReservationServiceTest {
     @Test
     public void check_returns_correct_number_single_reservation() {
         //Arrange
+        borrowService.borrow(res1.getBookId(), authentication);
         reservationService.reserve(res1.getBookId(), authentication);
 
         //Act
@@ -126,6 +136,7 @@ public class ReservationServiceTest {
     @Test
     public void check_returns_correct_number_multiple_reservation() {
         //Arrange
+        borrowService.borrow(res1.getBookId(), authentication);
         reservationService.reserve(res1.getBookId(), authentication);
         reservationService.reserve(res1.getBookId(), authentication);
 

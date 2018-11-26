@@ -18,7 +18,7 @@ Feature: Correctly managing reservations
 
   Scenario: An availability check is made on a book with reservations
     When a reservation is made on a book by an authorised user
-    And a reservation is made on a book by an authorised user
+    And a different reservation is made on a book by an authorised user
     Then the status of the book should be reserved with a queue of 2
 
 

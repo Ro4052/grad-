@@ -10,6 +10,7 @@ import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException
 import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
 import com.scottlogic.librarygradproject.OAuthClientTestHelper;
 import com.scottlogic.librarygradproject.Services.BookService;
+import com.scottlogic.librarygradproject.Services.BorrowService;
 import com.scottlogic.librarygradproject.Services.ReservationService;
 import com.scottlogic.librarygradproject.Services.UserService;
 import cucumber.api.PendingException;
@@ -17,6 +18,7 @@ import cucumber.api.java8.En;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ public class Stepdefs implements En {
     ReservationService resService;
     @Autowired
     UserService userService;
+    @Autowired
+    BorrowService borrowService;
     BooksController controller;
     ReservationsController rescontroller;
     Book newBook;
@@ -321,7 +325,11 @@ public class Stepdefs implements En {
             rescontroller = new ReservationsController(resService);
         });
         When("^a reservation is made on a book by an authorised user$", () -> {
-           rescontroller.post(id,authentication);
+            borrowService.borrow(id, authentication);
+            rescontroller.post(id,authentication);
+        });
+        When("^a different reservation is made on a book by an authorised user$", () -> {
+            rescontroller.post(id,authentication);
         });
         Then("^that reservation is added to the database$", () -> {
           assertEquals(resService.checkReservation(id),1);
