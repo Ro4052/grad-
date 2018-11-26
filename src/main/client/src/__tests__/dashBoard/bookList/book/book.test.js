@@ -25,12 +25,23 @@ describe("Book Component Tests", () => {
     );
   });
 
-  test("Check Availability button rendered by default", () => {
-    const wrapper = shallow(<Book book={testBook} />);
+  test("Check Availability button rendered by default when logged in", () => {
+    const wrapper = shallow(<Book book={testBook} loggedIn={true} />);
     expect(wrapper.find("RequestButton").exists()).toBe(true);
     expect(wrapper.find("RequestButton").props().buttonText).toEqual(
       "Check Availability"
     );
     expect(wrapper.find("RequestButton").props().colour).toEqual(null);
+  });
+
+  test("No buttons render when not logged in", () => {
+    const wrapper = shallow(<Book book={testBook} loggedIn={false} />);
+    expect(wrapper.find("RequestButton").exists()).toBe(false);
+    expect(wrapper.find("#editButton").exists()).toBe(false);
+  });
+
+  test("Edit button renders when logged in", () => {
+    const wrapper = shallow(<Book book={testBook} loggedIn={true} />);
+    expect(wrapper.find("#editButton").exists()).toBe(true);
   });
 });

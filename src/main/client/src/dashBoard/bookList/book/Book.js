@@ -92,13 +92,15 @@ export default class Book extends Component {
             Publish Date: {book.publishDate}
           </div>
         </div>
-        <RequestButton
-          request={request}
-          colour={colour}
-          buttonText={buttonText}
-          bookId={book.id}
-          popupText={book.popupText}
-        />
+        {this.props.loggedIn && (
+          <RequestButton
+            request={request}
+            colour={colour}
+            buttonText={buttonText}
+            bookId={book.id}
+            popupText={book.popupText}
+          />
+        )}
         {book.editState ? (
           <EditBook
             updateBook={this.props.updateBook}
@@ -107,7 +109,10 @@ export default class Book extends Component {
           />
         ) : (
           this.props.loggedIn && (
-            <Button onClick={() => this.props.editStateChange(book.id)}>
+            <Button
+              id="editButton"
+              onClick={() => this.props.editStateChange(book.id)}
+            >
               Edit
             </Button>
           )
