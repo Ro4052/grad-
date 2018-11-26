@@ -4,20 +4,29 @@ import BookList from "./bookList/BookList";
 import AddBook from "./addBook/AddBook";
 import DeleteBookModal from "../common/modals/DeleteBookModal";
 import { connect } from "react-redux";
-import * as bookListActions from "./bookList/reducer";
 import { bindActionCreators } from "redux";
 import { Button } from "semantic-ui-react";
 import scottLogicLogo from "../common/SL_primary_AW_POS_LO_RGB.jpg";
+import * as bookListActions from "./bookList/reducer";
+import Login from "../login/Login";
+import SearchBar from "./searchBar/SearchBar";
 
 class DashBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       deleteMode: false,
-      deleteList: []
+      deleteList: [],
+      searchString: "",
+      lowerDate: "",
+      upperDate: new Date().getFullYear(),
+      searchBy: "all"
     };
     this.handleCheck = this.handleCheck.bind(this);
     this.toggleSelectMode = this.toggleSelectMode.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSearchByChange = this.handleSearchByChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   handleCheck(event) {
@@ -33,6 +42,37 @@ class DashBoard extends Component {
     this.setState({ deleteList: [] });
   }
 
+  handleChange(e) {
+    this.setState({
+      searchString: e.target.value.trimLeft()
+    });
+  }
+
+  handleDateChange(e) {
+    const date = new Date().getFullYear();
+    if (/[1234567890]/g.test(e.target.value) || e.target.value === "") {
+      if (e.target.value <= date && e.target.value >= 0) {
+        this.setState({
+          [e.target.id]: e.target.value
+        });
+      } else if (e.target.value > date) {
+        this.setState({
+          [e.target.id]: date
+        });
+      } else if (e.target.value < 0) {
+        this.setState({
+          [e.target.id]: 0
+        });
+      }
+    }
+  }
+
+  handleSearchByChange(e) {
+    this.setState({
+      searchBy: e.target.value
+    });
+  }
+
   render() {
     return (
       <div className={styles.dashBoard}>
@@ -43,36 +83,60 @@ class DashBoard extends Component {
             className={styles.logo}
           />
           <h1 className={styles.pageHeader}> Grad Library App </h1>
-          <div className={styles.navBtns}>
-            <Button
-              className={styles.selectBookBtn}
-              size="small"
-              onClick={this.toggleSelectMode}
-            >
-              Select Books
-            </Button>
-            <DeleteBookModal
-              deleteMode={this.state.deleteMode}
-              toggleSelectMode={this.toggleSelectMode}
-              deleteList={this.state.deleteList}
-              deleteBook={this.props.deleteBook}
-            />
-          </div>
+          {this.props.loggedIn && (
+            <div className={styles.navBtns}>
+              <div id="displayName">
+                Welcome {this.props.user.name || this.props.user.userId}
+              </div>
+              <Button
+                className={styles.selectBookBtn}
+                size="small"
+                onClick={this.toggleSelectMode}
+              >
+                Select Books
+              </Button>
+              <DeleteBookModal
+                deleteMode={this.state.deleteMode}
+                toggleSelectMode={this.toggleSelectMode}
+                deleteList={this.state.deleteList}
+                deleteBook={this.props.deleteBook}
+              />
+            </div>
+          )}
+          <Login />
         </div>
+        <SearchBar
+          handleSearchByChange={this.handleSearchByChange}
+          handleChange={this.handleChange}
+          handleDateChange={this.handleDateChange}
+          searchString={this.state.searchString}
+          upperDate={this.state.upperDate}
+          lowerDate={this.state.lowerDate}
+          searchBy={this.state.searchBy}
+        />
         <BookList
+          searchBy={this.state.searchBy}
+          searchString={this.state.searchString}
+          upperDate={this.state.upperDate}
+          lowerDate={this.state.lowerDate}
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
         />
-        <AddBook />
+        {this.props.loggedIn && <AddBook />}
       </div>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  user: state.login.user,
+  loggedIn: state.login.loggedIn
+});
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ ...bookListActions }, dispatch);
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(DashBoard);

@@ -1,17 +1,21 @@
 package com.scottlogic.librarygradproject;
 
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
+import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.LibraryUserRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import com.scottlogic.librarygradproject.Services.BookService;
+import com.scottlogic.librarygradproject.Services.BorrowService;
 import com.scottlogic.librarygradproject.Services.ReservationService;
 import com.scottlogic.librarygradproject.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 public class Application {
 
     @Autowired
@@ -37,9 +41,19 @@ public class Application {
 
     @Bean
     @Autowired
-    public ReservationService getReservationService(ReservationRepository reservationRepo, BookService bookService, UserService userService) {
-        return new ReservationService(reservationRepo, bookService, userService);
+    public ReservationService getReservationService(ReservationRepository reservationRepo, BookService bookService,
+                                                    UserService userService, BorrowService borrowService) {
+        return new ReservationService(reservationRepo, bookService, userService, borrowService);
     }
+
+    @Autowired
+    BorrowRepository borrowRepository;
+
+    @Bean
+    @Autowired
+    public BorrowService getBorrowService(BorrowRepository borrowRepository, UserService userService,
+                                          BookService bookService, ReservationRepository reservationRepository) {
+        return new BorrowService(borrowRepository, userService, bookService, reservationRepository); }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

@@ -4,6 +4,10 @@
   margin-bottom: 2em;
 }
 
+.bookDetails {
+  margin-bottom: 0.5em;
+}
+
 .bookFieldEllipsis {
   white-space: nowrap;
   overflow: hidden;
@@ -11,7 +15,7 @@
 }
 
 .bookFieldBreak {
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 input[type="checkbox"] + label {

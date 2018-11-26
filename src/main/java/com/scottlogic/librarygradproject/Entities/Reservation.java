@@ -14,20 +14,20 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reservation_sequence")
     private long id;
     private long bookId;
-    private String username;
+    private String userId;
     private long queuePosition;
 
     public Reservation() { }
 
-    public Reservation(long bookId, String username, long queuePosition) {
+    public Reservation(long bookId, String userId, long queuePosition) {
         this.bookId = bookId;
-        this.username = username;
+        this.userId = userId;
         this.queuePosition = queuePosition;
     }
 
     public static class ReservationBuilder {
         public Reservation build() {
-            return new Reservation(this.bookId, this.username, this.queuePosition);
+            return new Reservation(this.bookId, this.userId, this.queuePosition);
         }
     }
 }

@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "proxy": "http://localhost:8080/",
+  "proxy": "http://localhost:8080",
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
@@ -48,7 +48,7 @@
     "jest-environment-puppeteer": "^3.5.0",
     "jest-puppeteer": "^3.5.0",
     "lint-staged": "^8.0.4",
-    "mkdirp": "^0.5.1",
+    "moxios": "^0.4.0",
     "prettier": "^1.15.1",
     "pretty-quick": "^1.8.0",
     "puppeteer": "^1.10.0",

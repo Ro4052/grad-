@@ -1,6 +1,7 @@
 package com.scottlogic.librarygradproject;
 
 import com.scottlogic.librarygradproject.Entities.Book;
+import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
 import com.scottlogic.librarygradproject.Services.BookService;
 import org.apache.commons.lang3.StringUtils;
@@ -156,6 +157,14 @@ public class BookServiceTest {
         List<Book> books = service.findAll();
         assertArrayEquals(new Book[]{correctBook1, correctBook2}, books.toArray());
     }
+
+    @Test(expected = BookNotFoundException.class)
+    public void get_Throws_Invalid_Id() {
+        service.save(correctBook1);
+        service.save(correctBook2);
+        service.findOne(4L);
+    }
+
 
     @Test
     public void delete_Removes_Correct_Book() {
