@@ -96,7 +96,7 @@ describe("RequestButton Borrow Component Tests", () => {
     expect(wrapper.find("Popup").props().content).toEqual("Available");
   });
 
-  test("Button calls reserve book function", () => {
+  test("Button calls borrow book function", () => {
     const borrowBook = jest.fn();
     const wrapper = shallow(
       <RequestButton
