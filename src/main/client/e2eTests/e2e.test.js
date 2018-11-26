@@ -8,8 +8,8 @@ let page;
 
 beforeAll(async () => {
   browser = await puppeteer.launch({
-    headless: false
-    //args: ['--disable-dev-shm-usage'],
+    headless: true,
+    args: ["--no-sandbox"]
   });
   page = await browser.newPage();
   await page.goto(`http://${require("ip").address()}:3000/`, {
