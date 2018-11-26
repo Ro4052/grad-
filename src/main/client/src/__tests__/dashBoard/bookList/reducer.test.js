@@ -13,7 +13,8 @@ const testBook1 = {
   author: "JK Rowling",
   isbn: "9780747532699",
   publishDate: "1997",
-  editState: false
+  editState: false,
+  popupText: "Loading..."
 };
 
 const testBook2 = {
@@ -22,7 +23,8 @@ const testBook2 = {
   author: "JRR Tolkien",
   isbn: "9780261103252",
   publishDate: "1954",
-  editState: false
+  editState: false,
+  popupText: "Loading..."
 };
 
 describe("BookList reducer tests", () => {
@@ -31,8 +33,7 @@ describe("BookList reducer tests", () => {
   beforeEach(() => {
     initialState = {
       bookList: {
-        books: [testBook1, testBook2],
-        reservePopText: ""
+        books: [testBook1, testBook2]
       }
     };
     moxios.install();
@@ -54,10 +55,21 @@ describe("BookList reducer tests", () => {
     expect(store.getActions()[0]).toEqual(expectedAction);
   });
 
-  test("dispatches RESERVE_TEXT loading action", () => {
+  test("dispatches GET_BOOKS action after book is checked", () => {
     const expectedAction = {
-      type: actions.types.RESERVE_TEXT,
-      text: "Loading..."
+      type: actions.types.GET_BOOKS,
+      books: [testBook1, testBook2]
+    };
+    const store = mockStore(initialState);
+
+    store.dispatch(actions.checkBook(0));
+    expect(store.getActions()[0]).toEqual(expectedAction);
+  });
+
+  test("dispatches GET_BOOKS action after book is reserved", () => {
+    const expectedAction = {
+      type: actions.types.GET_BOOKS,
+      books: [testBook1, testBook2]
     };
     const store = mockStore(initialState);
 
@@ -65,45 +77,14 @@ describe("BookList reducer tests", () => {
     expect(store.getActions()[0]).toEqual(expectedAction);
   });
 
-  test("dispatches the right RESERVE_TEXT action on successful reservation", done => {
+  test("dispatches GET_BOOKS action after book is borrowed", () => {
     const expectedAction = {
-      type: actions.types.RESERVE_TEXT,
-      text: "Reservation successful!"
+      type: actions.types.GET_BOOKS,
+      books: [testBook1, testBook2]
     };
     const store = mockStore(initialState);
 
-    store.dispatch(actions.reserveBook(0));
-    moxios.wait(() => {
-      const postRequest = moxios.requests.mostRecent();
-      postRequest
-        .respondWith({
-          status: 200
-        })
-        .then(() => {
-          expect(store.getActions()[1]).toEqual(expectedAction);
-          done();
-        });
-    });
-  });
-
-  test("dispatches the right RESERVE_TEXT action on failed reservation", done => {
-    const expectedAction = {
-      type: actions.types.RESERVE_TEXT,
-      text: "Reservation failed"
-    };
-    const store = mockStore(initialState);
-
-    store.dispatch(actions.reserveBook(0));
-    moxios.wait(() => {
-      const postRequest = moxios.requests.mostRecent();
-      postRequest
-        .respondWith({
-          status: 404
-        })
-        .then(() => {
-          expect(store.getActions()[1]).toEqual(expectedAction);
-          done();
-        });
-    });
+    store.dispatch(actions.borrowBook(0));
+    expect(store.getActions()[0]).toEqual(expectedAction);
   });
 });

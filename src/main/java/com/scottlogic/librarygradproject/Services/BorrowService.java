@@ -35,7 +35,7 @@ public class BorrowService {
     }
 
     public void borrow(long bookId, OAuth2Authentication authentication) {
-        bookService.findOne(bookId);
+        if (this.isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
         String userId = userService.loggedIn(authentication).getUserId();
         LocalDate borrowDate = LocalDate.now();
         LocalDate returnDate = LocalDate.now().plusDays(7);

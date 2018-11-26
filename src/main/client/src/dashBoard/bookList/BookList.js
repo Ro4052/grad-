@@ -35,16 +35,15 @@ export class BookList extends Component {
             })
             .map(book => (
               <Book
+                key={book.id}
                 deleteMode={this.props.deleteMode}
                 handleCheck={this.props.handleCheck}
                 updateBook={this.props.updateBook}
                 editStateChange={this.props.editStateChange}
-                key={book.id}
                 book={book}
                 reserveBook={this.props.reserveBook}
-                reservePopText={this.props.reservePopText}
                 checkBook={this.props.checkBook}
-                checkBookPopText={this.props.availability}
+                borrowBook={this.props.borrowBook}
                 loggedIn={this.props.loggedIn}
               />
             ))}
@@ -56,9 +55,7 @@ export class BookList extends Component {
 
 const mapStateToProps = state => ({
   books: state.bookList.books,
-  reservePopText: state.bookList.reservePopText,
-  loggedIn: state.login.loggedIn,
-  availability: state.bookList.checkBookPopText
+  loggedIn: state.login.loggedIn
 });
 
 const mapDispatchToProps = dispatch =>

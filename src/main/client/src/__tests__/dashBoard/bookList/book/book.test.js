@@ -25,33 +25,12 @@ describe("Book Component Tests", () => {
     );
   });
 
-  test("reserveBook action called with the right ID", () => {
-    const reserveBook = jest.fn();
-    const wrapper = shallow(
-      <Book book={testBook} reserveBook={reserveBook} loggedIn={true} />
+  test("Check Availability button rendered by default", () => {
+    const wrapper = shallow(<Book book={testBook} />);
+    expect(wrapper.find("RequestButton").exists()).toBe(true);
+    expect(wrapper.find("RequestButton").props().buttonText).toEqual(
+      "Check Availability"
     );
-    shallow(wrapper.find("#reservePopup").props().trigger).simulate("click");
-    expect(reserveBook).toHaveBeenCalledWith(testBook.id);
-  });
-
-  test("reserve popup has the right text", () => {
-    const wrapper = shallow(
-      <Book book={testBook} reservePopText="Test text" />
-    );
-    expect(wrapper.find("#reservePopup").props().content).toBe("Test text");
-  });
-
-  test("Available check action called with the right ID", () => {
-    const checkBook = jest.fn();
-    const wrapper = shallow(<Book book={testBook} checkBook={checkBook} />);
-    shallow(wrapper.find("#availablePopup").props().trigger).simulate("click");
-    expect(checkBook).toHaveBeenCalledWith(testBook.id);
-  });
-
-  test("available popup has the right text", () => {
-    const wrapper = shallow(
-      <Book book={testBook} checkBookPopText="Test Text" />
-    );
-    expect(wrapper.find("#availablePopup").props().content).toBe("Test Text");
+    expect(wrapper.find("RequestButton").props().colour).toEqual(null);
   });
 });

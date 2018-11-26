@@ -1,15 +1,17 @@
 import React, { Component } from "react";
-import { Button, Popup } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
+import RequestButton from "./requestButton/RequestButton";
 
 export default class Book extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fullTitle: false,
-      fullAuthor: false
+      fullAuthor: false,
+      availabilityChecked: false
     };
     this.toggleTitle = this.toggleTitle.bind(this);
     this.toggleAuthor = this.toggleAuthor.bind(this);
@@ -29,6 +31,22 @@ export default class Book extends Component {
 
   render() {
     const { book } = this.props;
+    let request, colour, buttonText;
+    request = book.availabilityChecked
+      ? book.isAvailable
+        ? this.props.borrowBook
+        : this.props.reserveBook
+      : this.props.checkBook;
+    colour = book.availabilityChecked
+      ? book.isAvailable
+        ? "green"
+        : "blue"
+      : null;
+    buttonText = book.availabilityChecked
+      ? book.isAvailable
+        ? "Borrow"
+        : "Reserve"
+      : "Check Availability";
     return (
       <li className={styles.book}>
         {this.props.deleteMode ? (
@@ -74,18 +92,12 @@ export default class Book extends Component {
             Publish Date: {book.publishDate}
           </div>
         </div>
-        <Popup
-          id="reservePopup"
-          on="click"
-          trigger={
-            this.props.loggedIn && (
-              <Button primary onClick={() => this.props.reserveBook(book.id)}>
-                Reserve
-              </Button>
-            )
-          }
-          content={this.props.reservePopText}
-          hideOnScroll
+        <RequestButton
+          request={request}
+          colour={colour}
+          buttonText={buttonText}
+          bookId={book.id}
+          popupText={book.popupText}
         />
         {book.editState ? (
           <EditBook
@@ -100,17 +112,6 @@ export default class Book extends Component {
             </Button>
           )
         )}
-        <Popup
-          id="availablePopup"
-          on="click"
-          trigger={
-            <Button onClick={() => this.props.checkBook(book.id)}>
-              Check Availability
-            </Button>
-          }
-          content={this.props.checkBookPopText}
-          hideOnScroll
-        />
       </li>
     );
   }
