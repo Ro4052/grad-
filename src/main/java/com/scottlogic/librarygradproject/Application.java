@@ -50,7 +50,9 @@ public class Application {
 
     @Bean
     @Autowired
-    public BorrowService getBorrowService(BorrowRepository borrowRepository, UserService userService, BookService bookService) { return new BorrowService(borrowRepository, userService, bookService); }
+    public BorrowService getBorrowService(BorrowRepository borrowRepository, UserService userService,
+                                          BookService bookService, ReservationRepository reservationRepository) {
+        return new BorrowService(borrowRepository, userService, bookService, reservationRepository); }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
