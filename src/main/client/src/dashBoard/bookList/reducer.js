@@ -102,6 +102,7 @@ export const borrowBook = bookId => dispatch => {
     .catch(() => {
       dispatch(popupText("Book cannot be borrowed at this time", bookId));
     });
+  dispatch(isBookAvailable(bookId, false));
 };
 
 export const checkBook = bookId => dispatch => {
