@@ -39,7 +39,7 @@ public class BorrowServiceTest {
 
     private OAuth2Authentication authentication;
     private OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
-    private Book book1, book2, book3;
+    private Book book1, book2, book3, book4;
     private Borrow borrow1, borrow2, borrow3, borrow4;
 
     @Before
@@ -49,8 +49,10 @@ public class BorrowServiceTest {
         bookService.save(book1);
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
         bookService.save(book2);
-        book3 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
+        book3 = new Book("0123456789", "Correct Book3", "Correct Author3", "2016");
         bookService.save(book3);
+        book4 = new Book("1111111111", "Correct Book4", "Correct Author4", "1999");
+        bookService.save(book4);
         borrow1 = new Borrow(1, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));
         borrow1.setId(1);
         borrow2 = new Borrow(2, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));
@@ -136,21 +138,6 @@ public class BorrowServiceTest {
         assertFalse(borrowService.isBorrowed(bookId));
     }
 
-    @Test
-    public void delete_with_valid_borrowId_deletes_loan() {
-        //Arrange
-        long borrowToDeleteId = 1;
-        borrowService.borrow(book1.getId(), authentication);
-        borrowService.borrow(book2.getId(), authentication);
-
-        //Act
-        borrowService.delete(borrowToDeleteId);
-        List<Borrow> loans = borrowService.findAll();
-
-        //Assert
-        assertArrayEquals(new Borrow[] {borrow2}, loans.toArray());
-    }
-
     @Test (expected = BorrowNotFoundException.class)
     public void delete_with_invalid_borrowId_throws_exception() {
         //Arrange
@@ -161,7 +148,7 @@ public class BorrowServiceTest {
         borrowService.delete(invalidBorrowId);
     }
 
-//  Three reservations for a book and an active borrow ->
+    //  Three reservations for a book and an active borrow ->
 //  inactivate, delete first reservation and create new borrow and amend queue position
     @Test
     public void bookReturned_Multiple_Reservations_Pending() {
@@ -184,7 +171,7 @@ public class BorrowServiceTest {
         assertArrayEquals(new Borrow[] {borrow1, borrow2}, borrowService.findAll().toArray());
     }
 
-//    no active borrows ->
+    //    no active borrows ->
 //    throw an exception
     @Test (expected = BookAlreadyReturnedException.class)
     public void bookReturned_No_Active_Borrows_Throws() {
@@ -201,7 +188,7 @@ public class BorrowServiceTest {
         borrowService.bookReturned(1);
     }
 
-//  can't create a new borrow if one already exists after a book is returned
+    //  can't create a new borrow if one already exists after a book is returned
     @Test (expected = BookAlreadyBorrowedException.class)
     public void bookReturned_Two_Active_Borrows_Throws() {
         //Arrange
@@ -215,7 +202,7 @@ public class BorrowServiceTest {
 
     }
 
-//  no reservation for the book and an active borrow ->
+    //  no reservation for the book and an active borrow ->
 //  inactivate borrow, do nothing to reservations table
     @Test
     public void bookReturned_No_Reservations_Pending() {
