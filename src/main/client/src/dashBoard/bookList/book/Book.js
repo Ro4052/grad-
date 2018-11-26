@@ -49,7 +49,7 @@ export default class Book extends Component {
       : "Check Availability";
     return (
       <li className={styles.book}>
-        {this.props.deleteMode ? (
+        {this.props.deleteMode && this.props.loggedIn ? (
           <h3 id={`bookTitle${book.id}`}>
             <input
               id={book.id}
@@ -93,29 +93,29 @@ export default class Book extends Component {
           </div>
         </div>
         {this.props.loggedIn && (
-          <RequestButton
-            request={request}
-            colour={colour}
-            buttonText={buttonText}
-            bookId={book.id}
-            popupText={book.popupText}
-          />
-        )}
-        {book.editState ? (
-          <EditBook
-            updateBook={this.props.updateBook}
-            book={book}
-            editStateChange={this.props.editStateChange}
-          />
-        ) : (
-          this.props.loggedIn && (
-            <Button
-              id="editButton"
-              onClick={() => this.props.editStateChange(book.id)}
-            >
-              Edit
-            </Button>
-          )
+          <div>
+            <RequestButton
+              request={request}
+              colour={colour}
+              buttonText={buttonText}
+              bookId={book.id}
+              popupText={book.popupText}
+            />
+            {book.editState ? (
+              <EditBook
+                updateBook={this.props.updateBook}
+                book={book}
+                editStateChange={this.props.editStateChange}
+              />
+            ) : (
+              <Button
+                id="editButton"
+                onClick={() => this.props.editStateChange(book.id)}
+              >
+                Edit
+              </Button>
+            )}
+          </div>
         )}
       </li>
     );
