@@ -41,7 +41,7 @@ public class ReservationService {
         if (!borrowService.isBorrowed(bookId)) {
             throw new BookIsAvailableException(bookId);
         }
-        String userId = userService.loggedIn(authentication).getUserId();
+        String userId = userService.getUserDetails(authentication).getUserId();
         validateReservation(bookId, userId);
         long nextInQueue = resRepo.findLatestQueue(bookId) + 1;
         Reservation reservation = Reservation.builder().bookId(bookId).userId(userId).queuePosition(nextInQueue).build();

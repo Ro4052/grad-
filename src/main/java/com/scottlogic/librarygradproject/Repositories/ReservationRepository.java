@@ -16,4 +16,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     long findLatestQueue(@Param("bookId") long bookId);
 
     List<Reservation> findAllByBookIdOrderByQueuePositionAsc(long bookId);
+
+    List<Reservation> findAllByUserId(String userId);
 }
