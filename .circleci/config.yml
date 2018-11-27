@@ -16,7 +16,7 @@ jobs:
           key: maven-dependencies-{{ checksum "pom.xml" }}
 
       - run:
-          name: Setting Up Maven Dependencies
+          name: Setting up Maven dependencies
           command: mvn dependency:go-offline
 
       - save_cache:
@@ -25,8 +25,8 @@ jobs:
           key: maven-dependencies-{{ checksum "pom.xml" }}
 
       - run:
-          name: Running Server Unint Tests
-          command: mvn package
+          name: Running server unit tests
+          command: mvn test
 
       - persist_to_workspace:
           root: .
@@ -43,7 +43,7 @@ jobs:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
       - run:
-          name: Setting Up Node Dependencies
+          name: Setting up Node dependencies
           command: cd src/main/client && npm install
 
       - save_cache:
@@ -52,7 +52,7 @@ jobs:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
       - run:
-          name: Running Client Unit Tests
+          name: Running client unit tests
           command: cd src/main/client && npm run test
 
   e2e_test:
@@ -71,7 +71,7 @@ jobs:
           key: node-dependencies-{{ checksum "src/main/client/package.json" }}-v0.1.0
 
       - run:
-          name: Setting Up Node Dependencies
+          name: Setting up Node dependencies
           command: cd src/main/client && npm install
 
       - save_cache:
@@ -102,7 +102,7 @@ jobs:
           command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):3000" > /dev/null
 
       - run:
-          name: Running e2e Tests
+          name: Running e2e tests
           command: cd src/main/client && npm run test:e2e
 
 workflows:
