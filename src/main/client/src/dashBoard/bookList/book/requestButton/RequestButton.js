@@ -9,7 +9,7 @@ export default class RequestButton extends Component {
         trigger={
           <Button
             id="variableButton"
-            onClick={() => this.props.request(this.props.bookId)}
+            onClick={() => this.props.request(this.props.id)}
             color={this.props.colour}
           >
             {this.props.buttonText}

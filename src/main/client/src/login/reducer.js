@@ -1,4 +1,5 @@
 import * as axios from "axios";
+import { checkAllBooks } from "../dashBoard/bookList/reducer";
 
 const types = {
   CHECKING_LOGIN: "login/CHECKING_LOGIN",
@@ -44,6 +45,8 @@ export const checkLogin = () => dispatch => {
     .catch(() => {
       dispatch(checkingLogin(false));
     });
+  // THIS IS NOT WORKING:
+  dispatch(checkAllBooks());
 };
 
 export const loginUser = () => dispatch => {

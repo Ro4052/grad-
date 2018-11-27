@@ -90,6 +90,7 @@ export const reserveBook = bookId => dispatch => {
       // Failure popup text
       dispatch(popupText("Reservation failed", bookId));
     });
+  //  need to set the "role" state of the userStatus for the bookId to "Reserver"
 };
 
 export const borrowBook = bookId => dispatch => {
@@ -102,6 +103,7 @@ export const borrowBook = bookId => dispatch => {
     .catch(() => {
       dispatch(popupText("Book cannot be borrowed at this time", bookId));
     });
+  // This needs to change, needs to set the "role" state of the userStatus for the bookId to "Borrower"
   dispatch(isBookAvailable(bookId, false));
 };
 
@@ -125,6 +127,47 @@ export const checkBook = bookId => dispatch => {
     .catch(() => {
       dispatch(popupText("Something went wrong", bookId));
     });
+};
+
+export const checkAllBooks = () => (dispatch, getState) => {
+  console.log("HELOOOOOO");
+  let role, reservationId, borrowId;
+  const user = getState().login.user;
+  // console log out the user
+  const newBooks = getState().bookList.books.forEach(book => {
+    if (user.reservations) {
+      this.props.user.reservations.forEach(reservation => {
+        if (reservation.bookId === book.id) {
+          borrowId = null;
+          reservationId = reservation.id;
+          role = "Reserver";
+          dispatch(popupText("Cancel Reservation", book.id));
+        }
+      });
+    } else if (user.borrows) {
+      this.props.user.borrows.forEach(borrow => {
+        if (borrow.bookId === book.id) {
+          borrowId = borrow.id;
+          reservationId = null;
+          role = "Borrower";
+          dispatch(popupText("Return Book", book.id));
+        }
+      });
+    } else {
+      borrowId = null;
+      reservationId = null;
+      role = "Nothing";
+    }
+    book.borrowId = borrowId;
+    book.reservationId = reservationId;
+    book.role = role;
+  });
+  // const newBooks = getState().bookList.books.map(book => {
+  //   return bookId === book.id
+  //     ? { ...book, role: role, reservationId, borrowId }
+  //     : book;
+  // });
+  dispatch(getBooksAction(newBooks));
 };
 
 // Reducers

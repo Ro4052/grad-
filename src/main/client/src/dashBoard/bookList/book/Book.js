@@ -30,23 +30,41 @@ export default class Book extends Component {
   }
 
   render() {
+    console.log(this.props.book);
     const { book } = this.props;
-    let request, colour, buttonText;
-    request = book.availabilityChecked
-      ? book.isAvailable
-        ? this.props.borrowBook
-        : this.props.reserveBook
-      : this.props.checkBook;
-    colour = book.availabilityChecked
-      ? book.isAvailable
-        ? "green"
-        : "blue"
-      : null;
-    buttonText = book.availabilityChecked
-      ? book.isAvailable
-        ? "Borrow"
-        : "Reserve"
-      : "Check Availability";
+    let request, colour, buttonText, popupText;
+    switch (this.props.role) {
+      case "Borrower":
+        request = "";
+        colour = "red";
+        buttonText = "Return";
+        popupText = "Return book";
+        break;
+      case "Reserver":
+        request = "";
+        colour = "red";
+        buttonText = "Cancel";
+        popupText = "Return book";
+        break;
+      default:
+        request = book.availabilityChecked
+          ? book.isAvailable
+            ? this.props.borrowBook
+            : this.props.reserveBook
+          : this.props.checkBook;
+        colour = book.availabilityChecked
+          ? book.isAvailable
+            ? "green"
+            : "blue"
+          : null;
+        buttonText = book.availabilityChecked
+          ? book.isAvailable
+            ? "Borrow"
+            : "Reserve"
+          : "Check Availability";
+        popupText = book.popupText;
+        break;
+    }
     return (
       <li className={styles.book}>
         {this.props.deleteMode && this.props.loggedIn ? (
@@ -98,8 +116,8 @@ export default class Book extends Component {
               request={request}
               colour={colour}
               buttonText={buttonText}
-              bookId={book.id}
-              popupText={book.popupText}
+              // id={book.roleId}
+              popupText={popupText}
             />
             {book.editState ? (
               <EditBook
