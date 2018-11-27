@@ -1,18 +1,24 @@
 import React from "react";
 
+import history from "../../history";
 import scottLogicLogo from "../SL_primary_AW_POS_LO_RGB.jpg";
 import Login from "../../login/Login";
 import styles from "./PageHeader.module.css";
 
 const PageHeader = props => (
   <div className={styles.navBar}>
-    <img src={scottLogicLogo} alt="Scott Logic Logo" className={styles.logo} />
+    <img
+      src={scottLogicLogo}
+      alt="Scott Logic Logo"
+      className={styles.logo}
+      onClick={() => history.push("/dashboard")}
+    />
     <h1 className={styles.pageHeader}> Grad Library App </h1>
     <div className={styles.profileActions}>
       {props.loggedIn && (
-        <div id="displayName">
+        <h4 id="displayName" onClick={() => history.push("/profile")}>
           Welcome, {props.user.name || props.user.userId}
-        </div>
+        </h4>
       )}
       <Login />
     </div>
