@@ -101,21 +101,23 @@ class DashBoard extends Component {
           lowerDate={this.state.lowerDate}
           searchBy={this.state.searchBy}
         />
-        <div className={styles.librarianBtns}>
-          <Button
-            className={styles.selectBookBtn}
-            size="small"
-            onClick={this.toggleSelectMode}
-          >
-            Select Books
-          </Button>
-          <DeleteBookModal
-            deleteMode={this.state.deleteMode}
-            toggleSelectMode={this.toggleSelectMode}
-            deleteList={this.state.deleteList}
-            deleteBook={this.props.deleteBook}
-          />
-        </div>
+        {this.props.loggedIn && (
+          <div className={styles.librarianBtns}>
+            <Button
+              className={styles.selectBookBtn}
+              size="small"
+              onClick={this.toggleSelectMode}
+            >
+              Select Books
+            </Button>
+            <DeleteBookModal
+              deleteMode={this.state.deleteMode}
+              toggleSelectMode={this.toggleSelectMode}
+              deleteList={this.state.deleteList}
+              deleteBook={this.props.deleteBook}
+            />
+          </div>
+        )}
         <BookList
           searchBy={this.state.searchBy}
           searchString={this.state.searchString}
