@@ -26,7 +26,7 @@ jobs:
 
       - run:
           name: Running server unit tests
-          command: mvn test
+          command: mvn package
 
       - persist_to_workspace:
           root: .
