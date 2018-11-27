@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import styles from "./DashBoard.module.css";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Button } from "semantic-ui-react";
+
+import * as bookListActions from "./bookList/reducer";
+import PageHeader from "../common/pageHeader/PageHeader";
 import BookList from "./bookList/BookList";
 import AddBook from "./addBook/AddBook";
 import DeleteBookModal from "../common/modals/DeleteBookModal";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Button } from "semantic-ui-react";
-import scottLogicLogo from "../common/SL_primary_AW_POS_LO_RGB.jpg";
-import * as bookListActions from "./bookList/reducer";
-import Login from "../login/Login";
 import SearchBar from "./searchBar/SearchBar";
+import styles from "./DashBoard.module.css";
 
 class DashBoard extends Component {
   constructor(props) {
@@ -76,22 +76,7 @@ class DashBoard extends Component {
   render() {
     return (
       <div className={styles.dashBoard}>
-        <div className={styles.navBar}>
-          <img
-            src={scottLogicLogo}
-            alt="Scott Logic Logo"
-            className={styles.logo}
-          />
-          <h1 className={styles.pageHeader}> Grad Library App </h1>
-          <div className={styles.profileActions}>
-            {this.props.loggedIn && (
-              <div id="displayName">
-                Welcome {this.props.user.name || this.props.user.userId}
-              </div>
-            )}
-            <Login />
-          </div>
-        </div>
+        <PageHeader user={this.props.user} loggedIn={this.props.loggedIn} />
         <SearchBar
           handleSearchByChange={this.handleSearchByChange}
           handleChange={this.handleChange}
