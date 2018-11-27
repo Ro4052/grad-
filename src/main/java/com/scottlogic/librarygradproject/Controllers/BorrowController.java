@@ -38,6 +38,6 @@ public class BorrowController {
     @RequestMapping(value = "/borrow/check/{bookId}", method = RequestMethod.GET)
     public boolean check(@PathVariable long bookId) { return borrowService.isBorrowed(bookId); }
 
-    @RequestMapping(value = "/borrow/return/{bookId}", method = RequestMethod.PUT)
-    public void returnBook(@PathVariable long bookId) { borrowService.bookReturned(bookId); }
+    @RequestMapping(value = "/borrow/return/{borrowId}", method = RequestMethod.PUT)
+    public void returnBook(@PathVariable long borrowId) { borrowService.bookReturned(borrowId); }
 }
