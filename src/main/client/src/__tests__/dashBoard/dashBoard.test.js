@@ -6,7 +6,9 @@ import configureStore from "redux-mock-store";
 const mockStore = configureStore();
 
 const testUser = { userId: "testUser" };
-const inititalState = { login: { loggedIn: true, user: testUser } };
+const inititalState = {
+  login: { loggedIn: true, user: { userDetails: testUser } }
+};
 let store = mockStore(inititalState);
 
 describe("Dashboard renders", () => {
