@@ -83,27 +83,14 @@ class DashBoard extends Component {
             className={styles.logo}
           />
           <h1 className={styles.pageHeader}> Grad Library App </h1>
-          {this.props.loggedIn && (
-            <div className={styles.navBtns}>
+          <div className={styles.profileActions}>
+            {this.props.loggedIn && (
               <div id="displayName">
                 Welcome {this.props.user.name || this.props.user.userId}
               </div>
-              <Button
-                className={styles.selectBookBtn}
-                size="small"
-                onClick={this.toggleSelectMode}
-              >
-                Select Books
-              </Button>
-              <DeleteBookModal
-                deleteMode={this.state.deleteMode}
-                toggleSelectMode={this.toggleSelectMode}
-                deleteList={this.state.deleteList}
-                deleteBook={this.props.deleteBook}
-              />
-            </div>
-          )}
-          <Login />
+            )}
+            <Login />
+          </div>
         </div>
         <SearchBar
           handleSearchByChange={this.handleSearchByChange}
@@ -114,6 +101,21 @@ class DashBoard extends Component {
           lowerDate={this.state.lowerDate}
           searchBy={this.state.searchBy}
         />
+        <div className={styles.librarianBtns}>
+          <Button
+            className={styles.selectBookBtn}
+            size="small"
+            onClick={this.toggleSelectMode}
+          >
+            Select Books
+          </Button>
+          <DeleteBookModal
+            deleteMode={this.state.deleteMode}
+            toggleSelectMode={this.toggleSelectMode}
+            deleteList={this.state.deleteList}
+            deleteBook={this.props.deleteBook}
+          />
+        </div>
         <BookList
           searchBy={this.state.searchBy}
           searchString={this.state.searchString}
