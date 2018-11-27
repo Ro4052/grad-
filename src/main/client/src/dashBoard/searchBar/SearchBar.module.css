@@ -7,8 +7,13 @@
   align-items: center;
 }
 
+.searchBarContainer {
+  width: 60%;
+  height: 100%;
+}
+
 .searchBar {
-  width: 50%;
+  width: 90%;
   height: 100%;
   border-radius: 1.25em;
   border: solid 1px grey;
@@ -21,6 +26,12 @@
   box-shadow: 0 0 0 1px #2185d0;
   border: none;
   outline: none;
+}
+
+.searchIcon {
+  position: relative;
+  right: 25px;
+  bottom: 2px;
 }
 
 .dateEntry {

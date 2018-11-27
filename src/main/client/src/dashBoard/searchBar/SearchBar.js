@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styles from "./SearchBar.module.css";
 import DateSearch from "./dateSearch/DateSearch";
+import { Icon } from "semantic-ui-react";
 
 class SearchBar extends Component {
   render() {
@@ -19,12 +20,15 @@ class SearchBar extends Component {
           </select>
         </div>
         {this.props.searchBy !== "publishDate" ? (
-          <input
-            className={styles.searchBar}
-            placeholder="Search"
-            onChange={this.props.handleChange}
-            value={this.props.searchString}
-          />
+          <div className={styles.searchBarContainer}>
+            <input
+              className={styles.searchBar}
+              placeholder="Search"
+              onChange={this.props.handleChange}
+              value={this.props.searchString}
+            />
+            <Icon name="search" className={styles.searchIcon} />
+          </div>
         ) : (
           <div className={styles.dateSearchContainer}>
             <label className={styles.dateLabel}>From:</label>
