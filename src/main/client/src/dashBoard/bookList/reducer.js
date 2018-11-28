@@ -157,26 +157,22 @@ export const checkAllBooks = user => (dispatch, getState) => {
     reservationId = null;
     role = "Nothing";
     popupText = "Click to check availability";
-    if (user.reservations) {
-      user.reservations.forEach(reservation => {
-        if (reservation.bookId === book.id) {
-          borrowId = null;
-          reservationId = reservation.id;
-          role = "Reserver";
-          popupText = "Cancel your reservation";
-        }
-      });
-    }
-    if (user.borrows) {
-      user.borrows.forEach(borrow => {
-        if (borrow.bookId === book.id && borrow.active) {
-          borrowId = borrow.id;
-          reservationId = null;
-          role = "Borrower";
-          popupText = "Return your Book";
-        }
-      });
-    }
+    user.reservations.forEach(reservation => {
+      if (reservation.bookId === book.id) {
+        borrowId = null;
+        reservationId = reservation.id;
+        role = "Reserver";
+        popupText = "Cancel your reservation";
+      }
+    });
+    user.borrows.forEach(borrow => {
+      if (borrow.bookId === book.id && borrow.active) {
+        borrowId = borrow.id;
+        reservationId = null;
+        role = "Borrower";
+        popupText = "Return your Book";
+      }
+    });
     book.borrowId = borrowId;
     book.reservationId = reservationId;
     book.role = role;

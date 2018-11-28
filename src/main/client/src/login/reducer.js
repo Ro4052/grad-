@@ -13,7 +13,7 @@ const types = {
 const INITIAL_STATE = {
   loggingIn: false,
   loggedIn: false,
-  user: {}
+  user: { reservations: [], borrows: [] }
 };
 
 const checkingLogin = checking => ({
