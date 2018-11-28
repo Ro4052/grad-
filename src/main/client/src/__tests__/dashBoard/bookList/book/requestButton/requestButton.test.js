@@ -3,7 +3,8 @@ import RequestButton from "../../../../../dashBoard/bookList/book/requestButton/
 import { shallow } from "enzyme";
 
 const testBook = {
-  id: 1
+  id: 1,
+  popupText: "click to check availability"
 };
 
 describe("RequestButton Check Availability Component Tests", () => {
@@ -11,11 +12,10 @@ describe("RequestButton Check Availability Component Tests", () => {
     const checkBook = jest.fn();
     const wrapper = shallow(
       <RequestButton
-        bookId={testBook.id}
         buttonText="Check Availability"
         request={checkBook}
         colour={null}
-        popupText="click to check availability"
+        book={testBook}
       />
     );
     expect(shallow(wrapper.find("Popup").props().trigger).text()).toEqual(
@@ -30,28 +30,27 @@ describe("RequestButton Check Availability Component Tests", () => {
     const checkBook = jest.fn();
     const wrapper = shallow(
       <RequestButton
-        bookId={testBook.id}
         buttonText="Check Availability"
         request={checkBook}
         colour={null}
-        popupText="click to check availability"
+        book={testBook}
       />
     );
     shallow(wrapper.find("Popup").props().trigger).simulate("click");
-    expect(checkBook).toHaveBeenCalledWith(testBook.id);
+    expect(checkBook).toHaveBeenCalledWith(testBook);
   });
 });
 
 describe("RequestButton Reserve Component Tests", () => {
   test("Button renders with correct styling", () => {
     const reserveBook = jest.fn();
+    testBook.popupText = "number of reservations: 0";
     const wrapper = shallow(
       <RequestButton
-        bookId={testBook.id}
         buttonText="Reserve"
         request={reserveBook}
         colour="blue"
-        popupText="number of reservations: 0"
+        book={testBook}
       />
     );
     expect(shallow(wrapper.find("Popup").props().trigger).text()).toEqual(
@@ -64,30 +63,30 @@ describe("RequestButton Reserve Component Tests", () => {
 
   test("Button calls reserve book function", () => {
     const reserveBook = jest.fn();
+    testBook.popupText = "number of reservations: 0";
     const wrapper = shallow(
       <RequestButton
-        bookId={testBook.id}
         buttonText="Reserve"
         request={reserveBook}
         colour="blue"
-        popupText="number of reservations: 0"
+        book={testBook}
       />
     );
     shallow(wrapper.find("Popup").props().trigger).simulate("click");
-    expect(reserveBook).toHaveBeenCalledWith(testBook.id);
+    expect(reserveBook).toHaveBeenCalledWith(testBook);
   });
 });
 
 describe("RequestButton Borrow Component Tests", () => {
   test("Button renders with correct styling", () => {
     const borrowBook = jest.fn();
+    testBook.popupText = "Available";
     const wrapper = shallow(
       <RequestButton
-        bookId={testBook.id}
         buttonText="Borrow"
         request={borrowBook}
         colour="green"
-        popupText="Available"
+        book={testBook}
       />
     );
     expect(shallow(wrapper.find("Popup").props().trigger).text()).toEqual(
@@ -98,16 +97,16 @@ describe("RequestButton Borrow Component Tests", () => {
 
   test("Button calls borrow book function", () => {
     const borrowBook = jest.fn();
+    testBook.popupText = "number of reservations: 0";
     const wrapper = shallow(
       <RequestButton
-        bookId={testBook.id}
         buttonText="Reserve"
         request={borrowBook}
         colour="blue"
-        popupText="number of reservations: 0"
+        book={testBook}
       />
     );
     shallow(wrapper.find("Popup").props().trigger).simulate("click");
-    expect(borrowBook).toHaveBeenCalledWith(testBook.id);
+    expect(borrowBook).toHaveBeenCalledWith(testBook);
   });
 });
