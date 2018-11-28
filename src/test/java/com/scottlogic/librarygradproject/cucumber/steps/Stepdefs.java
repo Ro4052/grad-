@@ -2,9 +2,11 @@ package com.scottlogic.librarygradproject.cucumber.steps;
 
 
 import com.scottlogic.librarygradproject.Controllers.BooksController;
+import com.scottlogic.librarygradproject.Controllers.BorrowController;
 import com.scottlogic.librarygradproject.Controllers.ReservationsController;
 import com.scottlogic.librarygradproject.Entities.Book;
 import com.scottlogic.librarygradproject.Entities.LibraryUser;
+import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
 import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
 import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
@@ -37,8 +39,6 @@ public class Stepdefs implements En {
     ReservationService resService;
     @Autowired
     UserService userService;
-    @Autowired
-    BorrowService borrowService;
     BooksController controller;
     ReservationsController rescontroller;
     Book newBook;
@@ -325,7 +325,6 @@ public class Stepdefs implements En {
             rescontroller = new ReservationsController(resService);
         });
         When("^a reservation is made on a book by an authorised user$", () -> {
-            borrowService.borrow(id, authentication);
             rescontroller.post(id,authentication);
         });
         When("^a different reservation is made on a book by an authorised user$", () -> {
@@ -343,6 +342,24 @@ public class Stepdefs implements En {
         });
         And("^a user table with one user exists$", () -> {
             userService.add(user1);
+        });
+
+        And("^the book is deleted$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+        Then("^the reservation on that book is deleted$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+
+        When("^a book is available$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
+        });
+        And("^a reservation is make on a book by an authorised user$", () -> {
+            // Write code here that turns the phrase above into concrete actions
+            throw new PendingException();
         });
     }
 }
