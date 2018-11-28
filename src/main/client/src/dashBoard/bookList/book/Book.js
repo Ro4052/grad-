@@ -50,21 +50,17 @@ export default class Book extends Component {
         buttonText = "Cancel";
         break;
       default:
-        request = book.availabilityChecked
-          ? book.isAvailable
+        if (book.availabilityChecked) {
+          request = book.isAvailable
             ? this.props.borrowBook
-            : this.props.reserveBook
-          : this.props.checkBook;
-        colour = book.availabilityChecked
-          ? book.isAvailable
-            ? "green"
-            : "blue"
-          : null;
-        buttonText = book.availabilityChecked
-          ? book.isAvailable
-            ? "Borrow"
-            : "Reserve"
-          : "Check Availability";
+            : this.props.reserveBook;
+          colour = book.isAvailable ? "green" : "blue";
+          buttonText = book.isAvailable ? "Borrow" : "Reserve";
+        } else {
+          request = this.props.checkBook;
+          colour = null;
+          buttonText = "Check Availability";
+        }
         break;
     }
     return (
