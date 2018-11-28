@@ -4,6 +4,8 @@ import com.scottlogic.librarygradproject.Controllers.BooksController;
 import com.scottlogic.librarygradproject.Controllers.LibraryUserController;
 import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Services.BookService;
+import com.scottlogic.librarygradproject.Services.BorrowService;
+import com.scottlogic.librarygradproject.Services.ReservationService;
 import com.scottlogic.librarygradproject.Services.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,13 +25,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void loggedIn_Calls_Service_LoggedIn() {
-
+    public void loggedIn_Calls_Correct_Functions() {
         OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
         OAuth2Authentication authentication = helper.getOauthTestAuthentication();
         controller.user(authentication);
         verify(service).loggedIn(authentication);
+        verify(service).findUserReservations(authentication);
+        verify(service).findUserBorrows(authentication);
     }
-
-
 }

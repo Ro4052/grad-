@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Repository
@@ -17,4 +18,6 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
 
     @Query(value = "SELECT * FROM public.borrow WHERE return_date < :date AND is_active = true", nativeQuery = true)
     Stream<Borrow> findOverdueBorrows(@Param("date") LocalDate date);
+
+    List<Borrow> findAllByUserId(String userId);
 }

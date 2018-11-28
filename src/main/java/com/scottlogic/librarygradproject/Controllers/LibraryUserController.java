@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class LibraryUserController {
@@ -20,7 +23,11 @@ public class LibraryUserController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public LibraryUser user(OAuth2Authentication authentication) {
-        return userService.loggedIn(authentication);
+    public Map<String, Object> user(OAuth2Authentication authentication) {
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("userDetails", userService.loggedIn(authentication));
+        userData.put("reservations", userService.findUserReservations(authentication));
+        userData.put("borrows", userService.findUserBorrows(authentication));
+        return userData;
     }
 }

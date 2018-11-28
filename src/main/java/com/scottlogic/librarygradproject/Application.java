@@ -23,8 +23,9 @@ public class Application {
 
     @Bean
     @Autowired
-    public UserService getUserService(LibraryUserRepository userRepo) {
-        return new UserService(userRepo);
+    public UserService getUserService(LibraryUserRepository userRepo, ReservationRepository reservationRepository,
+                                      BorrowRepository borrowRepository) {
+        return new UserService(userRepo, reservationRepository, borrowRepository);
     }
 
     @Autowired

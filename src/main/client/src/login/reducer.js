@@ -13,7 +13,8 @@ const types = {
 
 const INITIAL_STATE = {
   loggingIn: false,
-  loggedIn: false
+  loggedIn: false,
+  user: {}
 };
 
 const checkingLogin = checking => ({

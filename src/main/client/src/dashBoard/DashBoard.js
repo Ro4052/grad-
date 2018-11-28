@@ -118,7 +118,7 @@ class DashBoard extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.login.user,
+  user: state.login.user.userDetails,
   loggedIn: state.login.loggedIn
 });
 
