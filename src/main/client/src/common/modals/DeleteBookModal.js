@@ -31,6 +31,7 @@ export default class DeleteBookModal extends Component {
               disabled={!this.props.deleteList.length}
               id="delBookBtn"
               onClick={() => this.setState({ open: true })}
+              size="small"
             >
               Delete Selected Book(s)
             </Button>

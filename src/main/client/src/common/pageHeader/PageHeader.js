@@ -1,4 +1,5 @@
 import React from "react";
+import { Image } from "semantic-ui-react";
 
 import history from "../../history";
 import scottLogicLogo from "../SL_primary_AW_POS_LO_RGB.jpg";
@@ -8,6 +9,7 @@ import styles from "./PageHeader.module.css";
 const PageHeader = props => (
   <div className={styles.navBar}>
     <img
+      size="small"
       src={scottLogicLogo}
       alt="Scott Logic Logo"
       className={styles.logo}

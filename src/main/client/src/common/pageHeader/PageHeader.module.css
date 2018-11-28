@@ -6,15 +6,16 @@
 }
 
 .logo {
-  height: auto;
-  width: auto;
-  max-width: 20%;
-  max-height: 80%;
+  height: 12vh;
+  width: 36vh;
   cursor: pointer;
+  max-width: 30vw;
+  max-height: 10vw;
 }
 
 .pageHeader {
   font-size: 5vmin;
+  text-align: center;
 }
 
 .profileActions {
