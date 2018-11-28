@@ -30,21 +30,18 @@ export default class Book extends Component {
   }
 
   render() {
-    console.log(this.props.book);
     const { book } = this.props;
-    let request, colour, buttonText, popupText;
-    switch (this.props.role) {
+    let request, colour, buttonText;
+    switch (book.role) {
       case "Borrower":
-        request = "";
+        request = this.props.returnBook;
         colour = "red";
         buttonText = "Return";
-        popupText = "Return book";
         break;
       case "Reserver":
-        request = "";
+        request = () => alert("To Be implemented"); // function needs to be created
         colour = "red";
         buttonText = "Cancel";
-        popupText = "Return book";
         break;
       default:
         request = book.availabilityChecked
@@ -62,7 +59,6 @@ export default class Book extends Component {
             ? "Borrow"
             : "Reserve"
           : "Check Availability";
-        popupText = book.popupText;
         break;
     }
     return (
@@ -116,8 +112,7 @@ export default class Book extends Component {
               request={request}
               colour={colour}
               buttonText={buttonText}
-              // id={book.roleId}
-              popupText={popupText}
+              book={book}
             />
             {book.editState ? (
               <EditBook

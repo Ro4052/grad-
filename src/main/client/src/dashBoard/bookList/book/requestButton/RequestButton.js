@@ -9,13 +9,13 @@ export default class RequestButton extends Component {
         trigger={
           <Button
             id="variableButton"
-            onClick={() => this.props.request(this.props.id)}
+            onClick={() => this.props.request(this.props.book)}
             color={this.props.colour}
           >
             {this.props.buttonText}
           </Button>
         }
-        content={this.props.popupText}
+        content={this.props.book.popupText}
         hideOnScroll
       />
     );

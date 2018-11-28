@@ -41,12 +41,11 @@ export const checkLogin = () => dispatch => {
     .then(userResult => {
       dispatch(checkingLogin(false));
       dispatch(loggedIn(userResult.data));
+      dispatch(checkAllBooks(userResult.data));
     })
     .catch(() => {
       dispatch(checkingLogin(false));
     });
-  // THIS IS NOT WORKING:
-  dispatch(checkAllBooks());
 };
 
 export const loginUser = () => dispatch => {

@@ -48,6 +48,7 @@ export class BookList extends Component {
                     checkBook={this.props.checkBook}
                     borrowBook={this.props.borrowBook}
                     loggedIn={this.props.loggedIn}
+                    returnBook={this.props.returnBook}
                   />
                 );
               })}
