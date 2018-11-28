@@ -1,0 +1,33 @@
+.navBar {
+  height: 4em;
+  display: flex;
+  justify-content: space-between;
+  flex: auto;
+}
+
+.logo {
+  height: 12vh;
+  width: 36vh;
+  cursor: pointer;
+  max-width: 30vw;
+  max-height: 10vw;
+}
+
+.pageHeader {
+  font-size: 5vmin;
+  text-align: center;
+}
+
+.profileActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: auto;
+  width: auto;
+  min-width: 20%;
+  min-height: 80%;
+}
+
+.profileActions h4 {
+  cursor: pointer;
+}

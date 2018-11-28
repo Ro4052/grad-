@@ -1,5 +1,7 @@
 import * as axios from "axios";
 
+import history from "../history";
+
 const types = {
   CHECKING_LOGIN: "login/CHECKING_LOGIN",
   LOGGED_IN: "login/LOGGED_IN",
@@ -42,6 +44,7 @@ export const checkLogin = () => dispatch => {
       dispatch(loggedIn(userResult.data));
     })
     .catch(() => {
+      history.push("/dashboard");
       dispatch(checkingLogin(false));
     });
 };

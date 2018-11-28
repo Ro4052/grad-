@@ -5,37 +5,9 @@
   justify-content: space-between;
 }
 
-.navBar {
-  height: 4em;
-  display: flex;
-  justify-content: space-between;
-  flex: auto;
-}
-
-.profileActions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  height: auto;
-  width: auto;
-  min-width: 20%;
-  min-height: 80%;
-}
-
-.pageHeader {
-  font-size: 5vmin;
-}
-
 .selectBookBtn {
   width: fit-content;
   align-self: center;
-}
-
-.logo {
-  height: auto;
-  width: auto;
-  max-width: 20%;
-  max-height: 80%;
 }
 
 .librarianBtns {
