@@ -116,6 +116,7 @@ export const borrowBook = book => (dispatch, getState) => {
           eachBook.reservationId = null;
           eachBook.role = "Borrower";
           eachBook.popupText = "Return your Book";
+          eachBook.returnStarted = false;
         }
         return eachBook;
       });
@@ -124,8 +125,6 @@ export const borrowBook = book => (dispatch, getState) => {
     .catch(() => {
       dispatch(popupText("Book cannot be borrowed at this time", bookId));
     });
-  // This needs to change, needs to set the "role" state of the userStatus for the bookId to "Borrower"
-  // dispatch(isBookAvailable(bookId, false));
 };
 
 export const checkBook = book => dispatch => {
@@ -196,6 +195,28 @@ export const returnBook = book => (dispatch, getState) => {
       eachBook.role = "Nothing";
       eachBook.popupText = "Click to check availability";
       eachBook.availabilityChecked = false;
+    }
+    return eachBook;
+  });
+  dispatch(getBooksAction(newBooks));
+};
+
+export const startProcess = book => (dispatch, getState) => {
+  const newBooks = getState().bookList.books.map(eachBook => {
+    if (eachBook.id === book.id) {
+      eachBook.returnStarted = true;
+      eachBook.popupText = "Are you sure?";
+    }
+    return eachBook;
+  });
+  dispatch(getBooksAction(newBooks));
+};
+
+export const cancelProcess = book => (dispatch, getState) => {
+  const newBooks = getState().bookList.books.map(eachBook => {
+    if (eachBook.id === book.id) {
+      eachBook.returnStarted = false;
+      eachBook.popupText = "Return your Book";
     }
     return eachBook;
   });

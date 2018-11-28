@@ -34,9 +34,15 @@ export default class Book extends Component {
     let request, colour, buttonText;
     switch (book.role) {
       case "Borrower":
-        request = this.props.returnBook;
-        colour = "red";
-        buttonText = "Return";
+        if (!book.returnStarted) {
+          request = this.props.startProcess;
+          colour = "red";
+          buttonText = "Return";
+        } else {
+          request = this.props.returnBook;
+          colour = "red";
+          buttonText = "Confirm";
+        }
         break;
       case "Reserver":
         request = () => alert("To Be implemented"); // function needs to be created
@@ -107,12 +113,13 @@ export default class Book extends Component {
           </div>
         </div>
         {this.props.loggedIn && (
-          <div>
+          <div className={styles.bookBtnsContainer}>
             <RequestButton
               request={request}
               colour={colour}
               buttonText={buttonText}
               book={book}
+              cancelProcess={this.props.cancelProcess}
             />
             {book.editState ? (
               <EditBook

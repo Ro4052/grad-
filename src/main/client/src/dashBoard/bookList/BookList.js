@@ -49,6 +49,8 @@ export class BookList extends Component {
                     borrowBook={this.props.borrowBook}
                     loggedIn={this.props.loggedIn}
                     returnBook={this.props.returnBook}
+                    startProcess={this.props.startProcess}
+                    cancelProcess={this.props.cancelProcess}
                   />
                 );
               })}
