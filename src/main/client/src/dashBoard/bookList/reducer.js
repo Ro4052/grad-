@@ -195,6 +195,7 @@ export const returnBook = book => (dispatch, getState) => {
       eachBook.role = "Nothing";
       eachBook.popupText = "Click to check availability";
       eachBook.availabilityChecked = false;
+      eachBook.returnStarted = false;
     }
     return eachBook;
   });
