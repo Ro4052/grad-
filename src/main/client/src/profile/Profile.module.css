@@ -20,22 +20,21 @@
   text-overflow: ellipsis;
 }
 
-.tablesContainer {
-  overflow-y: scroll;
+.tabContainer {
   height: 60vh;
   width: 90vw;
   display: block;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
-  border: solid rgb(229, 229, 229);
-  border-radius: 10px;
   padding: 10px;
 }
 
 .avatarPic {
   height: 15vh;
   width: 15vh;
+  min-height: 50px;
+  min-width: 50px;
   display: block;
   margin-left: auto;
   margin-right: auto;

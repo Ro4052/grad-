@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Table } from "semantic-ui-react";
+import { Tab } from "semantic-ui-react";
+import { bindActionCreators } from "redux";
 
+import * as bookListActions from "../dashBoard/bookList/reducer";
 import history from "../history";
 import PageHeader from "../common/pageHeader/PageHeader";
+import LoansTable from "./tables/LoansTable";
+import LoanHistoryTable from "./tables/LoanHistoryTable";
+import ReservationsTable from "./tables/ReservationsTable";
 import styles from "./Profile.module.css";
 
 class Profile extends Component {
@@ -14,6 +19,51 @@ class Profile extends Component {
   }
 
   render() {
+    const panes = [
+      {
+        menuItem: {
+          content: "Active Loans",
+          icon: "book",
+          key: "Active Loans"
+        },
+        render: () => (
+          <Tab.Pane>
+            <LoansTable borrows={this.props.borrows} books={this.props.books} />
+          </Tab.Pane>
+        )
+      },
+      {
+        menuItem: {
+          content: "Reservations",
+          icon: "clock outline",
+          key: "Reservations"
+        },
+        render: () => (
+          <Tab.Pane>
+            <ReservationsTable
+              reservations={this.props.reservations}
+              books={this.props.books}
+            />
+          </Tab.Pane>
+        )
+      },
+      {
+        menuItem: {
+          content: "Loan History",
+          icon: "archive",
+          key: "Loan History"
+        },
+        render: () => (
+          <Tab.Pane>
+            <LoanHistoryTable
+              borrows={this.props.borrows}
+              books={this.props.books}
+              //put props for the one button here
+            />
+          </Tab.Pane>
+        )
+      }
+    ];
     return (
       <div className={styles.profile}>
         <PageHeader user={this.props.user} loggedIn={this.props.loggedIn} />
@@ -28,97 +78,7 @@ class Profile extends Component {
             <h4 className={styles.username}>
               user ID: {this.props.user.userId}
             </h4>
-            <div className={styles.tablesContainer}>
-              <h3>Active Loans:</h3>
-              <Table celled>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell width={8}>Book Title</Table.HeaderCell>
-                    <Table.HeaderCell width={2}>Date Borrowed</Table.HeaderCell>
-                    <Table.HeaderCell width={2}>Due Date</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.borrows
-                    .filter(borrow => {
-                      return borrow.active === true;
-                    })
-                    .map(borrow => {
-                      return (
-                        <Table.Row key={borrow.id}>
-                          <Table.Cell className={styles.tableCell}>
-                            {
-                              this.props.books.find(book => {
-                                return book.id === borrow.bookId;
-                              }).title
-                            }
-                          </Table.Cell>
-                          <Table.Cell>{borrow.borrowDate}</Table.Cell>
-                          <Table.Cell>{borrow.returnDate}</Table.Cell>
-                        </Table.Row>
-                      );
-                    })}
-                </Table.Body>
-              </Table>
-              <h3>Reservations:</h3>
-              <Table celled>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell width={8}>Book Title</Table.HeaderCell>
-                    <Table.HeaderCell width={4}>
-                      Position in Queue
-                    </Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.reservations.map(res => {
-                    return (
-                      <Table.Row key={res.id}>
-                        <Table.Cell className={styles.tableCell}>
-                          {
-                            this.props.books.find(book => {
-                              return book.id === res.bookId;
-                            }).title
-                          }
-                        </Table.Cell>
-                        <Table.Cell>{res.queuePosition}</Table.Cell>
-                      </Table.Row>
-                    );
-                  })}
-                </Table.Body>
-              </Table>
-              <h3>Loan History:</h3>
-              <Table celled collapsing>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell width={8}>Book Title</Table.HeaderCell>
-                    <Table.HeaderCell width={2}>Date Borrowed</Table.HeaderCell>
-                    <Table.HeaderCell width={2}>Due Date</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.borrows
-                    .filter(borrow => {
-                      return borrow.active === false;
-                    })
-                    .map(borrow => {
-                      return (
-                        <Table.Row key={borrow.id}>
-                          <Table.Cell className={styles.tableCell}>
-                            {
-                              this.props.books.find(book => {
-                                return book.id === borrow.bookId;
-                              }).title
-                            }
-                          </Table.Cell>
-                          <Table.Cell>{borrow.borrowDate}</Table.Cell>
-                          <Table.Cell>{borrow.returnDate}</Table.Cell>
-                        </Table.Row>
-                      );
-                    })}
-                </Table.Body>
-              </Table>
-            </div>
+            <Tab panes={panes} className={styles.tabContainer} />
           </div>
         )}
       </div>
@@ -134,4 +94,10 @@ const mapStateToProps = state => ({
   books: state.bookList.books
 });
 
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...bookListActions }, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Profile);
