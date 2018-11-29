@@ -33,9 +33,9 @@ class Profile extends Component {
               <Table celled>
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Book Title</Table.HeaderCell>
-                    <Table.HeaderCell>Date Borrowed</Table.HeaderCell>
-                    <Table.HeaderCell>Due Date</Table.HeaderCell>
+                    <Table.HeaderCell width={8}>Book Title</Table.HeaderCell>
+                    <Table.HeaderCell width={2}>Date Borrowed</Table.HeaderCell>
+                    <Table.HeaderCell width={2}>Due Date</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -64,8 +64,10 @@ class Profile extends Component {
               <Table celled>
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Book Title</Table.HeaderCell>
-                    <Table.HeaderCell>Position in Queue</Table.HeaderCell>
+                    <Table.HeaderCell width={8}>Book Title</Table.HeaderCell>
+                    <Table.HeaderCell width={4}>
+                      Position in Queue
+                    </Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -86,12 +88,12 @@ class Profile extends Component {
                 </Table.Body>
               </Table>
               <h3>Loan History:</h3>
-              <Table celled>
+              <Table celled collapsing>
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Book Title</Table.HeaderCell>
-                    <Table.HeaderCell>Date Borrowed</Table.HeaderCell>
-                    <Table.HeaderCell>Due Date</Table.HeaderCell>
+                    <Table.HeaderCell width={8}>Book Title</Table.HeaderCell>
+                    <Table.HeaderCell width={2}>Date Borrowed</Table.HeaderCell>
+                    <Table.HeaderCell width={2}>Due Date</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
