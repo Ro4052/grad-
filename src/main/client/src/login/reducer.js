@@ -1,4 +1,5 @@
 import * as axios from "axios";
+import { checkAllBooks } from "../dashBoard/bookList/reducer";
 
 import history from "../history";
 
@@ -14,7 +15,7 @@ const types = {
 const INITIAL_STATE = {
   loggingIn: false,
   loggedIn: false,
-  user: {}
+  user: { reservations: [], borrows: [] }
 };
 
 const checkingLogin = checking => ({
@@ -42,6 +43,7 @@ export const checkLogin = () => dispatch => {
     .then(userResult => {
       dispatch(checkingLogin(false));
       dispatch(loggedIn(userResult.data));
+      dispatch(checkAllBooks(userResult.data));
     })
     .catch(() => {
       history.replace("/dashboard");
