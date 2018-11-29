@@ -9,3 +9,7 @@
   flex: 10;
   height: 100vh;
 }
+
+.username {
+  text-align: center;
+}
