@@ -1,6 +1,5 @@
 package com.scottlogic.librarygradproject.Services;
 
-import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.BookIsAvailableException;
 import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
@@ -11,6 +10,8 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 public class ReservationService {
 
@@ -54,7 +55,20 @@ public class ReservationService {
 
     public void delete(long reservationId) {
         try {
+            Reservation resToDelete = resRepo.getOne(reservationId);
+            AtomicLong queuePosition = new AtomicLong(resToDelete.getQueuePosition());
             resRepo.deleteById(reservationId);
+            List<Reservation> resQueue = resRepo
+                    .findAllByBookIdOrderByQueuePositionAsc(resToDelete.getBookId());
+
+            List<Reservation> adjustedReservations =
+                    resQueue.subList(queuePosition.intValue()-1, resQueue.size())
+                    .stream()
+                    .map(res -> {
+                        res.setQueuePosition(queuePosition.getAndIncrement());
+                        return res;
+                    }).collect(Collectors.toList());
+            resRepo.saveAll(adjustedReservations);
         } catch (EmptyResultDataAccessException e) {
             throw new ReservationNotFoundException(reservationId);
         }
