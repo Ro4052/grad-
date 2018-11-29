@@ -18,4 +18,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByBookIdOrderByQueuePositionAsc(long bookId);
 
     List<Reservation> findAllByUserId(String userId);
+
+    Boolean findOneByUserId(String userId);
 }

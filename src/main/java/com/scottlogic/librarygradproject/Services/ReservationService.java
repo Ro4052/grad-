@@ -2,6 +2,7 @@ package com.scottlogic.librarygradproject.Services;
 
 import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
+import com.scottlogic.librarygradproject.Exceptions.AlreadyReservedException;
 import com.scottlogic.librarygradproject.Exceptions.BookIsAvailableException;
 import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,10 +40,13 @@ public class ReservationService {
     }
 
     public long reserve(long bookId, OAuth2Authentication authentication) {
+        String userId = userService.getUserDetails(authentication).getUserId();
+        if (resRepo.findOneByUserId(userId)) {
+            throw new AlreadyReservedException(bookId);
+        }
         if (!borrowService.isBorrowed(bookId)) {
             throw new BookIsAvailableException(bookId);
         }
-        String userId = userService.getUserDetails(authentication).getUserId();
         validateReservation(bookId, userId);
         long nextInQueue = resRepo.findLatestQueue(bookId) + 1;
         Reservation reservation = Reservation.builder().bookId(bookId).userId(userId).queuePosition(nextInQueue).build();
