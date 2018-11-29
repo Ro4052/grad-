@@ -68,16 +68,23 @@ public class UserServiceTest {
     OAuth2Authentication authentication;
     OAuthClientTestHelper helper2 = new OAuthClientTestHelper("TestUser 2", "testuser 2", "");
     OAuth2Authentication authentication2 = helper2.getOauthTestAuthentication();
+    OAuthClientTestHelper helper3 = new OAuthClientTestHelper("TestUser 2", "testuser 2", "");
+    OAuth2Authentication authentication3 = helper3.getOauthTestAuthentication();
     Book book1, book2, book3;
 
     @Before
     public void before_Each_Test() {
         authentication = helper.getOauthTestAuthentication();
+        authentication2 = helper2.getOauthTestAuthentication();
+        authentication3 = helper3.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         bookService.save(book1);
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
         bookService.save(book2);
         book3 = new Book("0123456789", "Correct Book3", "Correct Author3", "2016");
+//        service.add(user1);
+//        service.add(user2);
+//        service.add(user3);
     }
 
     @Test
@@ -91,7 +98,6 @@ public class UserServiceTest {
     public void find_One_User() {
         service.add(user1);
         service.add(user2);
-        service.add(user3);
         LibraryUser user = service.findOne("TestUser 1");
         assertEquals(user1, user);
     }
@@ -110,6 +116,8 @@ public class UserServiceTest {
 
     @Test
     public void findUserReservations_Finds_Reservation() {
+        service.add(user1);
+        service.add(user2);
         borrowService.borrow(1, authentication);
         borrowService.borrow(2, authentication2);
         reservationService.reserve(1, authentication);
@@ -125,6 +133,7 @@ public class UserServiceTest {
 
     @Test
     public void findUserReservations_Finds_No_Reservation() {
+        service.add(user2);
         borrowService.borrow(1, authentication2);
         borrowService.borrow(2, authentication2);
         reservationService.reserve(1, authentication2);

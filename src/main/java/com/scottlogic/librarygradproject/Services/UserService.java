@@ -42,9 +42,9 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public LibraryUser findOne(String username) {
-        Optional<LibraryUser> User = userRepo.findById(username);
-        return User.orElseThrow(() -> new UserNotFoundException(username));
+    public LibraryUser findOne(String userId) {
+        Optional<LibraryUser> user = userRepo.findById(userId);
+        return user.orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     public void add(LibraryUser user) {

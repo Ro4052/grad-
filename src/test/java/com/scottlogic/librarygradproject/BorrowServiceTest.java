@@ -2,6 +2,7 @@ package com.scottlogic.librarygradproject;
 
 import com.scottlogic.librarygradproject.Entities.Book;
 import com.scottlogic.librarygradproject.Entities.Borrow;
+import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.*;
 import com.scottlogic.librarygradproject.Services.BookService;
@@ -37,14 +38,36 @@ public class BorrowServiceTest {
     @Autowired
     private ReservationService reservationService;
 
+    LibraryUser user1 = LibraryUser.builder()
+            .userId("TestUser 1")
+            .name("testuser 1")
+            .avatarUrl("avatar_url")
+            .build();
+    LibraryUser user2 = LibraryUser.builder()
+            .userId("TestUser 2")
+            .name("testuser 2")
+            .avatarUrl("avatar_url")
+            .build();
+    LibraryUser user3 = LibraryUser.builder()
+            .userId("TestUser 3")
+            .name("testuser 3")
+            .avatarUrl("avatar_url")
+            .build();
+
     private OAuth2Authentication authentication;
     private OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
+    private OAuth2Authentication authentication2;
+    private OAuthClientTestHelper helper2 = new OAuthClientTestHelper("TestUser 2", "testuser 2", "avatar_url");
+    private OAuth2Authentication authentication3;
+    private OAuthClientTestHelper helper3 = new OAuthClientTestHelper("TestUser 3", "testuser 3", "avatar_url");
     private Book book1, book2, book3, book4;
     private Borrow borrow1, borrow2, borrow3, borrow4;
 
     @Before
     public void before_Each_Test() {
         authentication = helper.getOauthTestAuthentication();
+        authentication2 = helper2.getOauthTestAuthentication();
+        authentication3 = helper3.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         bookService.save(book1);
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
@@ -61,6 +84,9 @@ public class BorrowServiceTest {
         borrow3.setId(3);
         borrow4 = new Borrow(4, "TestUser 1", LocalDate.now().minusDays(8), false, LocalDate.now().minusDays(1));
         borrow4.setId(4);
+        userService.add(user1);
+        userService.add(user2);
+        userService.add(user3);
     }
 
     @Test(expected = BookNotFoundException.class)
@@ -155,8 +181,8 @@ public class BorrowServiceTest {
         //Arrange
         borrowService.borrow(book1.getId(), authentication);
         reservationService.reserve(book1.getId(), authentication);
-        reservationService.reserve(book1.getId(), authentication);
-        reservationService.reserve(book1.getId(), authentication);
+        reservationService.reserve(book1.getId(), authentication2);
+        reservationService.reserve(book1.getId(), authentication3);
 
         //Act
         borrowService.bookReturned(1L);
