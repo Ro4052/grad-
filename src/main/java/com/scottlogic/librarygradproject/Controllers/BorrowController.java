@@ -22,8 +22,8 @@ public class BorrowController {
     }
 
     @RequestMapping(value = "/borrow/{bookId}", method = RequestMethod.POST)
-    public void post(@PathVariable long bookId, OAuth2Authentication authentication) {
-        borrowService.borrow(bookId, authentication);
+    public long post(@PathVariable long bookId, OAuth2Authentication authentication) {
+        return borrowService.borrow(bookId, authentication);
     }
 
     @RequestMapping(value = "/borrow", method = RequestMethod.GET)
