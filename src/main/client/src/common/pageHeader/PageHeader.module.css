@@ -22,10 +22,10 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  height: auto;
-  width: auto;
-  min-width: 20%;
-  min-height: 80%;
+  height: 12vh;
+  width: 36vh;
+  max-width: 30vw;
+  max-height: 10vw;
 }
 
 .profileActions h4 {
