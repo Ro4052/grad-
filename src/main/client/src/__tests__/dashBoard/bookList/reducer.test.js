@@ -87,4 +87,37 @@ describe("BookList reducer tests", () => {
     store.dispatch(actions.borrowBook(0));
     expect(store.getActions()[0]).toEqual(expectedAction);
   });
+
+  test("dispatches GET_BOOKS action after book is returned", () => {
+    const expectedAction = {
+      type: actions.types.GET_BOOKS,
+      books: [testBook1, testBook2]
+    };
+    const store = mockStore(initialState);
+
+    store.dispatch(actions.returnBook(0));
+    expect(store.getActions()[0]).toEqual(expectedAction);
+  });
+
+  test("dispatches GET_BOOKS action after startProcess", () => {
+    const expectedAction = {
+      type: actions.types.GET_BOOKS,
+      books: [testBook1, testBook2]
+    };
+    const store = mockStore(initialState);
+
+    store.dispatch(actions.startProcess(0));
+    expect(store.getActions()[0]).toEqual(expectedAction);
+  });
+
+  test("dispatches GET_BOOKS action after cancelProcess", () => {
+    const expectedAction = {
+      type: actions.types.GET_BOOKS,
+      books: [testBook1, testBook2]
+    };
+    const store = mockStore(initialState);
+
+    store.dispatch(actions.cancelProcess(0));
+    expect(store.getActions()[0]).toEqual(expectedAction);
+  });
 });

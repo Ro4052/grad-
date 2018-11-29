@@ -32,21 +32,37 @@ export default class Book extends Component {
   render() {
     const { book } = this.props;
     let request, colour, buttonText;
-    request = book.availabilityChecked
-      ? book.isAvailable
-        ? this.props.borrowBook
-        : this.props.reserveBook
-      : this.props.checkBook;
-    colour = book.availabilityChecked
-      ? book.isAvailable
-        ? "green"
-        : "blue"
-      : null;
-    buttonText = book.availabilityChecked
-      ? book.isAvailable
-        ? "Borrow"
-        : "Reserve"
-      : "Check Availability";
+    switch (book.role) {
+      case "Borrower":
+        if (!book.returnStarted) {
+          request = this.props.startProcess;
+          colour = "red";
+          buttonText = "Return";
+        } else {
+          request = this.props.returnBook;
+          colour = "red";
+          buttonText = "Confirm";
+        }
+        break;
+      case "Reserver":
+        request = () => alert("To Be implemented"); // function needs to be created
+        colour = "red";
+        buttonText = "Cancel";
+        break;
+      default:
+        if (book.availabilityChecked) {
+          request = book.isAvailable
+            ? this.props.borrowBook
+            : this.props.reserveBook;
+          colour = book.isAvailable ? "green" : "blue";
+          buttonText = book.isAvailable ? "Borrow" : "Reserve";
+        } else {
+          request = this.props.checkBook;
+          colour = null;
+          buttonText = "Check Availability";
+        }
+        break;
+    }
     return (
       <li className={styles.book}>
         {this.props.deleteMode && this.props.loggedIn ? (
@@ -93,13 +109,13 @@ export default class Book extends Component {
           </div>
         </div>
         {this.props.loggedIn && (
-          <div>
+          <div className={styles.bookBtnsContainer}>
             <RequestButton
               request={request}
               colour={colour}
               buttonText={buttonText}
-              bookId={book.id}
-              popupText={book.popupText}
+              book={book}
+              cancelProcess={this.props.cancelProcess}
             />
             {book.editState ? (
               <EditBook

@@ -77,14 +77,25 @@ export const deleteBook = bookIds => (dispatch, getState) => {
   dispatch(getBooksAction(newBooks));
 };
 
-export const reserveBook = bookId => dispatch => {
+export const reserveBook = book => (dispatch, getState) => {
+  const bookId = book.id;
   // Reset popup text
   dispatch(popupText("Loading...", bookId));
   axios
     .post(`/api/reserve/${bookId}`)
-    .then(() => {
+    .then(res => {
       // Success popup text
       dispatch(popupText("Reservation successful!", bookId));
+      const newBooks = getState().bookList.books.map(eachBook => {
+        if (eachBook.id === book.id) {
+          eachBook.borrowId = null;
+          eachBook.reservationId = res.data;
+          eachBook.role = "Reserver";
+          eachBook.popupText = "Cancel your Reservation";
+        }
+        return eachBook;
+      });
+      dispatch(getBooksAction(newBooks));
     })
     .catch(() => {
       // Failure popup text
@@ -92,20 +103,32 @@ export const reserveBook = bookId => dispatch => {
     });
 };
 
-export const borrowBook = bookId => dispatch => {
+export const borrowBook = book => (dispatch, getState) => {
+  const bookId = book.id;
   dispatch(popupText("Loading...", bookId));
   axios
     .post(`/api/borrow/${bookId}`)
-    .then(() => {
+    .then(res => {
       dispatch(popupText("Book successfully borrowed!", bookId));
+      const newBooks = getState().bookList.books.map(eachBook => {
+        if (eachBook.id === book.id) {
+          eachBook.borrowId = res.data;
+          eachBook.reservationId = null;
+          eachBook.role = "Borrower";
+          eachBook.popupText = "Return your Book";
+          eachBook.returnStarted = false;
+        }
+        return eachBook;
+      });
+      dispatch(getBooksAction(newBooks));
     })
     .catch(() => {
       dispatch(popupText("Book cannot be borrowed at this time", bookId));
     });
-  dispatch(isBookAvailable(bookId, false));
 };
 
-export const checkBook = bookId => dispatch => {
+export const checkBook = book => dispatch => {
+  const bookId = book.id;
   dispatch(popupText("Loading...", bookId));
   axios
     .get(`/api/borrow/check/${bookId}`)
@@ -125,6 +148,76 @@ export const checkBook = bookId => dispatch => {
     .catch(() => {
       dispatch(popupText("Something went wrong", bookId));
     });
+};
+
+export const checkAllBooks = user => (dispatch, getState) => {
+  let role, reservationId, borrowId, popupText;
+  const newBooks = getState().bookList.books.map(book => {
+    borrowId = null;
+    reservationId = null;
+    role = "Nothing";
+    popupText = "Click to check availability";
+    user.reservations.forEach(reservation => {
+      if (reservation.bookId === book.id) {
+        borrowId = null;
+        reservationId = reservation.id;
+        role = "Reserver";
+        popupText = "Cancel your reservation";
+      }
+    });
+    user.borrows.forEach(borrow => {
+      if (borrow.bookId === book.id && borrow.active) {
+        borrowId = borrow.id;
+        reservationId = null;
+        role = "Borrower";
+        popupText = "Return your Book";
+      }
+    });
+    book.borrowId = borrowId;
+    book.reservationId = reservationId;
+    book.role = role;
+    book.popupText = popupText;
+    return book;
+  });
+  dispatch(getBooksAction(newBooks));
+};
+
+export const returnBook = book => (dispatch, getState) => {
+  axios.put(`/api/borrow/return/${book.borrowId}`);
+  const newBooks = getState().bookList.books.map(eachBook => {
+    if (eachBook.id === book.id) {
+      eachBook.borrowId = null;
+      eachBook.reservationId = null;
+      eachBook.role = "Nothing";
+      eachBook.popupText = "Click to check availability";
+      eachBook.availabilityChecked = false;
+      eachBook.returnStarted = false;
+    }
+    return eachBook;
+  });
+  dispatch(getBooksAction(newBooks));
+};
+
+export const startProcess = book => (dispatch, getState) => {
+  const newBooks = getState().bookList.books.map(eachBook => {
+    if (eachBook.id === book.id) {
+      eachBook.returnStarted = true;
+      eachBook.popupText = "Are you sure?";
+    }
+    return eachBook;
+  });
+  dispatch(getBooksAction(newBooks));
+};
+
+export const cancelProcess = book => (dispatch, getState) => {
+  const newBooks = getState().bookList.books.map(eachBook => {
+    if (eachBook.id === book.id) {
+      eachBook.returnStarted = false;
+      eachBook.popupText = "Return your Book";
+    }
+    return eachBook;
+  });
+  dispatch(getBooksAction(newBooks));
 };
 
 // Reducers

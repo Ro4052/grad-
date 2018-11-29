@@ -24,8 +24,8 @@ public class ReservationsController {
     }
 
     @RequestMapping(value = "/reserve/{bookId}", method = RequestMethod.POST)
-    public void post(@PathVariable long bookId, OAuth2Authentication authentication) {
-        reservationService.reserve(bookId, authentication);
+    public long post(@PathVariable long bookId, OAuth2Authentication authentication) {
+        return reservationService.reserve(bookId, authentication);
     }
 
     @RequestMapping(value = "/reserve/{reservationId}", method = RequestMethod.DELETE)
