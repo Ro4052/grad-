@@ -44,7 +44,7 @@ export const checkLogin = () => dispatch => {
       dispatch(loggedIn(userResult.data));
     })
     .catch(() => {
-      history.push("/dashboard");
+      history.replace("/dashboard");
       dispatch(checkingLogin(false));
     });
 };
