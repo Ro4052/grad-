@@ -14,6 +14,8 @@ class Profile extends Component {
   }
 
   render() {
+    console.log(this.props.reservations);
+    console.log(this.props.borrows);
     return (
       <div className={styles.profile}>
         <PageHeader user={this.props.user} loggedIn={this.props.loggedIn} />
@@ -30,7 +32,26 @@ class Profile extends Component {
               user ID: {this.props.user.userId}
             </h4>
             <h3>Active Loans:</h3>
+            <ul>
+              {this.props.books
+                .filter(book => {
+                  return book.role === "Borrower";
+                })
+                .map(book => {
+                  return <li key={book.id}>{book.title}</li>;
+                })}
+            </ul>
             <h3>Reservations:</h3>
+            <ul>
+              {this.props.books
+                .filter(book => {
+                  return book.role === "Reserver";
+                })
+                .map(book => {
+                  return <li key={book.id}>{book.title}</li>;
+                })}
+            </ul>
+            <h3>Loan History:</h3>
           </div>
         )}
       </div>
@@ -40,7 +61,10 @@ class Profile extends Component {
 
 const mapStateToProps = state => ({
   user: state.login.user.userDetails,
-  loggedIn: state.login.loggedIn
+  reservations: state.login.user.reservations,
+  borrows: state.login.user.borrows,
+  loggedIn: state.login.loggedIn,
+  books: state.bookList.books
 });
 
 export default connect(mapStateToProps)(Profile);
