@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Image } from "semantic-ui-react";
+import { Image, Table } from "semantic-ui-react";
 
 import history from "../history";
 import PageHeader from "../common/pageHeader/PageHeader";
@@ -14,8 +14,6 @@ class Profile extends Component {
   }
 
   render() {
-    console.log(this.props.reservations);
-    console.log(this.props.borrows);
     return (
       <div className={styles.profile}>
         <PageHeader user={this.props.user} loggedIn={this.props.loggedIn} />
@@ -32,26 +30,92 @@ class Profile extends Component {
               user ID: {this.props.user.userId}
             </h4>
             <h3>Active Loans:</h3>
-            <ul>
-              {this.props.books
-                .filter(book => {
-                  return book.role === "Borrower";
-                })
-                .map(book => {
-                  return <li key={book.id}>{book.title}</li>;
-                })}
-            </ul>
+            <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Book Title</Table.HeaderCell>
+                  <Table.HeaderCell>Date Borrowed</Table.HeaderCell>
+                  <Table.HeaderCell>Due Date</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {this.props.borrows
+                  .filter(borrow => {
+                    return borrow.active === true;
+                  })
+                  .map(borrow => {
+                    return (
+                      <Table.Row key={borrow.id}>
+                        <Table.Cell>
+                          {
+                            this.props.books.find(book => {
+                              return book.id === borrow.bookId;
+                            }).title
+                          }
+                        </Table.Cell>
+                        <Table.Cell>{borrow.borrowDate}</Table.Cell>
+                        <Table.Cell>{borrow.returnDate}</Table.Cell>
+                      </Table.Row>
+                    );
+                  })}
+              </Table.Body>
+            </Table>
             <h3>Reservations:</h3>
-            <ul>
-              {this.props.books
-                .filter(book => {
-                  return book.role === "Reserver";
-                })
-                .map(book => {
-                  return <li key={book.id}>{book.title}</li>;
+            <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Book Title</Table.HeaderCell>
+                  <Table.HeaderCell>Position in Queue</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {this.props.reservations.map(res => {
+                  return (
+                    <Table.Row key={res.id}>
+                      <Table.Cell>
+                        {
+                          this.props.books.find(book => {
+                            return book.id === res.bookId;
+                          }).title
+                        }
+                      </Table.Cell>
+                      <Table.Cell>{res.queuePosition}</Table.Cell>
+                    </Table.Row>
+                  );
                 })}
-            </ul>
+              </Table.Body>
+            </Table>
             <h3>Loan History:</h3>
+            <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Book Title</Table.HeaderCell>
+                  <Table.HeaderCell>Date Borrowed</Table.HeaderCell>
+                  <Table.HeaderCell>Due Date</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {this.props.borrows
+                  .filter(borrow => {
+                    return borrow.active === false;
+                  })
+                  .map(borrow => {
+                    return (
+                      <Table.Row key={borrow.id}>
+                        <Table.Cell>
+                          {
+                            this.props.books.find(book => {
+                              return book.id === borrow.bookId;
+                            }).title
+                          }
+                        </Table.Cell>
+                        <Table.Cell>{borrow.borrowDate}</Table.Cell>
+                        <Table.Cell>{borrow.returnDate}</Table.Cell>
+                      </Table.Row>
+                    );
+                  })}
+              </Table.Body>
+            </Table>
           </div>
         )}
       </div>
