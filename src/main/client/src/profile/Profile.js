@@ -13,7 +13,7 @@ import styles from "./Profile.module.css";
 
 class Profile extends Component {
   componentDidUpdate() {
-    if (!this.props.loggedIn) {
+    if (!this.props.loggedIn && !this.props.loggingIn) {
       history.replace("/dashboard");
     }
   }
@@ -90,6 +90,7 @@ const mapStateToProps = state => ({
   user: state.login.user.userDetails,
   reservations: state.login.user.reservations,
   borrows: state.login.user.borrows,
+  loggingIn: state.login.loggingIn,
   loggedIn: state.login.loggedIn,
   books: state.bookList.books
 });

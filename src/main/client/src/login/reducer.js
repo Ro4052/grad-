@@ -41,7 +41,6 @@ export const checkLogin = () => dispatch => {
   axios
     .get("/api/user")
     .then(userResult => {
-      dispatch(checkingLogin(false));
       dispatch(loggedIn(userResult.data));
       dispatch(checkAllBooks(userResult.data));
     })
@@ -67,7 +66,12 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loggingIn: action.checking };
 
     case types.LOGGED_IN:
-      return { ...state, loggedIn: true, user: action.userData };
+      return {
+        ...state,
+        loggingIn: false,
+        loggedIn: true,
+        user: action.userData
+      };
 
     case types.LOGIN_USER:
       return { ...state, loggingIn: true };
