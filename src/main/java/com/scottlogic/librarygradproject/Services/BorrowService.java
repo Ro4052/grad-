@@ -33,10 +33,10 @@ public class BorrowService {
         this.bookService = bookService;
         this.reservationRepository = reservationRepository;
     }
-
+    @SuppressWarnings("unchecked")
     public long borrow(long bookId, OAuth2Authentication authentication) {
         if (this.isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
-        String userId = userService.loggedIn(authentication).getUserId();
+        String userId = ((Map<String, String>) authentication.getUserAuthentication().getDetails()).get("login");
         LocalDate borrowDate = LocalDate.now();
         LocalDate returnDate = LocalDate.now().plusDays(7);
         Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(borrowDate).returnDate(returnDate).build();
@@ -63,6 +63,10 @@ public class BorrowService {
     public boolean isBorrowed(long bookId) {
         bookService.findOne(bookId);
         return borrowRepository.isBookBorrowed(bookId);
+    }
+
+    public boolean existsByUserIdAndBookId(String userId, long bookId) {
+        return borrowRepository.existsByUserIdAndBookId(userId, bookId);
     }
 
     @Transactional

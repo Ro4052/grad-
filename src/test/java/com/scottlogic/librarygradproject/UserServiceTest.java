@@ -68,11 +68,15 @@ public class UserServiceTest {
     OAuth2Authentication authentication;
     OAuthClientTestHelper helper2 = new OAuthClientTestHelper("TestUser 2", "testuser 2", "");
     OAuth2Authentication authentication2 = helper2.getOauthTestAuthentication();
+    OAuthClientTestHelper helper3 = new OAuthClientTestHelper("TestUser 3", "testuser 3", "");
+    OAuth2Authentication authentication3 = helper3.getOauthTestAuthentication();
     Book book1, book2, book3;
 
     @Before
     public void before_Each_Test() {
         authentication = helper.getOauthTestAuthentication();
+        authentication2 = helper2.getOauthTestAuthentication();
+        authentication3 = helper3.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         bookService.save(book1);
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
@@ -91,7 +95,6 @@ public class UserServiceTest {
     public void find_One_User() {
         service.add(user1);
         service.add(user2);
-        service.add(user3);
         LibraryUser user = service.findOne("TestUser 1");
         assertEquals(user1, user);
     }
@@ -110,24 +113,28 @@ public class UserServiceTest {
 
     @Test
     public void findUserReservations_Finds_Reservation() {
+        service.add(user1);
+        service.add(user2);
         borrowService.borrow(1, authentication);
         borrowService.borrow(2, authentication2);
-        reservationService.reserve(1, authentication);
-        reservationService.reserve(2, authentication2);
+        reservationService.reserve(1, authentication2);
+        reservationService.reserve(2, authentication);
         Reservation userReservation = Reservation.builder().userId("TestUser 1")
-                .bookId(1)
+                .bookId(2)
                 .queuePosition(1)
                 .build();
-        userReservation.setId(1);
+        userReservation.setId(2);
         List<Reservation> userReservations = service.findUserReservations(authentication);
         assertArrayEquals(new Reservation[]{userReservation}, userReservations.toArray());
     }
 
     @Test
     public void findUserReservations_Finds_No_Reservation() {
+        service.add(user2);
+        service.add(user3);
         borrowService.borrow(1, authentication2);
-        borrowService.borrow(2, authentication2);
-        reservationService.reserve(1, authentication2);
+        borrowService.borrow(2, authentication3);
+        reservationService.reserve(1, authentication3);
         reservationService.reserve(2, authentication2);
         List<Reservation> userReservations = service.findUserReservations(authentication);
         assertArrayEquals(new Reservation[]{}, userReservations.toArray());
