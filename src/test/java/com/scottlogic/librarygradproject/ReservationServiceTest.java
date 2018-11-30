@@ -156,4 +156,35 @@ public class ReservationServiceTest {
         assertEquals(0L, reservationNumber);
     }
 
+    @Test
+    public void delete_reorders_queue() {
+        // Arrange
+        Reservation reservation1 = new Reservation(2, "TestUser 1", 1);
+        reservation1.setId(1);
+        Reservation reservation2 = new Reservation(2, "TestUser 1", 2);
+        reservation2.setId(2);
+        Reservation reservation3 = new Reservation(2, "TestUser 1", 3);
+        reservation3.setId(3);
+        Reservation reservation4 = new Reservation(2, "TestUser 1", 4);
+        reservation4.setId(4);
+        Reservation reservation5 = new Reservation(2, "TestUser 1", 5);
+        reservation5.setId(5);
+
+        borrowService.borrow(reservation1.getBookId(), authentication);
+        reservationService.reserve(reservation1.getBookId(), authentication);
+        reservationService.reserve(reservation1.getBookId(), authentication);
+        reservationService.reserve(reservation1.getBookId(), authentication);
+        reservationService.reserve(reservation1.getBookId(), authentication);
+        reservationService.reserve(reservation1.getBookId(), authentication);
+
+        // Act
+        reservationService.delete(reservation3.getId());
+        List<Reservation> newReservations = reservationService.findAll();
+
+        // Assert
+        reservation4.setQueuePosition(3);
+        reservation5.setQueuePosition(4);
+        assertEquals(reservation4, newReservations.get(2));
+        assertEquals(reservation5, newReservations.get(3));
+    }
 }
