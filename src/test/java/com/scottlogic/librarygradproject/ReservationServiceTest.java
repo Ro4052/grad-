@@ -184,7 +184,11 @@ public class ReservationServiceTest {
         // Assert
         reservation4.setQueuePosition(3);
         reservation5.setQueuePosition(4);
-        assertEquals(reservation4, newReservations.get(2));
-        assertEquals(reservation5, newReservations.get(3));
+        assertArrayEquals(new Reservation[] {
+                reservation1,
+                reservation2,
+                reservation4,
+                reservation5
+        }, newReservations.toArray());
     }
 }
