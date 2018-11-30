@@ -14,7 +14,7 @@ import styles from "./Profile.module.css";
 class Profile extends Component {
   componentDidUpdate() {
     if (!this.props.loggedIn) {
-      history.push("/dashboard");
+      history.replace("/dashboard");
     }
   }
 
