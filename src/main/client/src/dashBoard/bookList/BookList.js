@@ -10,43 +10,50 @@ export class BookList extends Component {
     return (
       <div className={styles.bookListContainer}>
         <ul className={styles.bookList}>
-          {this.props.books
-            .filter(book => {
-              book.all = `${book.title} ${book.author} ${book.isbn} ${
-                book.publishDate
-              }`;
-              if (this.props.searchBy !== "publishDate") {
-                return this.props.searchString.length > 0 &&
-                  book[this.props.searchBy].length
-                  ? book[this.props.searchBy]
-                      .toLowerCase()
-                      .includes(this.props.searchString.toLowerCase())
-                  : book;
-              } else {
-                const lowerDate = Number(this.props.lowerDate) || 0;
-                const upperDate =
-                  Number(this.props.upperDate) || new Date().getFullYear();
+          {this.props.books &&
+            this.props.books
+              .filter(book => {
+                book.all = `${book.title} ${book.author} ${book.isbn} ${
+                  book.publishDate
+                }`;
+                if (this.props.searchBy !== "publishDate") {
+                  return this.props.searchString.length > 0 &&
+                    book[this.props.searchBy].length
+                    ? book[this.props.searchBy]
+                        .toLowerCase()
+                        .includes(this.props.searchString.toLowerCase())
+                    : book;
+                } else {
+                  const lowerDate = Number(this.props.lowerDate) || 0;
+                  const upperDate =
+                    Number(this.props.upperDate) || new Date().getFullYear();
+                  return (
+                    (Number(book.publishDate) >= lowerDate &&
+                      Number(book.publishDate) <= upperDate) ||
+                    book.publishDate.length === 0
+                  );
+                }
+              })
+              .map(book => {
                 return (
-                  (Number(book.publishDate) >= lowerDate &&
-                    Number(book.publishDate) <= upperDate) ||
-                  book.publishDate.length === 0
+                  <Book
+                    key={book.id}
+                    role={book.role}
+                    deleteMode={this.props.deleteMode}
+                    handleCheck={this.props.handleCheck}
+                    updateBook={this.props.updateBook}
+                    editStateChange={this.props.editStateChange}
+                    book={book}
+                    reserveBook={this.props.reserveBook}
+                    checkBook={this.props.checkBook}
+                    borrowBook={this.props.borrowBook}
+                    loggedIn={this.props.loggedIn}
+                    returnBook={this.props.returnBook}
+                    startProcess={this.props.startProcess}
+                    cancelProcess={this.props.cancelProcess}
+                  />
                 );
-              }
-            })
-            .map(book => (
-              <Book
-                key={book.id}
-                deleteMode={this.props.deleteMode}
-                handleCheck={this.props.handleCheck}
-                updateBook={this.props.updateBook}
-                editStateChange={this.props.editStateChange}
-                book={book}
-                reserveBook={this.props.reserveBook}
-                checkBook={this.props.checkBook}
-                borrowBook={this.props.borrowBook}
-                loggedIn={this.props.loggedIn}
-              />
-            ))}
+              })}
         </ul>
       </div>
     );
@@ -55,7 +62,8 @@ export class BookList extends Component {
 
 const mapStateToProps = state => ({
   books: state.bookList.books,
-  loggedIn: state.login.loggedIn
+  loggedIn: state.login.loggedIn,
+  user: state.login.user
 });
 
 const mapDispatchToProps = dispatch =>

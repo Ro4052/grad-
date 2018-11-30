@@ -38,7 +38,7 @@ public class ReservationService {
         return resRepo.findLatestQueue(bookId);
     }
 
-    public void reserve(long bookId, OAuth2Authentication authentication) {
+    public long reserve(long bookId, OAuth2Authentication authentication) {
         if (!borrowService.isBorrowed(bookId)) {
             throw new BookIsAvailableException(bookId);
         }
@@ -46,7 +46,7 @@ public class ReservationService {
         validateReservation(bookId, userId);
         long nextInQueue = resRepo.findLatestQueue(bookId) + 1;
         Reservation reservation = Reservation.builder().bookId(bookId).userId(userId).queuePosition(nextInQueue).build();
-        resRepo.save(reservation);
+        return resRepo.save(reservation).getId();
     }
 
     public List<Reservation> findAll() {
