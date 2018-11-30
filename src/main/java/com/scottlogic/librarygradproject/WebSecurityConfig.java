@@ -20,7 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/books").permitAll()
                 .antMatchers("/", "/static/**", "/favicon.ico", "/login**", "/callback",
-                        "/error**")
+                        "/error**", "/dashboard", "/profile")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
