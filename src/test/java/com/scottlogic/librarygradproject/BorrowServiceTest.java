@@ -53,6 +53,11 @@ public class BorrowServiceTest {
             .name("testuser 3")
             .avatarUrl("avatar_url")
             .build();
+    LibraryUser user4 = LibraryUser.builder()
+            .userId("TestUser 4")
+            .name("testuser 4")
+            .avatarUrl("avatar_url")
+            .build();
 
     private OAuth2Authentication authentication;
     private OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
@@ -60,6 +65,8 @@ public class BorrowServiceTest {
     private OAuthClientTestHelper helper2 = new OAuthClientTestHelper("TestUser 2", "testuser 2", "avatar_url");
     private OAuth2Authentication authentication3;
     private OAuthClientTestHelper helper3 = new OAuthClientTestHelper("TestUser 3", "testuser 3", "avatar_url");
+    private OAuth2Authentication authentication4;
+    private OAuthClientTestHelper helper4 = new OAuthClientTestHelper("TestUser 4", "testuser 4", "avatar_url");
     private Book book1, book2, book3, book4;
     private Borrow borrow1, borrow2, borrow3, borrow4;
 
@@ -68,6 +75,7 @@ public class BorrowServiceTest {
         authentication = helper.getOauthTestAuthentication();
         authentication2 = helper2.getOauthTestAuthentication();
         authentication3 = helper3.getOauthTestAuthentication();
+        authentication4 = helper4.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         bookService.save(book1);
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
@@ -87,6 +95,7 @@ public class BorrowServiceTest {
         userService.add(user1);
         userService.add(user2);
         userService.add(user3);
+        userService.add(user4);
     }
 
     @Test(expected = BookNotFoundException.class)
@@ -180,14 +189,15 @@ public class BorrowServiceTest {
     public void bookReturned_Multiple_Reservations_Pending() {
         //Arrange
         borrowService.borrow(book1.getId(), authentication);
-        reservationService.reserve(book1.getId(), authentication);
         reservationService.reserve(book1.getId(), authentication2);
         reservationService.reserve(book1.getId(), authentication3);
+        reservationService.reserve(book1.getId(), authentication4);
 
         //Act
         borrowService.bookReturned(1L);
         borrow1.setActive(false);
         borrow2.setBookId(1);
+        borrow2.setUserId("TestUser 2");
 
         //Assert
         assertFalse(borrowService.findOne(1L).isActive());
@@ -275,11 +285,11 @@ public class BorrowServiceTest {
         borrowService.findOne(4).setBorrowDate(borrow4.getBorrowDate());
         borrowService.findOne(4).setReturnDate(borrow4.getReturnDate());
         borrowService.findOne(4).setActive(false);
-        Borrow borrow5 = new Borrow(3, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));
+        Borrow borrow5 = new Borrow(3, "TestUser 2", LocalDate.now(), true, LocalDate.now().plusDays(7));
         borrow5.setId(5L);
         borrow3.setId(3L);
         borrow3.setActive(false);
-        reservationService.reserve(3L, authentication);
+        reservationService.reserve(3L, authentication2);
 
         //Act
         borrowService.updateBorrowed(LocalDate.now());

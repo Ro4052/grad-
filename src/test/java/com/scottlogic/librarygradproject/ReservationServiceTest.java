@@ -4,6 +4,7 @@ import com.scottlogic.librarygradproject.Entities.Book;
 import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.AlreadyReservedException;
+import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
 import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
 import com.scottlogic.librarygradproject.Services.BookService;
@@ -42,6 +43,8 @@ public class ReservationServiceTest {
     private OAuth2Authentication authentication;
     private OAuthClientTestHelper helper2 = new OAuthClientTestHelper("TestUser 2", "testuser 2", "avatar_url");
     private OAuth2Authentication authentication2;
+    private OAuthClientTestHelper helper3 = new OAuthClientTestHelper("TestUser 3", "testuser 3", "avatar_url");
+    private OAuth2Authentication authentication3;
 
     LibraryUser user1 = LibraryUser.builder()
             .userId("TestUser 1")
@@ -53,11 +56,17 @@ public class ReservationServiceTest {
             .name("testuser 2")
             .avatarUrl("")
             .build();
+    LibraryUser user3 = LibraryUser.builder()
+            .userId("TestUser 3")
+            .name("testuser 3")
+            .avatarUrl("")
+            .build();
 
     @Before
     public void before_Each_Test() {
         authentication = helper.getOauthTestAuthentication();
         authentication2 = helper2.getOauthTestAuthentication();
+        authentication3 = helper3.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2002");
         res1 = new Reservation(1L, "TestUser 1", 1L);
@@ -70,6 +79,7 @@ public class ReservationServiceTest {
 
         userService.add(user1);
         userService.add(user2);
+        userService.add(user3);
     }
 
     @Test(expected = BookNotFoundException.class)
@@ -87,7 +97,7 @@ public class ReservationServiceTest {
         long bookId = 1;
 
         //Act
-        borrowService.borrow(bookId, authentication);
+        borrowService.borrow(bookId, authentication2);
         reservationService.reserve(bookId, authentication);
 
         //Assert
@@ -98,8 +108,8 @@ public class ReservationServiceTest {
     @Test
     public void get_with_valid_id_gets_reservation() {
         //Arrange
-        borrowService.borrow(res1.getBookId(), authentication);
-        borrowService.borrow(res2.getBookId(), authentication);
+        borrowService.borrow(res1.getBookId(), authentication2);
+        borrowService.borrow(res2.getBookId(), authentication2);
         reservationService.reserve(res1.getBookId(), authentication);
         reservationService.reserve(res2.getBookId(), authentication);
 
@@ -114,7 +124,7 @@ public class ReservationServiceTest {
     public void get_with_invalid_id_throws_exception() {
         //Arrange
         borrowService.borrow(res1.getBookId(), authentication);
-        reservationService.reserve(res1.getBookId(), authentication);
+        reservationService.reserve(res1.getBookId(), authentication2);
         long invalidReservationId = 10;
 
         //Act
@@ -124,8 +134,8 @@ public class ReservationServiceTest {
     @Test
     public void getAll_returns_all_reservations() {
         //Arrange
-        borrowService.borrow(res1.getBookId(), authentication);
-        borrowService.borrow(res2.getBookId(), authentication);
+        borrowService.borrow(res1.getBookId(), authentication2);
+        borrowService.borrow(res2.getBookId(), authentication2);
         reservationService.reserve(res1.getBookId(), authentication);
         reservationService.reserve(res2.getBookId(), authentication);
 
@@ -140,7 +150,7 @@ public class ReservationServiceTest {
     public void check_returns_correct_number_single_reservation() {
         //Arrange
         borrowService.borrow(res1.getBookId(), authentication);
-        reservationService.reserve(res1.getBookId(), authentication);
+        reservationService.reserve(res1.getBookId(), authentication2);
 
         //Act
         long reservationNumber = reservationService.checkReservation(res1.getBookId());
@@ -153,8 +163,8 @@ public class ReservationServiceTest {
     public void check_returns_correct_number_multiple_reservation() {
         //Arrange
         borrowService.borrow(res1.getBookId(), authentication);
-        reservationService.reserve(res1.getBookId(), authentication);
         reservationService.reserve(res1.getBookId(), authentication2);
+        reservationService.reserve(res1.getBookId(), authentication3);
 
         //Act
         long reservationNumber = reservationService.checkReservation(res1.getBookId());
@@ -175,10 +185,17 @@ public class ReservationServiceTest {
     @Test (expected = AlreadyReservedException.class)
     public void reserve_throws_if_book_already_reserved_by_user() {
         //Arrange
-        borrowService.borrow(res1.getBookId(), authentication);
+        borrowService.borrow(res1.getBookId(), authentication2);
         reservationService.reserve(res1.getBookId(), authentication);
 
         //Act
+        reservationService.reserve(res1.getBookId(), authentication);
+    }
+
+    @Test (expected = BookAlreadyBorrowedException.class)
+    public void reserve_throws_if_book_already_borrowed_by_user() {
+        //Arrange
+        borrowService.borrow(res1.getBookId(), authentication);
         reservationService.reserve(res1.getBookId(), authentication);
     }
 

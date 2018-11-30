@@ -33,7 +33,7 @@ public class BorrowService {
         this.bookService = bookService;
         this.reservationRepository = reservationRepository;
     }
-
+    @SuppressWarnings("unchecked")
     public long borrow(long bookId, OAuth2Authentication authentication) {
         if (this.isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
         String userId = ((Map<String, String>) authentication.getUserAuthentication().getDetails()).get("login");
