@@ -5,11 +5,11 @@ import history from "../history";
 
 const types = {
   CHECKING_LOGIN: "login/CHECKING_LOGIN",
-  LOGGED_IN: "login/LOGGED_IN",
   FAILED_LOGIN: "login/FAILED_LOGIN",
   LOGIN_USER: "login/LOGIN_USER",
-  LOADING: "login/LOADING",
+  LOGGED_IN: "login/LOGGED_IN",
   LOGOUT: "login/LOGOUT",
+  LOADING: "login/LOADING",
   ADD_BORROW: "login/ADD_BORROW",
   REMOVE_BORROW: "login/REMOVE_BORROW",
   ADD_RESERVATION: "login/ADD_RESERVATION",
@@ -99,7 +99,9 @@ export const addBorrow = (borrow, bookId) => (dispatch, getState) => {
 export const removeBorrow = borrowId => (dispatch, getState) => {
   const newBorrowList = [...getState().login.user.borrows];
   let inactiveBorrow = newBorrowList.find(borrow => borrow.id === borrowId);
-  inactiveBorrow.active = false;
+  if (inactiveBorrow) {
+    inactiveBorrow.active = false;
+  }
   dispatch(removeBorrowAction(newBorrowList));
 };
 

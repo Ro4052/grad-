@@ -96,7 +96,6 @@ export const reserveBook = book => (dispatch, getState) => {
     .then(res => {
       // Success popup text
       dispatch(popupText("Reservation successful!", bookId));
-      console.log(res);
       const newBooks = getState().bookList.books.map(eachBook => {
         if (eachBook.id === book.id) {
           eachBook.borrowId = null;
