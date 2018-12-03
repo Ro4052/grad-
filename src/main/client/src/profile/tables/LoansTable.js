@@ -24,8 +24,15 @@ export default class LoansTable extends Component {
               const borrowedBook = this.props.books.find(book => {
                 return book.id === borrow.bookId;
               });
-              let request, colour, buttonText;
-              if (!borrowedBook.processStarted) {
+              let request,
+                colour,
+                buttonText,
+                disabled = false;
+              if (!borrowedBook) {
+                request = () => {};
+                buttonText = "Deleted";
+                disabled = true;
+              } else if (!borrowedBook.processStarted) {
                 request = this.props.startProcess;
                 colour = "red";
                 buttonText = "Return";
@@ -37,7 +44,7 @@ export default class LoansTable extends Component {
               return (
                 <Table.Row key={borrow.id}>
                   <Table.Cell className={styles.tableCell}>
-                    {borrowedBook.title}
+                    {borrowedBook ? borrowedBook.title : "Book deleted"}
                   </Table.Cell>
                   <Table.Cell>{borrow.borrowDate}</Table.Cell>
                   <Table.Cell>{borrow.returnDate}</Table.Cell>
@@ -48,6 +55,7 @@ export default class LoansTable extends Component {
                       buttonText={buttonText}
                       cancelProcess={this.props.cancelProcess}
                       book={borrowedBook}
+                      disabled={disabled}
                     />
                   </Table.Cell>
                 </Table.Row>
