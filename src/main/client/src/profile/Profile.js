@@ -49,6 +49,9 @@ class Profile extends Component {
             <ReservationsTable
               reservations={this.props.reservations}
               books={this.props.books}
+              cancelReservation={this.props.cancelReservation}
+              startProcess={this.props.startProcess}
+              cancelProcess={this.props.cancelProcess}
             />
           </Tab.Pane>
         )

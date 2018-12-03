@@ -1,6 +1,11 @@
 import axios from "axios";
 
-import { addBorrow, removeBorrow } from "../../login/reducer";
+import {
+  addBorrow,
+  removeBorrow,
+  addReservation,
+  removeReservation
+} from "../../login/reducer";
 
 export const types = {
   GET_BOOKS: "bookList/GET_BOOKS"
@@ -96,6 +101,7 @@ export const reserveBook = book => (dispatch, getState) => {
           eachBook.reservationId = res.data;
           eachBook.role = "Reserver";
           eachBook.popupText = "Cancel your Reservation";
+          dispatch(addReservation(res.data, book.id));
         }
         return eachBook;
       });
@@ -212,8 +218,10 @@ export const returnBook = book => (dispatch, getState) => {
 
 export const cancelReservation = book => (dispatch, getState) => {
   axios.delete(`/api/reserve/${book.reservationId}`);
+  const resToCancel = book.reservationId;
   const newBooks = cancelHelper(book, getState().bookList.books);
   dispatch(getBooksAction(newBooks));
+  dispatch(removeReservation(resToCancel));
 };
 
 export const startProcess = book => (dispatch, getState) => {

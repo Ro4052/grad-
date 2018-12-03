@@ -12,7 +12,9 @@ const types = {
   LOADING: "login/LOADING",
   LOGOUT: "login/LOGOUT",
   ADD_BORROW: "login/ADD_BORROW",
-  REMOVE_BORROW: "login/REMOVE_BORROW"
+  REMOVE_BORROW: "login/REMOVE_BORROW",
+  ADD_RESERVATION: "login/ADD_RESERVATION",
+  REMOVE_RESERVATION: "login/REMOVE_RESERVATION"
 };
 
 const INITIAL_STATE = {
@@ -47,6 +49,16 @@ const addBorrowAction = newBorrow => ({
 const removeBorrowAction = newBorrowList => ({
   type: types.REMOVE_BORROW,
   newBorrowList
+});
+
+const addReservationAction = newReservation => ({
+  type: types.ADD_RESERVATION,
+  newReservation
+});
+
+const removeReservationAction = newResList => ({
+  type: types.REMOVE_RESERVATION,
+  newResList
 });
 
 export const checkLogin = () => dispatch => {
@@ -94,6 +106,24 @@ export const removeBorrow = borrowId => (dispatch, getState) => {
   dispatch(removeBorrowAction(newBorrowList));
 };
 
+export const addReservation = (resId, bookId) => (dispatch, getState) => {
+  const newReservation = {
+    id: resId,
+    bookId: bookId,
+    userId: getState().login.user.userDetails.userId,
+    queuePosition: "as yet unknown"
+  };
+  console.log(newReservation);
+  dispatch(addReservationAction(newReservation));
+};
+
+export const removeReservation = resId => (dispatch, getState) => {
+  const newResList = getState().login.user.reservations.filter(res => {
+    return res.id !== resId;
+  });
+  dispatch(removeReservationAction(newResList));
+};
+
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.CHECKING_LOGIN:
@@ -126,6 +156,21 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         user: { ...state.user, borrows: action.newBorrowList }
+      };
+
+    case types.ADD_RESERVATION:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          reservations: [...state.user.reservations, action.newReservation]
+        }
+      };
+
+    case types.REMOVE_RESERVATION:
+      return {
+        ...state,
+        user: { ...state.user, reservations: action.newResList }
       };
 
     default:
