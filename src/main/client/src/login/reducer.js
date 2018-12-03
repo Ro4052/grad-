@@ -2,7 +2,6 @@ import * as axios from "axios";
 import { checkAllBooks } from "../dashBoard/bookList/reducer";
 
 import history from "../history";
-var moment = require("moment");
 
 const types = {
   CHECKING_LOGIN: "login/CHECKING_LOGIN",
@@ -85,15 +84,13 @@ export const logOut = () => dispatch => {
   axios.post("/logout");
 };
 
-export const addBorrow = (borrowId, bookId) => (dispatch, getState) => {
+export const addBorrow = (borrow, bookId) => (dispatch, getState) => {
   const newBorrow = {
-    id: borrowId,
+    id: borrow.id,
     bookId: bookId,
     userId: getState().login.user.userDetails.userId,
-    borrowDate: moment().format("YYYY-MM-DD"),
-    returnDate: moment()
-      .add(7, "days")
-      .format("YYYY-MM-DD"),
+    borrowDate: borrow.borrowDate,
+    returnDate: borrow.returnDate,
     active: true
   };
   dispatch(addBorrowAction(newBorrow));

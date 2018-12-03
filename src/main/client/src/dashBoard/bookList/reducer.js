@@ -123,7 +123,7 @@ export const borrowBook = book => (dispatch, getState) => {
       dispatch(popupText("Book successfully borrowed!", bookId));
       const newBooks = getState().bookList.books.map(eachBook => {
         if (eachBook.id === book.id) {
-          eachBook.borrowId = res.data;
+          eachBook.borrowId = res.data.id;
           eachBook.reservationId = null;
           eachBook.role = "Borrower";
           eachBook.popupText = "Return your Book";
