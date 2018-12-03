@@ -64,7 +64,9 @@ export const updateBook = updatedBook => (dispatch, getState) => {
           popupText: book.popupText,
           availabilityChecked: book.availabilityChecked,
           isAvailable: book.isAvailable,
-          editState: false
+          editState: false,
+          processStarted: false,
+          role: book.role
         }
       : book;
   });
@@ -118,8 +120,7 @@ export const borrowBook = book => (dispatch, getState) => {
           eachBook.reservationId = null;
           eachBook.role = "Borrower";
           eachBook.popupText = "Return your Book";
-          eachBook.returnStarted = false;
-          //dispatch add borrow with borrow id & book id
+          eachBook.processStarted = false;
           dispatch(addBorrow(res.data, book.id));
         }
         return eachBook;
@@ -186,28 +187,39 @@ export const checkAllBooks = user => (dispatch, getState) => {
   dispatch(getBooksAction(newBooks));
 };
 
-export const returnBook = book => (dispatch, getState) => {
-  axios.put(`/api/borrow/return/${book.borrowId}`);
-  const borrowToEnd = book.borrowId;
-  const newBooks = getState().bookList.books.map(eachBook => {
+const cancelHelper = (book, books) => {
+  const newBooks = books.map(eachBook => {
     if (eachBook.id === book.id) {
       eachBook.borrowId = null;
       eachBook.reservationId = null;
       eachBook.role = "Nothing";
       eachBook.popupText = "Click to check availability";
       eachBook.availabilityChecked = false;
-      eachBook.returnStarted = false;
+      eachBook.processStarted = false;
     }
     return eachBook;
   });
+  return newBooks;
+};
+
+export const returnBook = book => (dispatch, getState) => {
+  axios.put(`/api/borrow/return/${book.borrowId}`);
+  const borrowToEnd = book.borrowId;
+  const newBooks = cancelHelper(book, getState().bookList.books);
   dispatch(getBooksAction(newBooks));
   dispatch(removeBorrow(borrowToEnd));
+};
+
+export const cancelReservation = book => (dispatch, getState) => {
+  axios.delete(`/api/reserve/${book.reservationId}`);
+  const newBooks = cancelHelper(book, getState().bookList.books);
+  dispatch(getBooksAction(newBooks));
 };
 
 export const startProcess = book => (dispatch, getState) => {
   const newBooks = getState().bookList.books.map(eachBook => {
     if (eachBook.id === book.id) {
-      eachBook.returnStarted = true;
+      eachBook.processStarted = true;
       eachBook.popupText = "Are you sure?";
     }
     return eachBook;
@@ -218,8 +230,11 @@ export const startProcess = book => (dispatch, getState) => {
 export const cancelProcess = book => (dispatch, getState) => {
   const newBooks = getState().bookList.books.map(eachBook => {
     if (eachBook.id === book.id) {
-      eachBook.returnStarted = false;
-      eachBook.popupText = "Return your Book";
+      eachBook.processStarted = false;
+      eachBook.popupText =
+        book.role === "Borrower"
+          ? "Return your Book"
+          : "Cancel your reservation";
     }
     return eachBook;
   });

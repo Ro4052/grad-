@@ -15,7 +15,7 @@ export default class RequestButton extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.book.returnStarted) {
+    if (this.props.book.processStarted) {
       document.addEventListener("click", this.checkClick);
     }
   }
@@ -38,7 +38,7 @@ export default class RequestButton extends Component {
               id="variableButton"
               onClick={() => this.props.request(this.props.book)}
               color={this.props.colour}
-              basic={this.props.book.returnStarted}
+              basic={this.props.book.processStarted}
             >
               {this.props.buttonText}
             </Button>

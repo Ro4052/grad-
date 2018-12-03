@@ -9,6 +9,7 @@ import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
 import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
 import com.scottlogic.librarygradproject.OAuthClientTestHelper;
+import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Services.BookService;
 import com.scottlogic.librarygradproject.Services.BorrowService;
 import com.scottlogic.librarygradproject.Services.ReservationService;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +58,21 @@ public class Stepdefs implements En {
             .build();
     OAuthClientTestHelper helper = new OAuthClientTestHelper("Boss", "Boss", "avatar_url");
     OAuth2Authentication authentication = helper.getOauthTestAuthentication();
+    LibraryUser user2 = LibraryUser.builder()
+            .userId("Boss 2")
+            .name("Boss 2")
+            .avatarUrl("avatar_url")
+            .build();
+    OAuthClientTestHelper helper2 = new OAuthClientTestHelper("Boss 2", "Boss 2", "avatar_url");
+    OAuth2Authentication authentication2 = helper2.getOauthTestAuthentication();
+    LibraryUser user3 = LibraryUser.builder()
+            .userId("Boss 3")
+            .name("Boss 3")
+            .avatarUrl("avatar_url")
+            .build();
+    OAuthClientTestHelper helper3 = new OAuthClientTestHelper("Boss 3", "Boss 3", "avatar_url");
+    OAuth2Authentication authentication3 = helper3.getOauthTestAuthentication();
+
     public Stepdefs() {
 
         Given("a book repository exists", () -> {
@@ -146,7 +163,6 @@ public class Stepdefs implements En {
             newBook = new Book("0123456789", "Correct Book", "Correct Author", "1999");
             newBook.setId(id);
             controller.put(newBook);
-            System.out.println(controller.getAll().get(0).getId());
         });
         Then("^the modified book should replace the original$", () -> {
             assertEquals(bookService.findOne(id), newBook);
@@ -326,10 +342,10 @@ public class Stepdefs implements En {
         });
         When("^a reservation is made on a book by an authorised user$", () -> {
             borrowService.borrow(id, authentication);
-            rescontroller.post(id,authentication);
+            rescontroller.post(id, authentication2);
         });
-        When("^a different reservation is made on a book by an authorised user$", () -> {
-            rescontroller.post(id,authentication);
+        When("^a different reservation is made on a book by a different authorised authorised user$", () -> {
+            rescontroller.post(id,authentication3);
         });
         Then("^that reservation is added to the database$", () -> {
           assertEquals(resService.checkReservation(id),1);
@@ -341,8 +357,10 @@ public class Stepdefs implements En {
         Then("^the status of the book should be reserved with a queue of (\\d+)$", (Integer arg0) -> {
             assertEquals(rescontroller.check(id), arg0.longValue());
         });
-        And("^a user table with one user exists$", () -> {
+        And("^a user table with three users exists$", () -> {
             userService.add(user1);
+            userService.add(user2);
+            userService.add(user3);
         });
     }
 }

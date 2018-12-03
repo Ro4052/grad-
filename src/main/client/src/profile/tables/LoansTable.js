@@ -25,7 +25,7 @@ export default class LoansTable extends Component {
                 return book.id === borrow.bookId;
               });
               let request, colour, buttonText;
-              if (!borrowedBook.returnStarted) {
+              if (!borrowedBook.processStarted) {
                 request = this.props.startProcess;
                 colour = "red";
                 buttonText = "Return";

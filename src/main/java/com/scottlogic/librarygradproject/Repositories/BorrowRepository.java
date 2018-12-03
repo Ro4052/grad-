@@ -20,4 +20,6 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
     Stream<Borrow> findOverdueBorrows(@Param("date") LocalDate date);
 
     List<Borrow> findAllByUserId(String userId);
+
+    Boolean existsByUserIdAndBookId(String userId, long bookId);
 }
