@@ -13,5 +13,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Modifying
     @Query(value = "DELETE FROM public.reservation WHERE book_id NOT IN (SELECT id FROM public.book)", nativeQuery = true)
     void clearDeletedBookReservations();
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE public.borrow SET is_active = false WHERE book_id NOT IN (SELECT id FROM public.book)", nativeQuery = true)
+    void clearDeletedBookBorrows();
 }
 

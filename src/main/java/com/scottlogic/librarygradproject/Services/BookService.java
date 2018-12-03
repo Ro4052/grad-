@@ -54,6 +54,7 @@ public class BookService {
         try {
             bookRepo.deleteById(id);
             bookRepo.clearDeletedBookReservations();
+            bookRepo.clearDeletedBookBorrows();
 
         } catch (EmptyResultDataAccessException e) {
             throw new BookNotFoundException(id);
@@ -77,6 +78,7 @@ public class BookService {
     public void deleteAll() {
         bookRepo.deleteAll();
         bookRepo.clearDeletedBookReservations();
+        bookRepo.clearDeletedBookBorrows();
     }
 
     public void removeMultiple(List<Long> ids) {
@@ -84,6 +86,7 @@ public class BookService {
         validBooks.forEach(book -> ids.remove(book.getId()));
         bookRepo.deleteAll(validBooks);
         bookRepo.clearDeletedBookReservations();
+        bookRepo.clearDeletedBookBorrows();
 
         if (ids.size() > 0) {
             throw new BookNotFoundException(ids);

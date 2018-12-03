@@ -19,14 +19,13 @@ export default class LoansTable extends Component {
               return borrow.active === false;
             })
             .map(borrow => {
+              const currentBook = this.props.books.find(book => {
+                return book.id === borrow.bookId;
+              });
               return (
                 <Table.Row key={borrow.id}>
                   <Table.Cell className={styles.tableCell}>
-                    {
-                      this.props.books.find(book => {
-                        return book.id === borrow.bookId;
-                      }).title
-                    }
+                    {currentBook ? currentBook.title : "Book deleted"}
                   </Table.Cell>
                   <Table.Cell>{borrow.borrowDate}</Table.Cell>
                   <Table.Cell>{borrow.returnDate}</Table.Cell>
