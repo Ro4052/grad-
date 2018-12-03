@@ -11,7 +11,7 @@ import LoanHistoryTable from "./tables/LoanHistoryTable";
 import ReservationsTable from "./tables/ReservationsTable";
 import styles from "./Profile.module.css";
 
-class Profile extends Component {
+export class Profile extends Component {
   componentDidUpdate() {
     if (!this.props.loggedIn && !this.props.loggingIn) {
       history.replace("/dashboard");
