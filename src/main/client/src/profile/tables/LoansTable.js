@@ -12,6 +12,7 @@ export default class LoansTable extends Component {
             <Table.HeaderCell width={8}>Book Title</Table.HeaderCell>
             <Table.HeaderCell width={2}>Date Borrowed</Table.HeaderCell>
             <Table.HeaderCell width={2}>Due Date</Table.HeaderCell>
+            <Table.HeaderCell width={2}>Return Books</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -20,26 +21,34 @@ export default class LoansTable extends Component {
               return borrow.active === true;
             })
             .map(borrow => {
+              const borrowedBook = this.props.books.find(book => {
+                return book.id === borrow.bookId;
+              });
+              let request, colour, buttonText;
+              if (!borrowedBook.returnStarted) {
+                request = this.props.startProcess;
+                colour = "red";
+                buttonText = "Return";
+              } else {
+                request = this.props.returnBook;
+                colour = "red";
+                buttonText = "Confirm";
+              }
               return (
                 <Table.Row key={borrow.id}>
                   <Table.Cell className={styles.tableCell}>
-                    {
-                      this.props.books.find(book => {
-                        return book.id === borrow.bookId;
-                      }).title
-                    }
+                    {borrowedBook.title}
                   </Table.Cell>
                   <Table.Cell>{borrow.borrowDate}</Table.Cell>
                   <Table.Cell>{borrow.returnDate}</Table.Cell>
                   <Table.Cell>
-                    {/* put relevant logic for button here */}
-                    {/* <RequestButton
+                    <RequestButton
                       request={request}
                       colour={colour}
                       buttonText={buttonText}
-                      book={book}
                       cancelProcess={this.props.cancelProcess}
-                    /> */}
+                      book={borrowedBook}
+                    />
                   </Table.Cell>
                 </Table.Row>
               );

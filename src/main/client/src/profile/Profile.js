@@ -28,7 +28,13 @@ class Profile extends Component {
         },
         render: () => (
           <Tab.Pane>
-            <LoansTable borrows={this.props.borrows} books={this.props.books} />
+            <LoansTable
+              borrows={this.props.borrows}
+              books={this.props.books}
+              returnBook={this.props.returnBook}
+              startProcess={this.props.startProcess}
+              cancelProcess={this.props.cancelProcess}
+            />
           </Tab.Pane>
         )
       },
@@ -58,7 +64,9 @@ class Profile extends Component {
             <LoanHistoryTable
               borrows={this.props.borrows}
               books={this.props.books}
-              //put props for the one button here
+              request={this.props.returnBook}
+              colour="red"
+              buttonText="Confirm"
             />
           </Tab.Pane>
         )

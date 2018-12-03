@@ -9,7 +9,8 @@ const types = {
   FAILED_LOGIN: "login/FAILED_LOGIN",
   LOGIN_USER: "login/LOGIN_USER",
   LOADING: "login/LOADING",
-  LOGOUT: "login/LOGOUT"
+  LOGOUT: "login/LOGOUT",
+  ADD_BORROW: "login/ADD_BORROW"
 };
 
 const INITIAL_STATE = {
@@ -36,6 +37,11 @@ const logOutAction = () => ({
   type: types.LOGOUT
 });
 
+const addBorrowAction = newBorrow => ({
+  type: types.ADD_BORROW,
+  newBorrow
+});
+
 export const checkLogin = () => dispatch => {
   dispatch(checkingLogin(true));
   axios
@@ -60,6 +66,18 @@ export const logOut = () => dispatch => {
   axios.post("/logout");
 };
 
+export const addBorrow = (borrowId, bookId) => (dispatch, getState) => {
+  const newBorrow = {
+    id: borrowId,
+    bookId: bookId,
+    userId: getState().login.user.userDetails.userId,
+    borrowDate: "today",
+    returnDate: "in one week",
+    active: true
+  };
+  dispatch(addBorrowAction(newBorrow));
+};
+
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.CHECKING_LOGIN:
@@ -78,6 +96,15 @@ export default (state = INITIAL_STATE, action) => {
 
     case types.LOGOUT:
       return { ...state, loggingIn: false, loggedIn: false, user: {} };
+
+    case types.ADD_BORROW:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          borrows: [...state.user.borrows, action.newBorrow]
+        }
+      };
 
     default:
       return state;

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { addBorrow } from "../../login/reducer";
+
 export const types = {
   GET_BOOKS: "bookList/GET_BOOKS"
 };
@@ -117,6 +119,8 @@ export const borrowBook = book => (dispatch, getState) => {
           eachBook.role = "Borrower";
           eachBook.popupText = "Return your Book";
           eachBook.returnStarted = false;
+          //dispatch add borrow with borrow id & book id
+          dispatch(addBorrow(res.data, book.id));
         }
         return eachBook;
       });
