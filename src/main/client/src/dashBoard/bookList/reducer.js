@@ -62,7 +62,9 @@ export const updateBook = updatedBook => (dispatch, getState) => {
           popupText: book.popupText,
           availabilityChecked: book.availabilityChecked,
           isAvailable: book.isAvailable,
-          editState: false
+          editState: false,
+          returnStarted: false,
+          role: book.role
         }
       : book;
   });
