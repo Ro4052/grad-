@@ -106,14 +106,13 @@ export const removeBorrow = borrowId => (dispatch, getState) => {
   dispatch(removeBorrowAction(newBorrowList));
 };
 
-export const addReservation = (resId, bookId) => (dispatch, getState) => {
+export const addReservation = (reservation, bookId) => (dispatch, getState) => {
   const newReservation = {
-    id: resId,
+    id: reservation.id,
     bookId: bookId,
     userId: getState().login.user.userDetails.userId,
-    queuePosition: "as yet unknown"
+    queuePosition: reservation.queuePosition
   };
-  console.log(newReservation);
   dispatch(addReservationAction(newReservation));
 };
 
