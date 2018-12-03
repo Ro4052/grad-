@@ -20,6 +20,10 @@ export default class RequestButton extends Component {
     }
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("click", this.checkClick);
+  }
+
   render() {
     return (
       <div

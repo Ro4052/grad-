@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { addBorrow } from "../../login/reducer";
+import { addBorrow, removeBorrow } from "../../login/reducer";
 
 export const types = {
   GET_BOOKS: "bookList/GET_BOOKS"
@@ -188,6 +188,7 @@ export const checkAllBooks = user => (dispatch, getState) => {
 
 export const returnBook = book => (dispatch, getState) => {
   axios.put(`/api/borrow/return/${book.borrowId}`);
+  const borrowToEnd = book.borrowId;
   const newBooks = getState().bookList.books.map(eachBook => {
     if (eachBook.id === book.id) {
       eachBook.borrowId = null;
@@ -200,6 +201,7 @@ export const returnBook = book => (dispatch, getState) => {
     return eachBook;
   });
   dispatch(getBooksAction(newBooks));
+  dispatch(removeBorrow(borrowToEnd));
 };
 
 export const startProcess = book => (dispatch, getState) => {

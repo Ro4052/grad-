@@ -10,7 +10,8 @@ const types = {
   LOGIN_USER: "login/LOGIN_USER",
   LOADING: "login/LOADING",
   LOGOUT: "login/LOGOUT",
-  ADD_BORROW: "login/ADD_BORROW"
+  ADD_BORROW: "login/ADD_BORROW",
+  REMOVE_BORROW: "login/REMOVE_BORROW"
 };
 
 const INITIAL_STATE = {
@@ -40,6 +41,11 @@ const logOutAction = () => ({
 const addBorrowAction = newBorrow => ({
   type: types.ADD_BORROW,
   newBorrow
+});
+
+const removeBorrowAction = newBorrowList => ({
+  type: types.REMOVE_BORROW,
+  newBorrowList
 });
 
 export const checkLogin = () => dispatch => {
@@ -78,6 +84,13 @@ export const addBorrow = (borrowId, bookId) => (dispatch, getState) => {
   dispatch(addBorrowAction(newBorrow));
 };
 
+export const removeBorrow = borrowId => (dispatch, getState) => {
+  const newBorrowList = [...getState().login.user.borrows];
+  let inactiveBorrow = newBorrowList.find(borrow => borrow.id === borrowId);
+  inactiveBorrow.active = false;
+  dispatch(removeBorrowAction(newBorrowList));
+};
+
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.CHECKING_LOGIN:
@@ -104,6 +117,12 @@ export default (state = INITIAL_STATE, action) => {
           ...state.user,
           borrows: [...state.user.borrows, action.newBorrow]
         }
+      };
+
+    case types.REMOVE_BORROW:
+      return {
+        ...state,
+        user: { ...state.user, borrows: action.newBorrowList }
       };
 
     default:
