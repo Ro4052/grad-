@@ -234,4 +234,12 @@ public class ReservationServiceTest {
         reservationService.reserve(res1.getBookId(), authentication);
     }
 
+    @Test
+    public void reserve_allowed_if_previous_borrow_is_inactive() {
+        // Arrange
+        borrowService.borrow(res1.getBookId(), authentication);
+        borrowService.bookReturned(res1.getBookId());
+        borrowService.borrow(res1.getBookId(), authentication2);
+        reservationService.reserve(res1.getBookId(), authentication);
+    }
 }
