@@ -22,7 +22,7 @@ const getBooksAction = books => ({
 });
 
 // Action Creators
-export const getBooks = () => dispatch => {
+export const getBooks = () => (dispatch, getState) => {
   axios.get("/api/books").then(res => {
     const books = res.data.map(book => {
       return {
@@ -34,6 +34,7 @@ export const getBooks = () => dispatch => {
       };
     });
     dispatch(getBooksAction(books));
+    dispatch(checkAllBooks(getState().login.user));
   });
 };
 

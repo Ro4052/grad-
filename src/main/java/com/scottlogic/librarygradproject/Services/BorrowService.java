@@ -1,6 +1,5 @@
 package com.scottlogic.librarygradproject.Services;
 
-import com.scottlogic.librarygradproject.Entities.Book;
 import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
@@ -21,15 +20,13 @@ import java.util.stream.Stream;
 public class BorrowService {
 
     private final BorrowRepository borrowRepository;
-    private final UserService userService;
     private final BookService bookService;
     private final ReservationRepository reservationRepository;
 
     @Autowired
-    public BorrowService(BorrowRepository borrowRepository, UserService userService, BookService bookService,
+    public BorrowService(BorrowRepository borrowRepository, BookService bookService,
                          ReservationRepository reservationRepository) {
         this.borrowRepository = borrowRepository;
-        this.userService = userService;
         this.bookService = bookService;
         this.reservationRepository = reservationRepository;
     }
@@ -66,7 +63,7 @@ public class BorrowService {
     }
 
     public boolean existsByUserIdAndBookId(String userId, long bookId) {
-        return borrowRepository.existsByUserIdAndBookId(userId, bookId);
+        return borrowRepository.existsByUserIdAndBookIdAndIsActive(userId, bookId, true);
     }
 
     @Transactional
