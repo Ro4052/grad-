@@ -34,7 +34,7 @@ export default class Book extends Component {
     let request, colour, buttonText;
     switch (book.role) {
       case "Borrower":
-        if (!book.returnStarted) {
+        if (!book.processStarted) {
           request = this.props.startProcess;
           colour = "red";
           buttonText = "Return";

@@ -63,7 +63,7 @@ export const updateBook = updatedBook => (dispatch, getState) => {
           availabilityChecked: book.availabilityChecked,
           isAvailable: book.isAvailable,
           editState: false,
-          returnStarted: false,
+          processStarted: false,
           role: book.role
         }
       : book;
@@ -118,7 +118,7 @@ export const borrowBook = book => (dispatch, getState) => {
           eachBook.reservationId = null;
           eachBook.role = "Borrower";
           eachBook.popupText = "Return your Book";
-          eachBook.returnStarted = false;
+          eachBook.processStarted = false;
         }
         return eachBook;
       });
@@ -193,7 +193,7 @@ export const returnBook = book => (dispatch, getState) => {
       eachBook.role = "Nothing";
       eachBook.popupText = "Click to check availability";
       eachBook.availabilityChecked = false;
-      eachBook.returnStarted = false;
+      eachBook.processStarted = false;
     }
     return eachBook;
   });
@@ -203,7 +203,7 @@ export const returnBook = book => (dispatch, getState) => {
 export const startProcess = book => (dispatch, getState) => {
   const newBooks = getState().bookList.books.map(eachBook => {
     if (eachBook.id === book.id) {
-      eachBook.returnStarted = true;
+      eachBook.processStarted = true;
       eachBook.popupText = "Are you sure?";
     }
     return eachBook;
@@ -214,7 +214,7 @@ export const startProcess = book => (dispatch, getState) => {
 export const cancelProcess = book => (dispatch, getState) => {
   const newBooks = getState().bookList.books.map(eachBook => {
     if (eachBook.id === book.id) {
-      eachBook.returnStarted = false;
+      eachBook.processStarted = false;
       eachBook.popupText = "Return your Book";
     }
     return eachBook;
