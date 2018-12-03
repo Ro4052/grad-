@@ -41,7 +41,7 @@ public class ReservationService {
         return resRepo.findLatestQueue(bookId);
     }
 
-    public long reserve(long bookId, OAuth2Authentication authentication) {
+    public Reservation reserve(long bookId, OAuth2Authentication authentication) {
         String userId = userService.getUserDetails(authentication).getUserId();
         if (resRepo.existsByUserIdAndBookId(userId, bookId)) {
             throw new AlreadyReservedException(bookId);
@@ -55,7 +55,7 @@ public class ReservationService {
         validateReservation(bookId, userId);
         long nextInQueue = resRepo.findLatestQueue(bookId) + 1;
         Reservation reservation = Reservation.builder().bookId(bookId).userId(userId).queuePosition(nextInQueue).build();
-        return resRepo.save(reservation).getId();
+        return resRepo.save(reservation);
     }
 
     public List<Reservation> findAll() {

@@ -24,7 +24,7 @@ public class ReservationsController {
     }
 
     @RequestMapping(value = "/reserve/{bookId}", method = RequestMethod.POST)
-    public long post(@PathVariable long bookId, OAuth2Authentication authentication) {
+    public Reservation post(@PathVariable long bookId, OAuth2Authentication authentication) {
         return reservationService.reserve(bookId, authentication);
     }
 
