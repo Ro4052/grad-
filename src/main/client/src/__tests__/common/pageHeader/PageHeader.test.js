@@ -14,7 +14,7 @@ describe("Page Header renders", () => {
   test("A display name is dispayed when logged in", () => {
     const wrapper = shallow(<PageHeader user={testUser} loggedIn={true} />);
     expect(wrapper.find("#displayName").text()).toEqual(
-      `Welcome, ${testUser.userId}`
+      `Welcome, ${testUser.userId}<Image />`
     );
   });
 

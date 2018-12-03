@@ -34,6 +34,11 @@ describe("BookList reducer tests", () => {
     initialState = {
       bookList: {
         books: [testBook1, testBook2]
+      },
+      login: {
+        loggingIn: false,
+        loggedIn: true,
+        user: { reservations: [], borrows: [], userDetails: {} }
       }
     };
     moxios.install();

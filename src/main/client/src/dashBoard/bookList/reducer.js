@@ -1,5 +1,12 @@
 import axios from "axios";
 
+import {
+  addBorrow,
+  removeBorrow,
+  addReservation,
+  removeReservation
+} from "../../login/reducer";
+
 export const types = {
   GET_BOOKS: "bookList/GET_BOOKS"
 };
@@ -92,9 +99,10 @@ export const reserveBook = book => (dispatch, getState) => {
       const newBooks = getState().bookList.books.map(eachBook => {
         if (eachBook.id === book.id) {
           eachBook.borrowId = null;
-          eachBook.reservationId = res.data;
+          eachBook.reservationId = res.data.id;
           eachBook.role = "Reserver";
           eachBook.popupText = "Cancel your Reservation";
+          dispatch(addReservation(res.data, book.id));
         }
         return eachBook;
       });
@@ -115,11 +123,12 @@ export const borrowBook = book => (dispatch, getState) => {
       dispatch(popupText("Book successfully borrowed!", bookId));
       const newBooks = getState().bookList.books.map(eachBook => {
         if (eachBook.id === book.id) {
-          eachBook.borrowId = res.data;
+          eachBook.borrowId = res.data.id;
           eachBook.reservationId = null;
           eachBook.role = "Borrower";
           eachBook.popupText = "Return your Book";
           eachBook.processStarted = false;
+          dispatch(addBorrow(res.data, book.id));
         }
         return eachBook;
       });
@@ -202,14 +211,18 @@ const cancelHelper = (book, books) => {
 
 export const returnBook = book => (dispatch, getState) => {
   axios.put(`/api/borrow/return/${book.borrowId}`);
+  const borrowToEnd = book.borrowId;
   const newBooks = cancelHelper(book, getState().bookList.books);
   dispatch(getBooksAction(newBooks));
+  dispatch(removeBorrow(borrowToEnd));
 };
 
 export const cancelReservation = book => (dispatch, getState) => {
   axios.delete(`/api/reserve/${book.reservationId}`);
+  const resToCancel = book.reservationId;
   const newBooks = cancelHelper(book, getState().bookList.books);
   dispatch(getBooksAction(newBooks));
+  dispatch(removeReservation(resToCancel));
 };
 
 export const startProcess = book => (dispatch, getState) => {

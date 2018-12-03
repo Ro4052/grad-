@@ -20,6 +20,7 @@ const PageHeader = props => (
       {props.loggedIn && (
         <h4 id="displayName" onClick={() => history.push("/profile")}>
           Welcome, {props.user.name || props.user.userId}
+          <Image src={props.user.avatarUrl} avatar spaced />
         </h4>
       )}
       <Login />
