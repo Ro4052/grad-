@@ -34,7 +34,7 @@ export default class Book extends Component {
     let request, colour, buttonText;
     switch (book.role) {
       case "Borrower":
-        if (!book.returnStarted) {
+        if (!book.processStarted) {
           request = this.props.startProcess;
           colour = "red";
           buttonText = "Return";
@@ -45,9 +45,15 @@ export default class Book extends Component {
         }
         break;
       case "Reserver":
-        request = () => alert("To Be implemented"); // function needs to be created
-        colour = "red";
-        buttonText = "Cancel";
+        if (!book.processStarted) {
+          request = this.props.startProcess;
+          colour = "red";
+          buttonText = "Cancel";
+        } else {
+          request = this.props.cancelReservation;
+          colour = "red";
+          buttonText = "Confirm";
+        }
         break;
       default:
         if (book.availabilityChecked) {
