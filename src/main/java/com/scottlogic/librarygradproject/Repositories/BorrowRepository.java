@@ -21,5 +21,5 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
 
     List<Borrow> findAllByUserId(String userId);
 
-    Boolean existsByUserIdAndBookId(String userId, long bookId);
+    Boolean existsByUserIdAndBookIdAndIsActive(String userId, long bookId, boolean isActive);
 }
