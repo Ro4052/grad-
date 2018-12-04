@@ -1,5 +1,6 @@
 <!-- prettier-ignore-start -->
 # Bristol Grad Library Project 2018
+_Current release: Eccles_
 
 A group project to develop an app for the office library for 2018 Bristol grads.
 
