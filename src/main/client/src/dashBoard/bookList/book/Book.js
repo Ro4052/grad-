@@ -4,6 +4,7 @@ import { Button } from "semantic-ui-react";
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
 import RequestButton from "../../../common/requestButton/RequestButton";
+import buttonLogic from "../../../common/requestButton/buttonLogic";
 
 export default class Book extends Component {
   constructor(props) {
@@ -31,44 +32,7 @@ export default class Book extends Component {
 
   render() {
     const { book } = this.props;
-    let request, colour, buttonText;
-    switch (book.role) {
-      case "Borrower":
-        if (!book.processStarted) {
-          request = this.props.startProcess;
-          colour = "red";
-          buttonText = "Return";
-        } else {
-          request = this.props.returnBook;
-          colour = "red";
-          buttonText = "Confirm";
-        }
-        break;
-      case "Reserver":
-        if (!book.processStarted) {
-          request = this.props.startProcess;
-          colour = "red";
-          buttonText = "Cancel";
-        } else {
-          request = this.props.cancelReservation;
-          colour = "red";
-          buttonText = "Confirm";
-        }
-        break;
-      default:
-        if (book.availabilityChecked) {
-          request = book.isAvailable
-            ? this.props.borrowBook
-            : this.props.reserveBook;
-          colour = book.isAvailable ? "green" : "blue";
-          buttonText = book.isAvailable ? "Borrow" : "Reserve";
-        } else {
-          request = this.props.checkBook;
-          colour = null;
-          buttonText = "Check Availability";
-        }
-        break;
-    }
+    const data = buttonLogic(this.props);
     return (
       <li className={styles.book}>
         {this.props.deleteMode && this.props.loggedIn ? (
@@ -117,9 +81,9 @@ export default class Book extends Component {
         {this.props.loggedIn && (
           <div className={styles.bookBtnsContainer}>
             <RequestButton
-              request={request}
-              colour={colour}
-              buttonText={buttonText}
+              request={data.request}
+              colour={data.colour}
+              buttonText={data.buttonText}
               book={book}
               cancelProcess={this.props.cancelProcess}
             />
