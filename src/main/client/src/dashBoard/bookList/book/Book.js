@@ -3,7 +3,7 @@ import { Button } from "semantic-ui-react";
 
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
-import RequestButton from "./requestButton/RequestButton";
+import RequestButton from "../../../common/requestButton/RequestButton";
 
 export default class Book extends Component {
   constructor(props) {

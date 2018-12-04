@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
 import styles from "../Profile.module.css";
-import RequestButton from "../../dashBoard/bookList/book/requestButton/RequestButton";
+import RequestButton from "../../common/requestButton/RequestButton";
 
 export default class LoansTable extends Component {
   render() {
