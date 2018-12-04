@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -16,18 +17,20 @@ public class Reservation {
     private long bookId;
     private String userId;
     private long queuePosition;
+    private LocalDate collectBy;
 
     public Reservation() { }
 
-    public Reservation(long bookId, String userId, long queuePosition) {
+    public Reservation(long bookId, String userId, long queuePosition, LocalDate collectBy) {
         this.bookId = bookId;
         this.userId = userId;
         this.queuePosition = queuePosition;
+        this.collectBy = collectBy;
     }
 
     public static class ReservationBuilder {
         public Reservation build() {
-            return new Reservation(this.bookId, this.userId, this.queuePosition);
+            return new Reservation(this.bookId, this.userId, this.queuePosition, this.collectBy);
         }
     }
 }
