@@ -1,9 +1,15 @@
-const buttonLogic = props => {
-  const book = props.book;
-  let request, colour, buttonText;
+const buttonLogic = (props, book) => {
+  let request,
+    colour,
+    buttonText,
+    disabled = false;
   switch (book.role) {
     case "Borrower":
-      if (!book.processStarted) {
+      if (!book.id) {
+        request = () => {};
+        buttonText = "Deleted";
+        disabled = true;
+      } else if (!book.processStarted) {
         request = props.startProcess;
         colour = "red";
         buttonText = "Return";
@@ -14,7 +20,11 @@ const buttonLogic = props => {
       }
       break;
     case "Reserver":
-      if (!book.processStarted) {
+      if (!book.id) {
+        request = () => {};
+        buttonText = "Deleted";
+        disabled = true;
+      } else if (!book.processStarted) {
         request = props.startProcess;
         colour = "red";
         buttonText = "Cancel";
@@ -36,7 +46,7 @@ const buttonLogic = props => {
       }
       break;
   }
-  return { request, colour, buttonText };
+  return { request, colour, buttonText, disabled };
 };
 
 export default buttonLogic;

@@ -32,7 +32,7 @@ export default class Book extends Component {
 
   render() {
     const { book } = this.props;
-    const data = buttonLogic(this.props);
+    const data = buttonLogic(this.props, book);
     return (
       <li className={styles.book}>
         {this.props.deleteMode && this.props.loggedIn ? (
