@@ -69,9 +69,9 @@ public class ReservationServiceTest {
         authentication6 = helper6.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2002");
-        res1 = new Reservation(1L, "TestUser 1", 1L);
+        res1 = new Reservation(1L, "TestUser 1", 1L, null);
         res1.setId(1);
-        res2 = new Reservation(2L, "TestUser 1", 1L);
+        res2 = new Reservation(2L, "TestUser 1", 1L, null);
         res2.setId(2);
 
         bookService.save(book1);
@@ -188,15 +188,15 @@ public class ReservationServiceTest {
     @Test
     public void delete_reorders_queue() {
         // Arrange
-        Reservation reservation1 = new Reservation(2, "TestUser 2", 1);
+        Reservation reservation1 = new Reservation(2, "TestUser 2", 1, null);
         reservation1.setId(1);
-        Reservation reservation2 = new Reservation(2, "TestUser 3", 2);
+        Reservation reservation2 = new Reservation(2, "TestUser 3", 2, null);
         reservation2.setId(2);
-        Reservation reservation3 = new Reservation(2, "TestUser 4", 3);
+        Reservation reservation3 = new Reservation(2, "TestUser 4", 3, null);
         reservation3.setId(3);
-        Reservation reservation4 = new Reservation(2, "TestUser 5", 4);
+        Reservation reservation4 = new Reservation(2, "TestUser 5", 4, null);
         reservation4.setId(4);
-        Reservation reservation5 = new Reservation(2, "TestUser 6", 5);
+        Reservation reservation5 = new Reservation(2, "TestUser 6", 5, null);
         reservation5.setId(5);
 
         borrowService.borrow(reservation1.getBookId(), authentication);
