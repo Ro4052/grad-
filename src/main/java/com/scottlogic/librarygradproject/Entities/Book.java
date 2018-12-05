@@ -5,6 +5,7 @@ import lombok.Builder;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Calendar;
 import java.util.Optional;
 
 @Builder
@@ -21,10 +22,10 @@ public class Book {
     public Book() { }
 
     public Book(String isbn, String title, String author, String publishDate) {
-        this.isbn = isbn;
+        setIsbn(isbn);
         setTitle(title);
         setAuthor(author);
-        this.publishDate = publishDate;
+        setPublishDate(publishDate);
     }
 
     public static class BookBuilder {
@@ -82,6 +83,16 @@ public class Book {
     }
 
     public void setPublishDate(String publishDate) {
+        publishDate = Optional.ofNullable(publishDate).orElse("").trim();
+        if (publishDate.length() > 0) {
+            while (publishDate.length() < 4) {
+                publishDate = "0" + publishDate;
+            }
+        }
+        if ((publishDate.length() > 0 && (!publishDate.matches("|[0-9]{4}") ||
+                Integer.parseInt(publishDate) > Calendar.getInstance().get(Calendar.YEAR)))) {
+            throw new IncorrectBookFormatException();
+        }
         this.publishDate = publishDate;
     }
 

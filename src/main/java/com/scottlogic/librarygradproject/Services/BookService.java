@@ -6,7 +6,6 @@ import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,22 +16,6 @@ public class BookService {
     @Autowired
     public BookService(BookRepository bookRepo) {
         this.bookRepo = bookRepo;
-    }
-
-    private Book validateBook(Book book) {
-        book.setPublishDate(Optional.ofNullable(book.getPublishDate()).orElse("").trim());
-        String year = book.getPublishDate();
-        if (year.length() > 0) {
-            while (year.length() < 4) {
-                year = "0" + year;
-            }
-        }
-        book.setPublishDate(year);
-        if ((book.getPublishDate().length() > 0 && (!book.getPublishDate().matches("|[0-9]{4}") ||
-                  Integer.parseInt(book.getPublishDate()) > Calendar.getInstance().get(Calendar.YEAR)))) {
-            throw new IncorrectBookFormatException();
-        }
-        return book;
     }
 
     public List<Book> findAll() {
@@ -56,17 +39,15 @@ public class BookService {
     }
 
     public void save(Book book) {
-        Book newBook = validateBook(book);
-        if (newBook.getId() != 0) {
+        if (book.getId() != 0) {
             throw new IncorrectBookFormatException();
         }
-        bookRepo.save(newBook);
+        bookRepo.save(book);
     }
 
     public void put(Book book) {
         findOne(book.getId());
-        Book updatedBook = validateBook(book);
-        bookRepo.save(updatedBook);
+        bookRepo.save(book);
     }
 
     public void deleteAll() {
