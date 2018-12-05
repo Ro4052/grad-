@@ -1,10 +1,8 @@
 package com.scottlogic.librarygradproject.Services;
 
 import com.scottlogic.librarygradproject.Entities.Reservation;
-import com.scottlogic.librarygradproject.Exceptions.AlreadyReservedException;
-import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
-import com.scottlogic.librarygradproject.Exceptions.BookIsAvailableException;
-import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
+import com.scottlogic.librarygradproject.Exceptions.*;
+import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,21 +19,23 @@ import java.util.stream.Stream;
 public class ReservationService {
 
     private final ReservationRepository resRepo;
-    private final BookService bookService;
+    private final BookRepository bookRepo;
     private final UserService userService;
     private final BorrowService borrowService;
 
     @Autowired
-    public ReservationService(ReservationRepository resRepo, BookService bookService, UserService userService,
-                              BorrowService borrowService) {
+    public ReservationService(ReservationRepository resRepo, BookRepository bookRepo,
+                              UserService userService, BorrowService borrowService) {
         this.resRepo = resRepo;
-        this.bookService = bookService;
+        this.bookRepo = bookRepo;
         this.userService = userService;
         this.borrowService = borrowService;
     }
 
     private void validateReservation(long bookId, String userId) {
-        bookService.findOne(bookId);
+        if (!bookRepo.existsById(bookId)) {
+            throw new BookNotFoundException(bookId);
+        }
         userService.findOne(userId);
     }
 

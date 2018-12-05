@@ -27,6 +27,7 @@ public class UserService {
         this.reservationRepo = reservationRepo;
         this.borrowRepo = borrowRepo;
     }
+
     @SuppressWarnings("unchecked")
     public LibraryUser getUserDetails(OAuth2Authentication authentication) {
         Map<String, String> userDetails = (Map<String, String>) authentication.getUserAuthentication().getDetails();

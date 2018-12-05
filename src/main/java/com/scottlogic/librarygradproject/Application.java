@@ -42,9 +42,9 @@ public class Application {
 
     @Bean
     @Autowired
-    public ReservationService getReservationService(ReservationRepository reservationRepo, BookService bookService,
+    public ReservationService getReservationService(ReservationRepository reservationRepo, BookRepository bookRepo,
                                                     UserService userService, BorrowService borrowService) {
-        return new ReservationService(reservationRepo, bookService, userService, borrowService);
+        return new ReservationService(reservationRepo, bookRepo, userService, borrowService);
     }
 
     @Autowired

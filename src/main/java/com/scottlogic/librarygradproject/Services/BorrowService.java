@@ -31,6 +31,7 @@ public class BorrowService {
         this.bookRepo = bookRepo;
         this.reservationRepo = reservationRepo;
     }
+
     @SuppressWarnings("unchecked")
     public Borrow borrow(long bookId, OAuth2Authentication authentication) {
         if (this.isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
