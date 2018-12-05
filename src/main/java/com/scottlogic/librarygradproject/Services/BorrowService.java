@@ -98,10 +98,8 @@ public class BorrowService {
 
     @Transactional
     public void updateBorrowed(LocalDate currentDate) {
-        List<Long> borrowIds = new ArrayList<>();
         try (Stream<Borrow> borrows = borrowRepository.findOverdueBorrows(currentDate)) {
-            borrows.forEach(borrow -> borrowIds.add(borrow.getId()));
+            borrows.forEach(borrow -> bookReturned(borrow.getId()));
         }
-        borrowIds.forEach(id -> bookReturned(id));
     }
 }

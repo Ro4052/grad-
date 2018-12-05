@@ -101,10 +101,8 @@ public class ReservationService {
 
     @Transactional
     public void updateReservations(LocalDate currentDate) {
-        List<Long> reservationIds = new ArrayList<>();
         try (Stream<Reservation> reservations = resRepo.findOverdueReservations(currentDate)) {
-            reservations.forEach(reservation -> reservationIds.add(reservation.getId()));
+            reservations.forEach(reservation -> delete(reservation.getId()));
         }
-        reservationIds.forEach(id -> delete(id));
     }
 }
