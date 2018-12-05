@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
 import styles from "../Profile.module.css";
-import RequestButton from "../../dashBoard/bookList/book/requestButton/RequestButton";
+import RequestButton from "../../common/requestButton/RequestButton";
+import buttonLogic from "../../common/requestButton/buttonLogic";
 
 export default class LoansTable extends Component {
   render() {
@@ -23,24 +24,14 @@ export default class LoansTable extends Component {
             .map(borrow => {
               const borrowedBook = this.props.books.find(book => {
                 return book.id === borrow.bookId;
-              });
-              let request,
-                colour,
-                buttonText,
-                disabled = false;
-              if (!borrowedBook) {
-                request = () => {};
-                buttonText = "Deleted";
-                disabled = true;
-              } else if (!borrowedBook.processStarted) {
-                request = this.props.startProcess;
-                colour = "red";
-                buttonText = "Return";
-              } else {
-                request = this.props.returnBook;
-                colour = "red";
-                buttonText = "Confirm";
-              }
+              }) || {
+                role: "Borrower",
+                title: `Book with ID: ${
+                  borrow.bookId
+                } has been removed from the library`
+              };
+              const data =
+                borrowedBook && buttonLogic(this.props, borrowedBook);
               return (
                 <Table.Row key={borrow.id}>
                   <Table.Cell className={styles.tableCell}>
@@ -49,14 +40,16 @@ export default class LoansTable extends Component {
                   <Table.Cell>{borrow.borrowDate}</Table.Cell>
                   <Table.Cell>{borrow.returnDate}</Table.Cell>
                   <Table.Cell>
-                    <RequestButton
-                      request={request}
-                      colour={colour}
-                      buttonText={buttonText}
-                      cancelProcess={this.props.cancelProcess}
-                      book={borrowedBook}
-                      disabled={disabled}
-                    />
+                    {data && (
+                      <RequestButton
+                        request={data.request}
+                        colour={data.colour}
+                        buttonText={data.buttonText}
+                        disabled={data.disabled}
+                        cancelProcess={this.props.cancelProcess}
+                        book={borrowedBook}
+                      />
+                    )}
                   </Table.Cell>
                 </Table.Row>
               );

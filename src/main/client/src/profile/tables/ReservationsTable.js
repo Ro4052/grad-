@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
 import styles from "../Profile.module.css";
-import RequestButton from "../../dashBoard/bookList/book/requestButton/RequestButton";
+import RequestButton from "../../common/requestButton/RequestButton";
+import buttonLogic from "../../common/requestButton/buttonLogic";
 
 export default class ReservationsTable extends Component {
   render() {
@@ -18,17 +19,13 @@ export default class ReservationsTable extends Component {
           {this.props.reservations.map(res => {
             const reservedBook = this.props.books.find(book => {
               return book.id === res.bookId;
-            });
-            let request, colour, buttonText;
-            if (!reservedBook.processStarted) {
-              request = this.props.startProcess;
-              colour = "red";
-              buttonText = "Cancel";
-            } else {
-              request = this.props.cancelReservation;
-              colour = "red";
-              buttonText = "Confirm";
-            }
+            }) || {
+              role: "Reserver",
+              title: `Book with ID: ${
+                res.bookId
+              } has been removed from the library`
+            };
+            const data = reservedBook && buttonLogic(this.props, reservedBook);
             return (
               <Table.Row key={res.id}>
                 <Table.Cell className={styles.tableCell}>
@@ -37,9 +34,10 @@ export default class ReservationsTable extends Component {
                 <Table.Cell>{res.queuePosition}</Table.Cell>
                 <Table.Cell>
                   <RequestButton
-                    request={request}
-                    colour={colour}
-                    buttonText={buttonText}
+                    request={data.request}
+                    colour={data.colour}
+                    buttonText={data.buttonText}
+                    disabled={data.disabled}
                     cancelProcess={this.props.cancelProcess}
                     book={reservedBook}
                   />

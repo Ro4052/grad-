@@ -1,5 +1,5 @@
 import React from "react";
-import RequestButton from "../../../../../dashBoard/bookList/book/requestButton/RequestButton";
+import RequestButton from "../../../../../common/requestButton/RequestButton";
 import { shallow } from "enzyme";
 
 const testBook = {
