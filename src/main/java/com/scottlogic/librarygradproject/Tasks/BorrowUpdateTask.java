@@ -22,7 +22,7 @@ public class BorrowUpdateTask {
         this.borrowService = borrowService;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void checkExpiredBorrows() {
         borrowService.updateBorrowed(LocalDate.now());
     }

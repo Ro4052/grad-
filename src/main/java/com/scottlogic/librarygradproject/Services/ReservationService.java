@@ -79,7 +79,7 @@ public class ReservationService {
                     .stream()
                     .map(res -> {
                         res.setQueuePosition(queuePosition.getAndIncrement());
-                        if (res.getQueuePosition() == 1) {
+                        if (res.getQueuePosition() == 1 && resToDelete.getCollectBy() != null) {
                             res.setCollectBy(LocalDate.now().plusDays(3));
                         }
                         return res;
