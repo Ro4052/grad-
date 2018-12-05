@@ -187,7 +187,7 @@ public class BookServiceTest {
         editedBook.setId(1);
 
         // Act
-        service.put(editedBook);
+        service.update(editedBook);
 
         // Assert
         assertThat(service.findOne(1).getTitle(), is(editedBook.getTitle()));

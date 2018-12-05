@@ -45,7 +45,7 @@ public class BookService {
         bookRepo.save(book);
     }
 
-    public void put(Book book) {
+    public void update(Book book) {
         findOne(book.getId());
         bookRepo.save(book);
     }

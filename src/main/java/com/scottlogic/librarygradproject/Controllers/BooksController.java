@@ -45,6 +45,6 @@ public class BooksController {
 
     @RequestMapping(value = "/books/{id}", method = RequestMethod.PUT)
     public void put(@RequestBody() Book book) {
-        bookService.put(book);
+        bookService.update(book);
     }
 }
