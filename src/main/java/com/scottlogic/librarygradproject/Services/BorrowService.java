@@ -59,7 +59,7 @@ public class BorrowService {
 
     public boolean isBorrowed(long bookId) {
         bookService.findOne(bookId);
-        return borrowRepository.isBookBorrowed(bookId);
+        return borrowRepository.isBookBorrowed(bookId) || reservationRepository.isBookAwaitingCollection(bookId);
     }
 
     public boolean existsByUserIdAndBookId(String userId, long bookId) {
@@ -73,27 +73,15 @@ public class BorrowService {
             throw new BookAlreadyReturnedException(borrowId);
         }
         borrowToReturn.setActive(false);
+        borrowToReturn.setReturnDate(LocalDate.now());
         long bookId = borrowToReturn.getBookId();
         if (isBorrowed(bookId)) {
             throw new BookAlreadyBorrowedException(bookId);
         }
-        List<Reservation> reservations = reservationRepository.findAllByBookIdOrderByQueuePositionAsc(bookId);
-        if (!reservations.isEmpty()) {
-            Reservation firstReservation = reservations.remove(0);
-            borrowRepository.save(Borrow.builder()
-                    .bookId(bookId)
-                    .userId(firstReservation.getUserId())
-                    .isActive(true)
-                    .borrowDate(LocalDate.now())
-                    .returnDate(LocalDate.now().plusDays(7))
-                    .build());
-            reservationRepository.delete(firstReservation);
+        Reservation reservationToCollect = reservationRepository.findOneByBookIdAndQueuePosition(bookId, 1);
+        if (reservationToCollect != null) {
+            reservationToCollect.setCollectBy(LocalDate.now().plusDays(3));
         }
-        final LongWrapper queuePosition = new LongWrapper(1);
-        reservations.forEach(reservation -> {
-                   reservation.setQueuePosition(queuePosition.getValue());
-                   queuePosition.increment();
-        });
     }
 
     @Transactional
