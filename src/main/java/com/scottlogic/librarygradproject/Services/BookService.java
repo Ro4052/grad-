@@ -21,7 +21,6 @@ public class BookService {
 
     private Book validateBook(Book book) {
         book.setIsbn(Optional.ofNullable(book.getIsbn()).orElse("").trim());
-        book.setAuthor(Optional.ofNullable(book.getAuthor()).orElseThrow(() -> new IncorrectBookFormatException()).trim());
         book.setTitle(Optional.ofNullable(book.getTitle()).orElseThrow(() -> new IncorrectBookFormatException()).trim());
         book.setPublishDate(Optional.ofNullable(book.getPublishDate()).orElse("").trim());
         String year = book.getPublishDate();
@@ -32,7 +31,6 @@ public class BookService {
         }
         book.setPublishDate(year);
         if (!book.getIsbn().matches("|[0-9]{10}|[0-9]{13}") ||
-                (book.getAuthor().length() == 0 || book.getAuthor().length() > 200) ||
                 (book.getTitle().length() == 0 || book.getTitle().length() > 200) ||
                 (book.getPublishDate().length() > 0 && (!book.getPublishDate().matches("|[0-9]{4}") ||
                         Integer.parseInt(book.getPublishDate()) > Calendar.getInstance().get(Calendar.YEAR)))) {

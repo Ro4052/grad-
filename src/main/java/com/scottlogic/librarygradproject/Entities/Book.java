@@ -1,9 +1,11 @@
 package com.scottlogic.librarygradproject.Entities;
 
+import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
 import lombok.Builder;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Optional;
 
 @Builder
 @Entity
@@ -22,7 +24,7 @@ public class Book {
         
         this.isbn = isbn;
         this.title = title;
-        this.author = author;
+        setAuthor(author);
         this.publishDate = publishDate;
     }
 
@@ -61,6 +63,10 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+        author = Optional.ofNullable(author).orElseThrow(() -> new IncorrectBookFormatException()).trim();
+        if (author.length() == 0 || author.length() > 200) {
+            throw new IncorrectBookFormatException();
+        }
         this.author = author;
     }
 
