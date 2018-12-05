@@ -31,10 +31,11 @@ class DashBoard extends Component {
   }
 
   handleCheck(event) {
+    const newId = parseInt(event.target.value);
     let newDeleteList = [...this.state.deleteList];
-    event.target.checked
-      ? newDeleteList.push(event.target.value)
-      : (newDeleteList = newDeleteList.filter(id => id !== event.target.value));
+    !newDeleteList.includes(newId)
+      ? newDeleteList.push(newId)
+      : (newDeleteList = newDeleteList.filter(id => id !== newId));
     this.setState({ deleteList: newDeleteList });
   }
 
@@ -114,6 +115,7 @@ class DashBoard extends Component {
           lowerDate={this.state.lowerDate}
           deleteMode={this.state.deleteMode}
           handleCheck={this.handleCheck}
+          deleteList={this.state.deleteList}
         />
         {this.props.loggedIn && <AddBook />}
       </div>

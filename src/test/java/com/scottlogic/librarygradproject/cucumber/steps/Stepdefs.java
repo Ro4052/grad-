@@ -89,8 +89,8 @@ public class Stepdefs implements En {
            assertEquals(bookService.findAll().size(), 1);
         });
         When("^An add book request is received with incorrect ISBN$", () -> {
-            newBook = new Book("012345678", "Correct Book", "Correct Author", "1999");
             try {
+                newBook = new Book("012345678", "Correct Book", "Correct Author", "1999");
                 controller.post(newBook);
             }
             catch (IncorrectBookFormatException e) {}
@@ -99,49 +99,49 @@ public class Stepdefs implements En {
             assertEquals(bookService.findAll().size(), 0);
         });
         When("^An add book request is received without author$", () -> {
-            newBook = new Book("0123456789", "Correct Book", "", "1999");
             try {
+                newBook = new Book("0123456789", "Correct Book", "", "1999");
                 controller.post(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An add book request is received without title$", () -> {
-            newBook = new Book("0123456789", "", "Correct Author", "1999");
             try {
+                newBook = new Book("0123456789", "", "Correct Author", "1999");
                 controller.post(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An add book request is received with author too long$", () -> {
             String longAuthor = StringUtils.repeat("A", 201);
-            newBook = new Book("0123456789", "Correct Book", longAuthor, "1999");
             try {
+                newBook = new Book("0123456789", "Correct Book", longAuthor, "1999");
                 controller.post(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An add book request is received with title too long$", () -> {
             String longTitle = StringUtils.repeat("A", 201);
-            Book newBook = new Book("0123456789", longTitle, "Correct Author", "1999");
             try {
+                Book newBook = new Book("0123456789", longTitle, "Correct Author", "1999");
                 controller.post(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An add book request is received with incorrect date format$", () -> {
-            newBook = new Book("0123456789", "Correct Title", "Correct Author", "19991");
             try {
+                newBook = new Book("0123456789", "Correct Title", "Correct Author", "19991");
                 controller.post(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An add book request is received with leading and trailing whitespace in fields otherwise acceptable$", () -> {
             newBook = new Book("  0123456789123  ", " Correct Title   ", " Correct Author   ", " 1999  ");
-                controller.post(newBook);
+            controller.post(newBook);
         });
         When("^An add book request is received with leading and trailing whitespace in fields and unacceptable$", () -> {
-            newBook = new Book("  012345678911  ", " Correct Title   ", " Correct Author   ", " 1999  ");
             try {
+                newBook = new Book("  012345678911  ", " Correct Title   ", " Correct Author   ", " 1999  ");
                 controller.post(newBook);
             }
             catch (IncorrectBookFormatException e) {}
@@ -168,9 +168,9 @@ public class Stepdefs implements En {
             assertEquals(bookService.findOne(id), newBook);
         });
         When("^An edit book request is received with incorrect ISBN$", () -> {
-            newBook = new Book("012345678", "Correct Book", "Correct Author", "1999");
-            newBook.setId(id);
             try {
+                newBook = new Book("012345678", "Correct Book", "Correct Author", "1999");
+                newBook.setId(id);
                 controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
@@ -180,43 +180,43 @@ public class Stepdefs implements En {
             assertNotEquals(bookService.findOne(id), newBook);
         });
         When("^An edit book request is received without author$", () -> {
-            newBook = new Book("0123456789", "Correct Book","", "1999");
-            newBook.setId(id);
             try {
+                newBook = new Book("0123456789", "Correct Book","", "1999");
+                newBook.setId(id);
                 controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An edit book request is received without title$", () -> {
-            newBook = new Book("0123456789", "","Correct Title", "1999");
-            newBook.setId(id);
             try {
+                newBook = new Book("0123456789", "","Correct Title", "1999");
+                newBook.setId(id);
                 controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An edit book request is received with author too long$", () -> {
             String longAuthor = StringUtils.repeat("A", 201);
-            newBook = new Book("0123456789", "Correct Book", longAuthor, "1999");
-            newBook.setId(id);
             try {
+                newBook = new Book("0123456789", "Correct Book", longAuthor, "1999");
+                newBook.setId(id);
                 controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An edit book request is received with title too long$", () -> {
             String longTitle = StringUtils.repeat("A", 201);
-            newBook = new Book("0123456789", longTitle, "Correct Author", "1999");
-            newBook.setId(id);
             try {
+                newBook = new Book("0123456789", longTitle, "Correct Author", "1999");
+                newBook.setId(id);
                 controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
         });
         When("^An edit book request is received with incorrect date format$", () -> {
-            newBook = new Book("0123456789", "Correct Book", "Correct Author", "19998");
-            newBook.setId(id);
             try {
+                newBook = new Book("0123456789", "Correct Book", "Correct Author", "19998");
+                newBook.setId(id);
                 controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
@@ -229,14 +229,12 @@ public class Stepdefs implements En {
             newBook = trimBook;
         });
         When("^An edit book request is received with leading and trailing whitespace in fields and unacceptable$", () -> {
-            newBook = new Book("   012345679    ", "  Correct Book  ", "  Correct Author  ", "  19939      ");
-            newBook.setId(id);
-            Book trimBook = new Book("012345679", "Correct Book", "Correct Author", "19939");
             try {
+                newBook = new Book("   012345679    ", "  Correct Book  ", "  Correct Author  ", "  19939      ");
+                newBook.setId(id);
                 controller.put(newBook);
             }
             catch (IncorrectBookFormatException e) {}
-            newBook = trimBook;
         });
         When("^An edit book request is received without isbn$", () -> {
             newBook = new Book("", "Correct Book", "Correct Author", "1999");

@@ -82,7 +82,7 @@ export const updateBook = updatedBook => (dispatch, getState) => {
 export const deleteBook = bookIds => (dispatch, getState) => {
   axios.delete("/api/books", { data: bookIds });
   const newBooks = getState().bookList.books.filter(
-    book => !bookIds.includes(book.id.toString())
+    book => !bookIds.includes(book.id)
   );
   dispatch(getBooksAction(newBooks));
 };

@@ -1,9 +1,12 @@
 package com.scottlogic.librarygradproject.Entities;
 
+import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
 import lombok.Builder;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Calendar;
+import java.util.Optional;
 
 @Builder
 @Entity
@@ -19,11 +22,10 @@ public class Book {
     public Book() { }
 
     public Book(String isbn, String title, String author, String publishDate) {
-        
-        this.isbn = isbn;
-        this.title = title;
-        this.author = author;
-        this.publishDate = publishDate;
+        setIsbn(isbn);
+        setTitle(title);
+        setAuthor(author);
+        setPublishDate(publishDate);
     }
 
     public static class BookBuilder {
@@ -45,6 +47,10 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
+        isbn = Optional.ofNullable(isbn).orElse("").trim();
+        if (!isbn.matches("|[0-9]{10}|[0-9]{13}")) {
+            throw new IncorrectBookFormatException();
+        }
         this.isbn = isbn;
     }
 
@@ -53,6 +59,10 @@ public class Book {
     }
 
     public void setTitle(String title) {
+        title = Optional.ofNullable(title).orElseThrow(() -> new IncorrectBookFormatException()).trim();
+        if (title.length() == 0 || title.length() > 200) {
+            throw new IncorrectBookFormatException();
+        }
         this.title = title;
     }
 
@@ -61,6 +71,10 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+        author = Optional.ofNullable(author).orElseThrow(() -> new IncorrectBookFormatException()).trim();
+        if (author.length() == 0 || author.length() > 200) {
+            throw new IncorrectBookFormatException();
+        }
         this.author = author;
     }
 
@@ -69,6 +83,16 @@ public class Book {
     }
 
     public void setPublishDate(String publishDate) {
+        publishDate = Optional.ofNullable(publishDate).orElse("").trim();
+        if (publishDate.length() > 0) {
+            while (publishDate.length() < 4) {
+                publishDate = "0" + publishDate;
+            }
+        }
+        if ((publishDate.length() > 0 && (!publishDate.matches("|[0-9]{4}") ||
+                Integer.parseInt(publishDate) > Calendar.getInstance().get(Calendar.YEAR)))) {
+            throw new IncorrectBookFormatException();
+        }
         this.publishDate = publishDate;
     }
 
