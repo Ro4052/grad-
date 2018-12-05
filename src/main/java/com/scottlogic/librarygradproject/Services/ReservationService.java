@@ -11,10 +11,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ReservationService {
 
@@ -75,6 +79,9 @@ public class ReservationService {
                     .stream()
                     .map(res -> {
                         res.setQueuePosition(queuePosition.getAndIncrement());
+                        if (res.getQueuePosition() == 1) {
+                            res.setCollectBy(LocalDate.now().plusDays(3));
+                        }
                         return res;
                     }).collect(Collectors.toList());
             resRepo.saveAll(adjustedReservations);
@@ -90,5 +97,12 @@ public class ReservationService {
     public Reservation findOne(long reservationId) {
         Optional<Reservation> reservationToGet = resRepo.findById(reservationId);
         return reservationToGet.orElseThrow(() -> new ReservationNotFoundException(reservationId));
+    }
+
+    @Transactional
+    public void updateReservations(LocalDate currentDate) {
+        try (Stream<Reservation> reservations = resRepo.findOverdueReservations(currentDate)) {
+            reservations.forEach(reservation -> delete(reservation.getId()));
+        }
     }
 }
