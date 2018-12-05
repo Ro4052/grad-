@@ -5,7 +5,6 @@ import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
 import com.scottlogic.librarygradproject.Exceptions.BookAlreadyReturnedException;
 import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
-import com.scottlogic.librarygradproject.LongWrapper;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
