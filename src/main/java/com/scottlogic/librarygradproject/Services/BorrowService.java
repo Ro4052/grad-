@@ -2,9 +2,7 @@ package com.scottlogic.librarygradproject.Services;
 
 import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
-import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
-import com.scottlogic.librarygradproject.Exceptions.BookAlreadyReturnedException;
-import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
+import com.scottlogic.librarygradproject.Exceptions.*;
 import com.scottlogic.librarygradproject.LongWrapper;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
@@ -84,26 +82,29 @@ public class BorrowService {
         }
     }
 
-    public void bookCollected(long bookId) {
+    public Borrow bookCollected(long bookId) {
             List<Reservation> reservations = reservationRepository.findAllByBookIdOrderByQueuePositionAsc(bookId);
-            if (!reservations.isEmpty()) {
-                Reservation firstReservation = reservations.remove(0);
-                borrowRepository.save(Borrow.builder()
-                        .bookId(bookId)
-                        .userId(firstReservation.getUserId())
-                        .isActive(true)
-                        .borrowDate(LocalDate.now())
-                        .returnDate(LocalDate.now().plusDays(7))
-                        .build());
-                reservationRepository.delete(firstReservation);
-            }
+            if (reservations.isEmpty()) {throw new BookNotReservedException(bookId);}
+
+            Reservation firstReservation = reservations.remove(0);
+
+            Borrow borrow = (Borrow.builder()
+                    .bookId(bookId)
+                    .userId(firstReservation.getUserId())
+                    .isActive(true)
+                    .borrowDate(LocalDate.now())
+                    .returnDate(LocalDate.now().plusDays(7))
+                    .build());
+
+            reservationRepository.delete(firstReservation);
+
             final LongWrapper queuePosition = new LongWrapper(1);
             reservations.forEach(reservation -> {
-                System.out.println(queuePosition.getValue());
                 reservation.setQueuePosition(queuePosition.getValue());
                 reservationRepository.save(reservation);
                 queuePosition.increment();
             });
+            return borrowRepository.save(borrow);
     }
 
     @Transactional

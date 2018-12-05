@@ -39,5 +39,5 @@ public class BorrowController {
     public void returnBook(@PathVariable long borrowId) { borrowService.bookReturned(borrowId); }
 
     @RequestMapping(value = "/borrow/collect/{bookId}", method = RequestMethod.POST)
-    public void collectbook(@PathVariable long bookId) { borrowService.bookCollected(bookId); }
+    public Borrow collectbook(@PathVariable long bookId) { return borrowService.bookCollected(bookId); }
 }
