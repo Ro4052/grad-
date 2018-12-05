@@ -43,6 +43,7 @@ export class BookList extends Component {
                     handleCheck={this.props.handleCheck}
                     updateBook={this.props.updateBook}
                     editStateChange={this.props.editStateChange}
+                    checked={this.props.deleteList.includes(book.id)}
                     book={book}
                     reserveBook={this.props.reserveBook}
                     checkBook={this.props.checkBook}

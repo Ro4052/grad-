@@ -78,7 +78,8 @@ export default class Book extends Component {
               className={styles.checkBox}
               type="checkbox"
               value={book.id}
-              onClick={this.props.handleCheck}
+              checked={this.props.checked}
+              onChange={this.props.handleCheck}
             />
             <label htmlFor={book.id} className={styles.bookFieldBreak}>
               {book.title}
