@@ -77,13 +77,13 @@ public class BorrowServiceTest {
         authentication3 = helper3.getOauthTestAuthentication();
         authentication4 = helper4.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
-        bookService.save(book1);
+        bookService.add(book1);
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
-        bookService.save(book2);
+        bookService.add(book2);
         book3 = new Book("0123456789", "Correct Book3", "Correct Author3", "2016");
-        bookService.save(book3);
+        bookService.add(book3);
         book4 = new Book("1111111111", "Correct Book4", "Correct Author4", "1999");
-        bookService.save(book4);
+        bookService.add(book4);
         borrow1 = new Borrow(1, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));
         borrow1.setId(1);
         borrow2 = new Borrow(2, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));

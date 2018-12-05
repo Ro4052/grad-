@@ -78,9 +78,9 @@ public class UserServiceTest {
         authentication2 = helper2.getOauthTestAuthentication();
         authentication3 = helper3.getOauthTestAuthentication();
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
-        bookService.save(book1);
+        bookService.add(book1);
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
-        bookService.save(book2);
+        bookService.add(book2);
         book3 = new Book("0123456789", "Correct Book3", "Correct Author3", "2016");
     }
 

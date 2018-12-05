@@ -74,8 +74,8 @@ public class ReservationServiceTest {
         res2 = new Reservation(2L, "TestUser 1", 1L, null);
         res2.setId(2);
 
-        bookService.save(book1);
-        bookService.save(book2);
+        bookService.add(book1);
+        bookService.add(book2);
 
         userService.add(user1);
         userService.add(user2);

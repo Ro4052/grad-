@@ -49,7 +49,7 @@ public class BooksControllerTest {
         controller.post(newBook);
 
         // Assert
-        verify(bookService).save(newBook);
+        verify(bookService).add(newBook);
     }
 
     @Test
