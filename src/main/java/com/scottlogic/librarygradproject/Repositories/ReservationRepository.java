@@ -16,6 +16,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query(value = "SELECT COUNT(*) FROM public.reservation WHERE book_id = :bookId", nativeQuery = true)
     long findLatestQueue(@Param("bookId") long bookId);
 
+    @Query(value = "SELECT EXISTS(SELECT * FROM public.reservation WHERE collect_by IS NOT null AND book_id = :bookId)", nativeQuery = true)
+    boolean isBookAwaitingCollection(@Param("bookId") long bookId);
+
     @Query(value = "SELECT * FROM public.reservation WHERE collect_by < :date", nativeQuery = true)
     Stream<Reservation> findOverdueReservations(@Param("date") LocalDate date);
 
