@@ -4,7 +4,9 @@ import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
 import com.scottlogic.librarygradproject.Exceptions.BookAlreadyReturnedException;
+import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
+import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +21,14 @@ import java.util.stream.Stream;
 public class BorrowService {
 
     private final BorrowRepository borrowRepo;
-    private final BookService bookService;
+    private final BookRepository bookRepo;
     private final ReservationRepository reservationRepo;
 
     @Autowired
-    public BorrowService(BorrowRepository borrowRepo, BookService bookService,
+    public BorrowService(BorrowRepository borrowRepo, BookRepository bookRepo,
                          ReservationRepository reservationRepo) {
         this.borrowRepo = borrowRepo;
-        this.bookService = bookService;
+        this.bookRepo = bookRepo;
         this.reservationRepo = reservationRepo;
     }
     @SuppressWarnings("unchecked")
@@ -57,8 +59,11 @@ public class BorrowService {
     }
 
     public boolean isBorrowed(long bookId) {
-        bookService.findOne(bookId);
-        return borrowRepo.isBookBorrowed(bookId) || reservationRepo.isBookAwaitingCollection(bookId);
+        if (bookRepo.existsById(bookId)) {
+            return borrowRepo.isBookBorrowed(bookId) || reservationRepo.isBookAwaitingCollection(bookId);
+        } else {
+            throw new BookNotFoundException(bookId);
+        }
     }
 
     public boolean existsByUserIdAndBookId(String userId, long bookId) {

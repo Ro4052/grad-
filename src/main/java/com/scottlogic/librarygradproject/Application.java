@@ -23,9 +23,9 @@ public class Application {
 
     @Bean
     @Autowired
-    public UserService getUserService(LibraryUserRepository userRepo, ReservationRepository reservationRepository,
-                                      BorrowRepository borrowRepository) {
-        return new UserService(userRepo, reservationRepository, borrowRepository);
+    public UserService getUserService(LibraryUserRepository userRepo, ReservationRepository reservationRepo,
+                                      BorrowRepository borrowRepo) {
+        return new UserService(userRepo, reservationRepo, borrowRepo);
     }
 
     @Autowired
@@ -48,13 +48,13 @@ public class Application {
     }
 
     @Autowired
-    BorrowRepository borrowRepository;
+    BorrowRepository borrowRepo;
 
     @Bean
     @Autowired
-    public BorrowService getBorrowService(BorrowRepository borrowRepository, BookService bookService,
-                                          ReservationRepository reservationRepository) {
-        return new BorrowService(borrowRepository, bookService, reservationRepository); }
+    public BorrowService getBorrowService(BorrowRepository borrowRepo, BookRepository bookRepo,
+                                          ReservationRepository reservationRepo) {
+        return new BorrowService(borrowRepo, bookRepo, reservationRepo); }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
