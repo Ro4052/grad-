@@ -38,21 +38,22 @@ export class BookList extends Component {
                 return (
                   <Book
                     key={book.id}
-                    role={book.role}
+                    book={book}
                     deleteMode={this.props.deleteMode}
                     handleCheck={this.props.handleCheck}
-                    updateBook={this.props.updateBook}
                     editStateChange={this.props.editStateChange}
                     checked={this.props.deleteList.includes(book.id)}
-                    book={book}
+                    updateBook={this.props.updateBook}
                     reserveBook={this.props.reserveBook}
                     checkBook={this.props.checkBook}
                     borrowBook={this.props.borrowBook}
                     loggedIn={this.props.loggedIn}
                     returnBook={this.props.returnBook}
                     cancelReservation={this.props.cancelReservation}
+                    collectBook={this.props.collectBook}
                     startProcess={this.props.startProcess}
                     cancelProcess={this.props.cancelProcess}
+                    user={this.props.user}
                   />
                 );
               })}

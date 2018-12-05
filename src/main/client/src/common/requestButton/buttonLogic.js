@@ -33,6 +33,8 @@ const buttonLogic = (props, book) => {
         colour = "red";
         buttonText = "Confirm";
       }
+      // if book.collector set other stuff ...
+      // still going to have the issue of setting for both buttons though
       break;
     default:
       if (book.availabilityChecked) {

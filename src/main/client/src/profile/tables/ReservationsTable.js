@@ -40,6 +40,7 @@ export default class ReservationsTable extends Component {
                     disabled={data.disabled}
                     cancelProcess={this.props.cancelProcess}
                     book={reservedBook}
+                    content={reservedBook.popupText}
                   />
                 </Table.Cell>
               </Table.Row>

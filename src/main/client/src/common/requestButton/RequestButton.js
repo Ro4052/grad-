@@ -44,7 +44,8 @@ export default class RequestButton extends Component {
               {this.props.buttonText}
             </Button>
           }
-          content={this.props.book ? this.props.book.popupText : "Book deleted"}
+          // content={this.props.book ? this.props.book.popupText : "Book deleted"}
+          content={this.props.content}
           hideOnScroll
         />
       </div>

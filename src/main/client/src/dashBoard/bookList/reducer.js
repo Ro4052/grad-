@@ -29,6 +29,7 @@ export const getBooks = () => (dispatch, getState) => {
         ...book,
         editState: false,
         popupText: "click to check availability",
+        collectPopupText: `Collect ${book.title}`,
         availabilityChecked: false,
         isAvailable: undefined
       };
@@ -139,6 +140,31 @@ export const borrowBook = book => (dispatch, getState) => {
     });
 };
 
+export const collectBook = book => (dispatch, getState) => {
+  const bookId = book.id;
+  dispatch(popupText("Loading...", bookId));
+  axios
+    .post(`/api/borrow/collect/${bookId}`)
+    .then(res => {
+      dispatch(popupText("Book collected!", bookId));
+      const newBooks = getState().bookList.books.map(eachBook => {
+        if (eachBook.id === book.id) {
+          eachBook.borrowId = res.data.id;
+          eachBook.reservationId = null;
+          eachBook.role = "Collector";
+          eachBook.popupText = "Return your Book";
+          eachBook.processStarted = false;
+          dispatch(addBorrow(res.data, book.id));
+        }
+        return eachBook;
+      });
+      dispatch(getBooksAction(newBooks));
+    })
+    .catch(() => {
+      dispatch(popupText("Book cannot be collected at this time", bookId));
+    });
+};
+
 export const checkBook = book => dispatch => {
   const bookId = book.id;
   dispatch(popupText("Loading...", bookId));
@@ -163,7 +189,7 @@ export const checkBook = book => dispatch => {
 };
 
 export const checkAllBooks = user => (dispatch, getState) => {
-  let role, reservationId, borrowId, popupText;
+  let role, reservationId, borrowId, popupText, collector;
   const newBooks = getState().bookList.books.map(book => {
     borrowId = null;
     reservationId = null;
@@ -173,8 +199,10 @@ export const checkAllBooks = user => (dispatch, getState) => {
       if (reservation.bookId === book.id) {
         borrowId = null;
         reservationId = reservation.id;
-        role = "Reserver";
         popupText = "Cancel your reservation";
+        role = "Reserver";
+        if (reservation.queuePosition === 1 && reservation.collectBy)
+          collector = true;
       }
     });
     user.borrows.forEach(borrow => {

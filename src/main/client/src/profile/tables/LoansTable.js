@@ -48,6 +48,7 @@ export default class LoansTable extends Component {
                         disabled={data.disabled}
                         cancelProcess={this.props.cancelProcess}
                         book={borrowedBook}
+                        content={borrowedBook.popupText}
                       />
                     )}
                   </Table.Cell>
