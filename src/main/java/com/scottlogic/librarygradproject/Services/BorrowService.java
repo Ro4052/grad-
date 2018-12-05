@@ -85,7 +85,25 @@ public class BorrowService {
     }
 
     public void bookCollected(long bookId) {
-
+            List<Reservation> reservations = reservationRepository.findAllByBookIdOrderByQueuePositionAsc(bookId);
+            if (!reservations.isEmpty()) {
+                Reservation firstReservation = reservations.remove(0);
+                borrowRepository.save(Borrow.builder()
+                        .bookId(bookId)
+                        .userId(firstReservation.getUserId())
+                        .isActive(true)
+                        .borrowDate(LocalDate.now())
+                        .returnDate(LocalDate.now().plusDays(7))
+                        .build());
+                reservationRepository.delete(firstReservation);
+            }
+            final LongWrapper queuePosition = new LongWrapper(1);
+            reservations.forEach(reservation -> {
+                System.out.println(queuePosition.getValue());
+                reservation.setQueuePosition(queuePosition.getValue());
+                reservationRepository.save(reservation);
+                queuePosition.increment();
+            });
     }
 
     @Transactional

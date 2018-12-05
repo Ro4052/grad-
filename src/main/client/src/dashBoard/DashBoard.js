@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Button } from "semantic-ui-react";
+import axios from "axios";
 
 import * as bookListActions from "./bookList/reducer";
 import PageHeader from "../common/pageHeader/PageHeader";
@@ -103,6 +104,9 @@ class DashBoard extends Component {
             />
           </div>
         )}
+        <Button onClick={() => axios.post("/api/borrow/collect/6")}>
+          Funky Button
+        </Button>
         <BookList
           searchBy={this.state.searchBy}
           searchString={this.state.searchString}

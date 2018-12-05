@@ -4,10 +4,7 @@ import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Services.BorrowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,4 +37,7 @@ public class BorrowController {
 
     @RequestMapping(value = "/borrow/return/{borrowId}", method = RequestMethod.PUT)
     public void returnBook(@PathVariable long borrowId) { borrowService.bookReturned(borrowId); }
+
+    @RequestMapping(value = "/borrow/collect/{bookId}", method = RequestMethod.POST)
+    public void collectbook(@PathVariable long bookId) { borrowService.bookCollected(bookId); }
 }
