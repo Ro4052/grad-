@@ -84,10 +84,6 @@ public class BorrowService {
         }
     }
 
-    public void bookCollected(long bookId) {
-
-    }
-
     @Transactional
     public void updateBorrowed(LocalDate currentDate) {
         List<Long> borrowIds = new ArrayList<>();
