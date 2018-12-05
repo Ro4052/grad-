@@ -21,9 +21,8 @@ public class Book {
     public Book() { }
 
     public Book(String isbn, String title, String author, String publishDate) {
-        
         this.isbn = isbn;
-        this.title = title;
+        setTitle(title);
         setAuthor(author);
         this.publishDate = publishDate;
     }
@@ -55,6 +54,10 @@ public class Book {
     }
 
     public void setTitle(String title) {
+        title = Optional.ofNullable(title).orElseThrow(() -> new IncorrectBookFormatException()).trim();
+        if (title.length() == 0 || title.length() > 200) {
+            throw new IncorrectBookFormatException();
+        }
         this.title = title;
     }
 
