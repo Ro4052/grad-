@@ -79,7 +79,9 @@ public class BorrowService {
             throw new BookAlreadyBorrowedException(bookId);
         }
         Reservation reservationToCollect = reservationRepository.findOneByBookIdAndQueuePosition(bookId, 1);
-        reservationToCollect.setCollectBy(LocalDate.now().plusDays(3));
+        if (reservationToCollect != null) {
+            reservationToCollect.setCollectBy(LocalDate.now().plusDays(3));
+        }
     }
 
     public void bookCollected(long bookId) {
