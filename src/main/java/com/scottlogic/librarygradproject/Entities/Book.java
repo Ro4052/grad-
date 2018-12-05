@@ -46,6 +46,10 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
+        isbn = Optional.ofNullable(isbn).orElse("").trim();
+        if (!isbn.matches("|[0-9]{10}|[0-9]{13}")) {
+            throw new IncorrectBookFormatException();
+        }
         this.isbn = isbn;
     }
 

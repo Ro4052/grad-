@@ -20,7 +20,6 @@ public class BookService {
     }
 
     private Book validateBook(Book book) {
-        book.setIsbn(Optional.ofNullable(book.getIsbn()).orElse("").trim());
         book.setPublishDate(Optional.ofNullable(book.getPublishDate()).orElse("").trim());
         String year = book.getPublishDate();
         if (year.length() > 0) {
@@ -29,9 +28,8 @@ public class BookService {
             }
         }
         book.setPublishDate(year);
-        if (!book.getIsbn().matches("|[0-9]{10}|[0-9]{13}") ||
-                (book.getPublishDate().length() > 0 && (!book.getPublishDate().matches("|[0-9]{4}") ||
-                        Integer.parseInt(book.getPublishDate()) > Calendar.getInstance().get(Calendar.YEAR)))) {
+        if ((book.getPublishDate().length() > 0 && (!book.getPublishDate().matches("|[0-9]{4}") ||
+                  Integer.parseInt(book.getPublishDate()) > Calendar.getInstance().get(Calendar.YEAR)))) {
             throw new IncorrectBookFormatException();
         }
         return book;
