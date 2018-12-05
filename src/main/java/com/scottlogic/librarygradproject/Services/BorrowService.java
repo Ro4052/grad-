@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 public class BorrowService {
@@ -98,11 +99,10 @@ public class BorrowService {
 
             reservationRepository.delete(firstReservation);
 
-            final LongWrapper queuePosition = new LongWrapper(1);
+            AtomicLong queuePosition = new AtomicLong(1);
             reservations.forEach(reservation -> {
-                reservation.setQueuePosition(queuePosition.getValue());
+                reservation.setQueuePosition(queuePosition.getAndIncrement());
                 reservationRepository.save(reservation);
-                queuePosition.increment();
             });
             return borrowRepository.save(borrow);
     }
