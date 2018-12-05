@@ -91,4 +91,16 @@ public class BorrowControllerTest {
         //Assert
         verify(borrowService).bookReturned(borrowId);
     }
+
+    @Test
+    public void collectBook_calls_repo_bookCollected() {
+        //Arrange
+        long bookId = 1;
+
+        //Act
+        borrowController.collectBook(bookId);
+
+        //Assert
+        verify(borrowService).bookCollected(bookId);
+    }
 }
