@@ -38,7 +38,7 @@ public class BookService {
         }
     }
 
-    public void save(Book book) {
+    public void add(Book book) {
         if (book.getId() != 0) {
             throw new IncorrectBookFormatException();
         }

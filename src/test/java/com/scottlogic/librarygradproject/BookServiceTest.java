@@ -38,7 +38,7 @@ public class BookServiceTest {
 
     @Test
     public void add_Inserts_New_Book() {
-        service.save(correctBook1);
+        service.add(correctBook1);
         List<Book> books = service.findAll();
         assertArrayEquals(new Book[]{correctBook1}, books.toArray());
     }
@@ -46,7 +46,7 @@ public class BookServiceTest {
     @Test
     public void add_With_Whitespaces_Trims_And_Inserts() {
         Book newBook = new Book("  1231231231231 ", "    Correct Book ", "  Correct Author  ", " 1999 ");
-        service.save(newBook);
+        service.add(newBook);
         Book trimmedBook = new Book("1231231231231", "Correct Book", "Correct Author", "1999");
         assertArrayEquals(new Book[]{trimmedBook}, service.findAll().toArray());
     }
@@ -54,97 +54,97 @@ public class BookServiceTest {
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Incorrect_BookISBN_Throws() {
         Book newBook = new Book("012345678", "Correct Book", "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test
     public void add_With_Null_BookISBN_Works() {
         Book newBook = new Book(null, "Correct Book", "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
         assertArrayEquals(new Book[]{newBook}, service.findAll().toArray());
     }
 
     @Test
     public void add_With_Empty_BookISBN_Works() {
         Book newBook = new Book("", "Correct Book", "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
         assertArrayEquals(new Book[]{newBook}, service.findAll().toArray());
     }
 
     @Test
     public void add_With_10Digits_BookISBN_Works() {
         Book newBook = new Book("1231231231", "Correct Book", "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
         assertArrayEquals(new Book[]{newBook}, service.findAll().toArray());
     }
 
     @Test
     public void add_With_13Digits_BookISBN_Works() {
         Book newBook = new Book("1231231231231", "Correct Book", "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
         assertArrayEquals(new Book[]{newBook}, service.findAll().toArray());
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_9Digits_1Letter_BookISBN_Throws() {
         Book newBook = new Book("123123123A", "Correct Book", "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_12Digits_1Letter_BookISBN_Throws() {
         Book newBook = new Book("123123123123A", "Correct Book", "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Empty_BookTitle_Throws() {
         Book newBook = new Book("012345678", "", "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Null_BookTitle_Throws() {
         Book newBook = new Book("012345678", null, "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_TooLong_BookTitle_Throws() {
         String longTitle = StringUtils.repeat("A", 201);
         Book newBook = new Book("012345678", longTitle, "Correct Author", "1999");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Empty_BookAuthor_Throws() {
         Book newBook = new Book("012345678", "1", "", "1999");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Null_BookAuthor_Throws() {
         Book newBook = new Book("012345678", "1", null, "1999");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_TooLong_BookAuthor_Throws() {
         String longAuthor = StringUtils.repeat("A", 201);
         Book newBook = new Book("012345678", "1", longAuthor, "1999");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test(expected = IncorrectBookFormatException.class)
     public void add_With_Incorrect_BookPublishDate_Throws() {
         Book newBook = new Book("012345678", "Correct Book", "Correct Author", "19991");
-        service.save(newBook);
+        service.add(newBook);
     }
 
     @Test
     public void get_Returns_Specific_Books() {
-        service.save(correctBook1);
-        service.save(correctBook2);
+        service.add(correctBook1);
+        service.add(correctBook2);
 
         Book book = service.findOne(2L);
         assertEquals(correctBook2, book);
@@ -152,25 +152,25 @@ public class BookServiceTest {
 
     @Test
     public void getAll_Returns_All_Books() {
-        service.save(correctBook1);
-        service.save(correctBook2);
+        service.add(correctBook1);
+        service.add(correctBook2);
         List<Book> books = service.findAll();
         assertArrayEquals(new Book[]{correctBook1, correctBook2}, books.toArray());
     }
 
     @Test(expected = BookNotFoundException.class)
     public void get_Throws_Invalid_Id() {
-        service.save(correctBook1);
-        service.save(correctBook2);
+        service.add(correctBook1);
+        service.add(correctBook2);
         service.findOne(4L);
     }
 
 
     @Test
     public void delete_Removes_Correct_Book() {
-        service.save(correctBook1);
-        service.save(correctBook2);
-        service.save(correctBook3);
+        service.add(correctBook1);
+        service.add(correctBook2);
+        service.add(correctBook3);
         service.delete(2L);
         List<Book> books = service.findAll();
         assertArrayEquals(new Book[]{correctBook1, correctBook3}, books.toArray());
@@ -180,9 +180,9 @@ public class BookServiceTest {
     public void put_Updates_Correct_Book() {
 
         // Arrange
-        service.save(correctBook1);
-        service.save(correctBook2);
-        service.save(correctBook3);
+        service.add(correctBook1);
+        service.add(correctBook2);
+        service.add(correctBook3);
         Book editedBook = Book.builder().isbn("1010101010").title("new Title").publishDate("1027").author("New Author").build();
         editedBook.setId(1);
 
@@ -200,9 +200,9 @@ public class BookServiceTest {
     public void delete_Multiple_Correct_Books() {
 
         // Arrange
-        service.save(correctBook1);
-        service.save(correctBook2);
-        service.save(correctBook3);
+        service.add(correctBook1);
+        service.add(correctBook2);
+        service.add(correctBook3);
         List<Long> ids = new ArrayList<Long>();
         ids.add(1L);
         ids.add(3L);
@@ -219,9 +219,9 @@ public class BookServiceTest {
     public void delete_Multiple_Rejects_Invalid_Books() {
 
         // Arrange
-        service.save(correctBook1);
-        service.save(correctBook2);
-        service.save(correctBook3);
+        service.add(correctBook1);
+        service.add(correctBook2);
+        service.add(correctBook3);
         List<Long> ids = new ArrayList<Long>();
         ids.add(5L);
         ids.add(2L);
