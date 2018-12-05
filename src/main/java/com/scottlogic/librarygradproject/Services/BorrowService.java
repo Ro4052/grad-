@@ -18,16 +18,16 @@ import java.util.stream.Stream;
 
 public class BorrowService {
 
-    private final BorrowRepository borrowRepository;
+    private final BorrowRepository borrowRepo;
     private final BookService bookService;
-    private final ReservationRepository reservationRepository;
+    private final ReservationRepository reservationRepo;
 
     @Autowired
-    public BorrowService(BorrowRepository borrowRepository, BookService bookService,
-                         ReservationRepository reservationRepository) {
-        this.borrowRepository = borrowRepository;
+    public BorrowService(BorrowRepository borrowRepo, BookService bookService,
+                         ReservationRepository reservationRepo) {
+        this.borrowRepo = borrowRepo;
         this.bookService = bookService;
-        this.reservationRepository = reservationRepository;
+        this.reservationRepo = reservationRepo;
     }
     @SuppressWarnings("unchecked")
     public Borrow borrow(long bookId, OAuth2Authentication authentication) {
@@ -36,21 +36,21 @@ public class BorrowService {
         LocalDate borrowDate = LocalDate.now();
         LocalDate returnDate = LocalDate.now().plusDays(7);
         Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(borrowDate).returnDate(returnDate).build();
-        return borrowRepository.save(loan);
+        return borrowRepo.save(loan);
     }
 
     public List<Borrow> findAll() {
-        return borrowRepository.findAll();
+        return borrowRepo.findAll();
     }
 
     public Borrow findOne(long borrowId) {
-        Optional<Borrow> borrowToGet = borrowRepository.findById(borrowId);
+        Optional<Borrow> borrowToGet = borrowRepo.findById(borrowId);
         return borrowToGet.orElseThrow(() -> new BorrowNotFoundException(borrowId));
     }
 
     public void delete(long borrowId) {
         try {
-            borrowRepository.deleteById(borrowId);
+            borrowRepo.deleteById(borrowId);
         } catch (EmptyResultDataAccessException e) {
             throw new BorrowNotFoundException(borrowId);
         }
@@ -58,11 +58,11 @@ public class BorrowService {
 
     public boolean isBorrowed(long bookId) {
         bookService.findOne(bookId);
-        return borrowRepository.isBookBorrowed(bookId) || reservationRepository.isBookAwaitingCollection(bookId);
+        return borrowRepo.isBookBorrowed(bookId) || reservationRepo.isBookAwaitingCollection(bookId);
     }
 
     public boolean existsByUserIdAndBookId(String userId, long bookId) {
-        return borrowRepository.existsByUserIdAndBookIdAndIsActive(userId, bookId, true);
+        return borrowRepo.existsByUserIdAndBookIdAndIsActive(userId, bookId, true);
     }
 
     @Transactional
@@ -77,7 +77,7 @@ public class BorrowService {
         if (isBorrowed(bookId)) {
             throw new BookAlreadyBorrowedException(bookId);
         }
-        Reservation reservationToCollect = reservationRepository.findOneByBookIdAndQueuePosition(bookId, 1);
+        Reservation reservationToCollect = reservationRepo.findOneByBookIdAndQueuePosition(bookId, 1);
         if (reservationToCollect != null) {
             reservationToCollect.setCollectBy(LocalDate.now().plusDays(3));
         }
@@ -85,7 +85,7 @@ public class BorrowService {
 
     @Transactional
     public void updateBorrowed(LocalDate currentDate) {
-        try (Stream<Borrow> borrows = borrowRepository.findOverdueBorrows(currentDate)) {
+        try (Stream<Borrow> borrows = borrowRepo.findOverdueBorrows(currentDate)) {
             borrows.forEach(borrow -> bookReturned(borrow.getId()));
         }
     }

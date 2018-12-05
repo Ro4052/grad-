@@ -17,15 +17,15 @@ import java.util.Optional;
 public class UserService {
 
     private final LibraryUserRepository userRepo;
-    private final ReservationRepository reservationRepository;
-    private final BorrowRepository borrowRepository;
+    private final ReservationRepository reservationRepo;
+    private final BorrowRepository borrowRepo;
 
     @Autowired
-    public UserService(LibraryUserRepository userRepo, ReservationRepository reservationRepository,
-                       BorrowRepository borrowRepository) {
+    public UserService(LibraryUserRepository userRepo, ReservationRepository reservationRepo,
+                       BorrowRepository borrowRepo) {
         this.userRepo = userRepo;
-        this.reservationRepository = reservationRepository;
-        this.borrowRepository = borrowRepository;
+        this.reservationRepo = reservationRepo;
+        this.borrowRepo = borrowRepo;
     }
     @SuppressWarnings("unchecked")
     public LibraryUser getUserDetails(OAuth2Authentication authentication) {
@@ -57,12 +57,12 @@ public class UserService {
 
     public List<Reservation> findUserReservations(OAuth2Authentication authentication) {
         String userId = getUserDetails(authentication).getUserId();
-        return reservationRepository.findAllByUserId(userId);
+        return reservationRepo.findAllByUserId(userId);
     }
 
     public List<Borrow> findUserBorrows(OAuth2Authentication authentication) {
         String userId = getUserDetails(authentication).getUserId();
-        return borrowRepository.findAllByUserId(userId);
+        return borrowRepo.findAllByUserId(userId);
     }
 }
 
