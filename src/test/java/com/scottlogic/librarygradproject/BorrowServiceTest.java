@@ -184,7 +184,7 @@ public class BorrowServiceTest {
     }
 
     //  Three reservations for a book and an active borrow ->
-//  inactivate, delete first reservation and create new borrow and amend queue position
+//  inactivate, set collection date for first reservation in queue
     @Test
     public void bookReturned_Multiple_Reservations_Pending() {
         //Arrange
@@ -196,15 +196,13 @@ public class BorrowServiceTest {
         //Act
         borrowService.bookReturned(1L);
         borrow1.setActive(false);
-        borrow2.setBookId(1);
-        borrow2.setUserId("TestUser 2");
+        borrow1.setReturnDate(LocalDate.now());
 
         //Assert
         assertFalse(borrowService.findOne(1L).isActive());
-        assertEquals(2, reservationService.findAll().size());
-        assertEquals(reservationService.findOne(2L).getQueuePosition(), 1);
-        assertEquals(reservationService.findOne(3L).getQueuePosition(), 2);
-        assertArrayEquals(new Borrow[] {borrow1, borrow2}, borrowService.findAll().toArray());
+        assertEquals(3, reservationService.findAll().size());
+        assertEquals(reservationService.findOne(1L).getCollectBy(), LocalDate.now().plusDays(3));
+        assertArrayEquals(new Borrow[] {borrow1}, borrowService.findAll().toArray());
     }
 
     //    no active borrows ->
@@ -254,47 +252,23 @@ public class BorrowServiceTest {
 
     @Test
     public void update_Borrowed_Updates_Repo() {
-        //Arrange
+        //Arrange - borrow books 1-3
         borrowService.borrow(borrow1.getBookId(), authentication);
         borrowService.borrow(borrow2.getBookId(), authentication);
         borrowService.borrow(borrow3.getBookId(), authentication);
-        borrowService.borrow(borrow4.getBookId(), authentication);
+
+        //Arrange - match db borrow dates to test dates
         borrowService.findOne(3).setBorrowDate(borrow3.getBorrowDate());
         borrowService.findOne(3).setReturnDate(borrow3.getReturnDate());
-        borrowService.findOne(4).setBorrowDate(borrow4.getBorrowDate());
-        borrowService.findOne(4).setReturnDate(borrow4.getReturnDate());
-        borrowService.findOne(4).setActive(false);
+
+        //Arrange - expect db changes to match:
         borrow3.setActive(false);
+        borrow3.setReturnDate(LocalDate.now());
 
         //Act
         borrowService.updateBorrowed(LocalDate.now());
 
         //Assert
-        assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3, borrow4}, borrowService.findAll().toArray());
-    }
-
-    @Test
-    public void update_Borrowed_With_Reservation_Creates_New_Borrow() {
-        //Arrange
-        borrowService.borrow(borrow1.getBookId(), authentication);
-        borrowService.borrow(borrow2.getBookId(), authentication);
-        borrowService.borrow(borrow3.getBookId(), authentication);
-        borrowService.borrow(borrow4.getBookId(), authentication);
-        borrowService.findOne(3).setBorrowDate(borrow3.getBorrowDate());
-        borrowService.findOne(3).setReturnDate(borrow3.getReturnDate());
-        borrowService.findOne(4).setBorrowDate(borrow4.getBorrowDate());
-        borrowService.findOne(4).setReturnDate(borrow4.getReturnDate());
-        borrowService.findOne(4).setActive(false);
-        Borrow borrow5 = new Borrow(3, "TestUser 2", LocalDate.now(), true, LocalDate.now().plusDays(7));
-        borrow5.setId(5L);
-        borrow3.setId(3L);
-        borrow3.setActive(false);
-        reservationService.reserve(3L, authentication2);
-
-        //Act
-        borrowService.updateBorrowed(LocalDate.now());
-
-        //Assert
-        assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3, borrow4, borrow5}, borrowService.findAll().toArray());
+        assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3}, borrowService.findAll().toArray());
     }
 }

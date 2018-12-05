@@ -25,7 +25,11 @@ export default class LoansTable extends Component {
               return (
                 <Table.Row key={borrow.id}>
                   <Table.Cell className={styles.tableCell}>
-                    {currentBook ? currentBook.title : "Book deleted"}
+                    {currentBook
+                      ? currentBook.title
+                      : `Book with ID: ${
+                          borrow.bookId
+                        } has been removed from the library`}
                   </Table.Cell>
                   <Table.Cell>{borrow.borrowDate}</Table.Cell>
                   <Table.Cell>{borrow.returnDate}</Table.Cell>
