@@ -46,8 +46,12 @@ public class BookService {
     }
 
     public void update(Book book) {
-        findOne(book.getId());
-        bookRepo.save(book);
+        long bookId = book.getId();
+        if (bookRepo.existsById(bookId)) {
+            bookRepo.save(book);
+        } else {
+            throw new BookNotFoundException(bookId);
+        }
     }
 
     public void deleteAll() {
