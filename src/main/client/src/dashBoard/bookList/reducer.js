@@ -149,9 +149,10 @@ export const collectBook = book => (dispatch, getState) => {
       dispatch(popupText("Book collected!", bookId));
       const newBooks = getState().bookList.books.map(eachBook => {
         if (eachBook.id === book.id) {
+          dispatch(removeReservation(eachBook.reservationId));
           eachBook.borrowId = res.data.id;
           eachBook.reservationId = null;
-          eachBook.role = "Collector";
+          eachBook.role = "Borrower";
           eachBook.popupText = "Return your Book";
           eachBook.processStarted = false;
           dispatch(addBorrow(res.data, book.id));
@@ -189,7 +190,7 @@ export const checkBook = book => dispatch => {
 };
 
 export const checkAllBooks = user => (dispatch, getState) => {
-  let role, reservationId, borrowId, popupText, collector;
+  let role, reservationId, borrowId, popupText;
   const newBooks = getState().bookList.books.map(book => {
     borrowId = null;
     reservationId = null;
@@ -201,8 +202,6 @@ export const checkAllBooks = user => (dispatch, getState) => {
         reservationId = reservation.id;
         popupText = "Cancel your reservation";
         role = "Reserver";
-        if (reservation.queuePosition === 1 && reservation.collectBy)
-          collector = true;
       }
     });
     user.borrows.forEach(borrow => {
@@ -272,6 +271,28 @@ export const cancelProcess = book => (dispatch, getState) => {
         book.role === "Borrower"
           ? "Return your Book"
           : "Cancel your reservation";
+    }
+    return eachBook;
+  });
+  dispatch(getBooksAction(newBooks));
+};
+
+export const startCollection = book => (dispatch, getState) => {
+  const newBooks = getState().bookList.books.map(eachBook => {
+    if (eachBook.id === book.id) {
+      eachBook.collectionStarted = true;
+      eachBook.collectPopupText = "Are you sure?";
+    }
+    return eachBook;
+  });
+  dispatch(getBooksAction(newBooks));
+};
+
+export const cancelCollection = book => (dispatch, getState) => {
+  const newBooks = getState().bookList.books.map(eachBook => {
+    if (eachBook.id === book.id) {
+      eachBook.collectionStarted = false;
+      eachBook.collectPopupText = `Collect ${book.title}`;
     }
     return eachBook;
   });

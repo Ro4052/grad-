@@ -31,13 +31,20 @@ export default class Book extends Component {
   }
 
   render() {
+    let request, colour, buttonText;
     const { book } = this.props;
     const data = buttonLogic(this.props, book);
-    const collectData = buttonLogic(this.props, book);
-    console.log(book.role);
     const reservation = this.props.user.reservations.find(res => {
       return res.bookId === book.id;
     });
+    colour = "green";
+    if (!book.collectionStarted) {
+      request = this.props.startCollection;
+      buttonText = "Collect";
+    } else {
+      request = this.props.collectBook;
+      buttonText = "Confirm";
+    }
     return (
       <li className={styles.book}>
         {this.props.deleteMode && this.props.loggedIn ? (
@@ -93,16 +100,19 @@ export default class Book extends Component {
               book={book}
               cancelProcess={this.props.cancelProcess}
               content={book.popupText}
+              processStarted={this.props.book.processStarted}
             />
             {reservation &&
               reservation.queuePosition === 1 &&
               reservation.collectBy && (
                 <RequestButton
-                  request={this.props.collectBook}
-                  colour="green"
-                  buttonText="Collect"
+                  request={request}
+                  colour={colour}
+                  buttonText={buttonText}
                   book={book}
-                  cancelProcess={this.props.cancelProcess}
+                  collectionStarted={this.props.collectionStarted}
+                  cancelProcess={this.props.cancelCollection}
+                  processStarted={this.props.book.collectionStarted}
                   content={book.collectPopupText}
                 />
               )}

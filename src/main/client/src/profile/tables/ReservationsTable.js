@@ -41,6 +41,7 @@ export default class ReservationsTable extends Component {
                     cancelProcess={this.props.cancelProcess}
                     book={reservedBook}
                     content={reservedBook.popupText}
+                    processStarted={reservedBook.processStarted}
                   />
                 </Table.Cell>
               </Table.Row>

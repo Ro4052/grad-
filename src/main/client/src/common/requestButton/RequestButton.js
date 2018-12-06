@@ -15,7 +15,7 @@ export default class RequestButton extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.book && this.props.book.processStarted) {
+    if (this.props.processStarted) {
       document.addEventListener("click", this.checkClick);
     }
   }
@@ -38,13 +38,12 @@ export default class RequestButton extends Component {
               id="variableButton"
               onClick={() => this.props.request(this.props.book)}
               color={this.props.colour}
-              basic={this.props.book && this.props.book.processStarted}
+              basic={this.props.processStarted}
               disabled={this.props.disabled}
             >
               {this.props.buttonText}
             </Button>
           }
-          // content={this.props.book ? this.props.book.popupText : "Book deleted"}
           content={this.props.content}
           hideOnScroll
         />

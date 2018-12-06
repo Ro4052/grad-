@@ -53,6 +53,8 @@ export class BookList extends Component {
                     collectBook={this.props.collectBook}
                     startProcess={this.props.startProcess}
                     cancelProcess={this.props.cancelProcess}
+                    startCollection={this.props.startCollection}
+                    cancelCollection={this.props.cancelCollection}
                     user={this.props.user}
                   />
                 );

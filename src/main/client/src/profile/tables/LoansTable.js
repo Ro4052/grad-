@@ -49,6 +49,7 @@ export default class LoansTable extends Component {
                         cancelProcess={this.props.cancelProcess}
                         book={borrowedBook}
                         content={borrowedBook.popupText}
+                        processStarted={borrowedBook.processStarted}
                       />
                     )}
                   </Table.Cell>
