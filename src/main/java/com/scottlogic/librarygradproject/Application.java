@@ -1,5 +1,6 @@
 package com.scottlogic.librarygradproject;
 
+import com.scottlogic.librarygradproject.Helpers.BorrowHelper;
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.LibraryUserRepository;
@@ -43,12 +44,20 @@ public class Application {
     @Bean
     @Autowired
     public ReservationService getReservationService(ReservationRepository reservationRepo, BookRepository bookRepo,
-                                                    UserService userService, BorrowService borrowService) {
-        return new ReservationService(reservationRepo, bookRepo, userService, borrowService);
+                                                    UserService userService, BorrowHelper borrowHelper,
+                                                    BorrowRepository borrowRepo) {
+        return new ReservationService(reservationRepo, bookRepo, userService, borrowHelper, borrowRepo);
     }
 
     @Autowired
     BorrowRepository borrowRepo;
+
+    @Bean
+    @Autowired
+    public BorrowHelper getBorrowHelper(BookRepository bookRepo, BorrowRepository borrowRepo,
+                                        ReservationRepository reservationRepo) {
+        return new BorrowHelper(bookRepo, borrowRepo, reservationRepo);
+    }
 
     @Bean
     @Autowired

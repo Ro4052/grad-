@@ -67,10 +67,6 @@ public class BorrowService {
         }
     }
 
-    public boolean existsByUserIdAndBookId(String userId, long bookId) {
-        return borrowRepo.existsByUserIdAndBookIdAndIsActive(userId, bookId, true);
-    }
-
     @Transactional
     public void bookReturned(long borrowId) {
         Borrow borrowToReturn = findOne(borrowId);

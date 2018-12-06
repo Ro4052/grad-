@@ -2,7 +2,9 @@ package com.scottlogic.librarygradproject.Services;
 
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.*;
+import com.scottlogic.librarygradproject.Helpers.BorrowHelper;
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
+import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,15 +23,17 @@ public class ReservationService {
     private final ReservationRepository resRepo;
     private final BookRepository bookRepo;
     private final UserService userService;
-    private final BorrowService borrowService;
+    private final BorrowHelper borrowHelper;
+    private final BorrowRepository borrowRepo;
 
     @Autowired
-    public ReservationService(ReservationRepository resRepo, BookRepository bookRepo,
-                              UserService userService, BorrowService borrowService) {
+    public ReservationService(ReservationRepository resRepo, BookRepository bookRepo, UserService userService,
+                              BorrowHelper borrowHelper, BorrowRepository borrowRepo) {
         this.resRepo = resRepo;
         this.bookRepo = bookRepo;
         this.userService = userService;
-        this.borrowService = borrowService;
+        this.borrowHelper = borrowHelper;
+        this.borrowRepo = borrowRepo;
     }
 
     private void validateReservation(long bookId, String userId) {
@@ -48,10 +52,10 @@ public class ReservationService {
         if (resRepo.existsByUserIdAndBookId(userId, bookId)) {
             throw new AlreadyReservedException(bookId);
         }
-        if (borrowService.existsByUserIdAndBookId(userId, bookId)) {
+        if (borrowRepo.existsByUserIdAndBookIdAndIsActive(userId, bookId, true)) {
             throw new BookAlreadyBorrowedException(bookId);
         }
-        if (!borrowService.isBorrowed(bookId)) {
+        if (!borrowHelper.isBorrowed(bookId)) {
             throw new BookIsAvailableException(bookId);
         }
         validateReservation(bookId, userId);
