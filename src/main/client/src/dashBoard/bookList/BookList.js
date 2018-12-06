@@ -55,7 +55,7 @@ export class BookList extends Component {
                     cancelProcess={this.props.cancelProcess}
                     startCollection={this.props.startCollection}
                     cancelCollection={this.props.cancelCollection}
-                    user={this.props.user}
+                    userReservations={this.props.user.reservations}
                   />
                 );
               })}

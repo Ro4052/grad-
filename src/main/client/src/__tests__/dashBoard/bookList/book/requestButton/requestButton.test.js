@@ -16,6 +16,7 @@ describe("RequestButton Check Availability Component Tests", () => {
         request={checkBook}
         colour={null}
         book={testBook}
+        content="click to check availability"
       />
     );
     expect(shallow(wrapper.find("Popup").props().trigger).text()).toEqual(
@@ -51,6 +52,7 @@ describe("RequestButton Reserve Component Tests", () => {
         request={reserveBook}
         colour="blue"
         book={testBook}
+        content="number of reservations: 0"
       />
     );
     expect(shallow(wrapper.find("Popup").props().trigger).text()).toEqual(
@@ -87,6 +89,7 @@ describe("RequestButton Borrow Component Tests", () => {
         request={borrowBook}
         colour="green"
         book={testBook}
+        content="Available"
       />
     );
     expect(shallow(wrapper.find("Popup").props().trigger).text()).toEqual(

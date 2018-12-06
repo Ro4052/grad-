@@ -34,7 +34,7 @@ export default class Book extends Component {
     let request, colour, buttonText;
     const { book } = this.props;
     const data = buttonLogic(this.props, book);
-    const reservation = this.props.user.reservations.find(res => {
+    const reservation = this.props.userReservations.find(res => {
       return res.bookId === book.id;
     });
     colour = "green";
