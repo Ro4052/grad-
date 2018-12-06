@@ -6,6 +6,7 @@ import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException
 import com.scottlogic.librarygradproject.Exceptions.BookAlreadyReturnedException;
 import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.BorrowNotFoundException;
+import com.scottlogic.librarygradproject.Helpers.BorrowHelper;
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
@@ -20,13 +21,15 @@ import java.util.stream.Stream;
 
 public class BorrowService {
 
+    private final BorrowHelper borrowHelper;
     private final BorrowRepository borrowRepo;
     private final BookRepository bookRepo;
     private final ReservationRepository reservationRepo;
 
     @Autowired
-    public BorrowService(BorrowRepository borrowRepo, BookRepository bookRepo,
-                         ReservationRepository reservationRepo) {
+    public BorrowService(BorrowHelper borrowHelper, BorrowRepository borrowRepo,
+                         BookRepository bookRepo, ReservationRepository reservationRepo) {
+        this.borrowHelper = borrowHelper;
         this.borrowRepo = borrowRepo;
         this.bookRepo = bookRepo;
         this.reservationRepo = reservationRepo;
@@ -34,7 +37,7 @@ public class BorrowService {
 
     @SuppressWarnings("unchecked")
     public Borrow borrow(long bookId, OAuth2Authentication authentication) {
-        if (this.isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
+        if (isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
         String userId = ((Map<String, String>) authentication.getUserAuthentication().getDetails()).get("login");
         LocalDate borrowDate = LocalDate.now();
         LocalDate returnDate = LocalDate.now().plusDays(7);
@@ -60,11 +63,7 @@ public class BorrowService {
     }
 
     public boolean isBorrowed(long bookId) {
-        if (bookRepo.existsById(bookId)) {
-            return borrowRepo.isBookBorrowed(bookId) || reservationRepo.isBookAwaitingCollection(bookId);
-        } else {
-            throw new BookNotFoundException(bookId);
-        }
+        return borrowHelper.isBorrowed(bookId);
     }
 
     @Transactional

@@ -68,9 +68,9 @@ public class Application {
 
     @Bean
     @Autowired
-    public BorrowService getBorrowService(BorrowRepository borrowRepo, BookRepository bookRepo,
-                                          ReservationRepository reservationRepo) {
-        return new BorrowService(borrowRepo, bookRepo, reservationRepo); }
+    public BorrowService getBorrowService(BorrowHelper borrowHelper, BorrowRepository borrowRepo,
+                                          BookRepository bookRepo, ReservationRepository reservationRepo) {
+        return new BorrowService(borrowHelper, borrowRepo, bookRepo, reservationRepo); }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
