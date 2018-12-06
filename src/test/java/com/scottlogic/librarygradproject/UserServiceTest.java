@@ -100,8 +100,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void loggedIn_User_Works() {
-        service.loggedIn(authentication);
+    public void userInfo_Saves_User() {
+        service.userInfo(authentication);
         assertArrayEquals(new LibraryUser[] {user1}, service.findAll().toArray());
 
     }
@@ -112,7 +112,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void findUserReservations_Finds_Reservation() {
+    public void userInfo_Finds_Reservation() {
         service.add(user1);
         service.add(user2);
         borrowService.borrow(1, authentication);
@@ -124,24 +124,24 @@ public class UserServiceTest {
                 .queuePosition(1)
                 .build();
         userReservation.setId(2);
-        List<Reservation> userReservations = service.findUserReservations(authentication);
+        List<Reservation> userReservations = ((List<Reservation>) service.userInfo(authentication).get("reservations"));
         assertArrayEquals(new Reservation[]{userReservation}, userReservations.toArray());
     }
 
     @Test
-    public void findUserReservations_Finds_No_Reservation() {
+    public void userInfo_Finds_No_Reservation() {
         service.add(user2);
         service.add(user3);
         borrowService.borrow(1, authentication2);
         borrowService.borrow(2, authentication3);
         reservationService.reserve(1, authentication3);
         reservationService.reserve(2, authentication2);
-        List<Reservation> userReservations = service.findUserReservations(authentication);
+        List<Reservation> userReservations = ((List<Reservation>) service.userInfo(authentication).get("reservations"));
         assertArrayEquals(new Reservation[]{}, userReservations.toArray());
     }
 
     @Test
-    public void findUserBorrows_Finds_Borrow() {
+    public void userInfo_Finds_Borrow() {
         borrowService.borrow(1, authentication);
         borrowService.borrow(2, authentication2);
         Borrow userBorrow = Borrow.builder().userId("TestUser 1")
@@ -151,15 +151,15 @@ public class UserServiceTest {
                 .isActive(true)
                 .build();
         userBorrow.setId(1);
-        List<Borrow> userBorrows = service.findUserBorrows(authentication);
+        List<Borrow> userBorrows = ((List<Borrow>) service.userInfo(authentication).get("borrows"));
         assertArrayEquals(new Borrow[]{userBorrow}, userBorrows.toArray());
     }
 
     @Test
-    public void findUserBorrows_Finds_No_Borrow() {
+    public void userInfo_Finds_No_Borrow() {
         borrowService.borrow(1, authentication2);
         borrowService.borrow(2, authentication2);
-        List<Borrow> userBorrows = service.findUserBorrows(authentication);
+        List<Borrow> userBorrows = ((List<Borrow>) service.userInfo(authentication).get("borrows"));
         assertArrayEquals(new Reservation[]{}, userBorrows.toArray());
     }
 }

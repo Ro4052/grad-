@@ -3,8 +3,10 @@ package com.scottlogic.librarygradproject.Services;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.*;
 import com.scottlogic.librarygradproject.Helpers.BorrowHelper;
+import com.scottlogic.librarygradproject.Helpers.UserHelper;
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
+import com.scottlogic.librarygradproject.Repositories.LibraryUserRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,16 +24,18 @@ public class ReservationService {
 
     private final ReservationRepository resRepo;
     private final BookRepository bookRepo;
-    private final UserService userService;
+    private final UserHelper userHelper;
+    private final LibraryUserRepository userRepo;
     private final BorrowHelper borrowHelper;
     private final BorrowRepository borrowRepo;
 
     @Autowired
-    public ReservationService(ReservationRepository resRepo, BookRepository bookRepo, UserService userService,
-                              BorrowHelper borrowHelper, BorrowRepository borrowRepo) {
+    public ReservationService(ReservationRepository resRepo, BookRepository bookRepo, UserHelper userHelper,
+                              LibraryUserRepository userRepo, BorrowHelper borrowHelper, BorrowRepository borrowRepo) {
         this.resRepo = resRepo;
         this.bookRepo = bookRepo;
-        this.userService = userService;
+        this.userHelper = userHelper;
+        this.userRepo = userRepo;
         this.borrowHelper = borrowHelper;
         this.borrowRepo = borrowRepo;
     }
@@ -40,7 +44,9 @@ public class ReservationService {
         if (!bookRepo.existsById(bookId)) {
             throw new BookNotFoundException(bookId);
         }
-        userService.findOne(userId);
+        if (!userRepo.existsById(userId)) {
+            throw new UserNotFoundException(userId);
+        }
     }
 
     public long checkReservation(long bookId) {
@@ -48,7 +54,7 @@ public class ReservationService {
     }
 
     public Reservation reserve(long bookId, OAuth2Authentication authentication) {
-        String userId = userService.getUserDetails(authentication).getUserId();
+        String userId = userHelper.getUserDetails(authentication).getUserId();
         if (resRepo.existsByUserIdAndBookId(userId, bookId)) {
             throw new AlreadyReservedException(bookId);
         }
