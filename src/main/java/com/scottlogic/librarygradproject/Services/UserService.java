@@ -10,6 +10,7 @@ import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +27,14 @@ public class UserService {
         this.userRepo = userRepo;
         this.reservationRepo = reservationRepo;
         this.borrowRepo = borrowRepo;
+    }
+
+    public Map<String, Object> userInfo(OAuth2Authentication authentication) {
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("userDetails", loggedIn(authentication));
+        userData.put("reservations", findUserReservations(authentication));
+        userData.put("borrows", findUserBorrows(authentication));
+        return userData;
     }
 
     @SuppressWarnings("unchecked")
