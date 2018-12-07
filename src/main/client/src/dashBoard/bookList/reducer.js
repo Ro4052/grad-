@@ -49,7 +49,10 @@ export const updateBook = updatedBook => (dispatch, getState) => {
       ? {
           ...updatedBook,
           editState: false,
-          state: book.state
+          borrowId: book.borrowId,
+          reservationId: book.reservationId,
+          state: book.state,
+          collectState: book.collectState
         }
       : book;
   });
