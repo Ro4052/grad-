@@ -41,8 +41,9 @@ public class Application {
 
     @Bean
     @Autowired
-    public BookService getBookService(BookRepository bookRepo) {
-        return new BookService(bookRepo);
+    public BookService getBookService(BookRepository bookRepo, BorrowRepository borrowRepo,
+                                      ReservationRepository reservationRepo) {
+        return new BookService(bookRepo, borrowRepo, reservationRepo);
     }
 
     @Autowired
