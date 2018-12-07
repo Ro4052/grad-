@@ -4,7 +4,9 @@ import { Button } from "semantic-ui-react";
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
 import RequestButton from "../../../common/requestButton/RequestButton";
-import buttonLogic from "../../../common/requestButton/buttonLogic";
+// import buttonLogic from "../../../common/requestButton/buttonLogic";
+import buttonStates from "../../../common/requestButton/buttonStates";
+import buttonCollectStates from "../../../common/requestButton/buttonCollectStates";
 
 export default class Book extends Component {
   constructor(props) {
@@ -31,20 +33,12 @@ export default class Book extends Component {
   }
 
   render() {
-    let request, colour, buttonText;
     const { book } = this.props;
-    const data = buttonLogic(this.props, book);
+    const buttonState = buttonStates(this.props, book);
+    const collectState = buttonCollectStates(this.props, book);
     const reservation = this.props.userReservations.find(res => {
       return res.bookId === book.id;
     });
-    colour = "green";
-    if (!book.collectionStarted) {
-      request = this.props.startCollection;
-      buttonText = "Collect";
-    } else {
-      request = this.props.collectBook;
-      buttonText = "Confirm";
-    }
     return (
       <li className={styles.book}>
         {this.props.deleteMode && this.props.loggedIn ? (
@@ -94,26 +88,19 @@ export default class Book extends Component {
         {this.props.loggedIn && (
           <div className={styles.bookBtnsContainer}>
             <RequestButton
-              request={data.request}
-              colour={data.colour}
-              buttonText={data.buttonText}
+              buttonState={buttonState}
               book={book}
+              state={book.state}
               cancelProcess={this.props.cancelProcess}
-              content={book.popupText}
-              processStarted={this.props.book.processStarted}
             />
             {reservation &&
               reservation.queuePosition === 1 &&
               reservation.collectBy && (
                 <RequestButton
-                  request={request}
-                  colour={colour}
-                  buttonText={buttonText}
+                  buttonState={collectState}
                   book={book}
-                  collectionStarted={this.props.collectionStarted}
+                  state={book.collectState}
                   cancelProcess={this.props.cancelCollection}
-                  processStarted={this.props.book.collectionStarted}
-                  content={book.collectPopupText}
                 />
               )}
             {book.editState ? (

@@ -15,7 +15,13 @@ export default class RequestButton extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.processStarted) {
+    if (
+      this.props.state === "Borrower - Return Started" ||
+      this.props.state === "Reserver - Cancel Started" ||
+      this.props.state === "Available to Borrow" ||
+      this.props.state === "Available to Reserve" ||
+      this.props.state === "Collector - Collection Started"
+    ) {
       document.addEventListener("click", this.checkClick);
     }
   }
@@ -31,22 +37,24 @@ export default class RequestButton extends Component {
           this.confirmButton = el;
         }}
       >
-        <Popup
-          on="hover"
-          trigger={
-            <Button
-              id="variableButton"
-              onClick={() => this.props.request(this.props.book)}
-              color={this.props.colour}
-              basic={this.props.processStarted}
-              disabled={this.props.disabled}
-            >
-              {this.props.buttonText}
-            </Button>
-          }
-          content={this.props.content}
-          hideOnScroll
-        />
+        {this.props.buttonState && (
+          <Popup
+            on="hover"
+            trigger={
+              <Button
+                id="variableButton"
+                onClick={() => this.props.buttonState.request(this.props.book)}
+                color={this.props.buttonState.colour}
+                basic={this.props.buttonState.basic}
+                disabled={this.props.buttonState.disabled}
+              >
+                {this.props.buttonState.buttonText}
+              </Button>
+            }
+            content={this.props.buttonState.popupText}
+            hideOnScroll
+          />
+        )}
       </div>
     );
   }

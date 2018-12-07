@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
 import styles from "../Profile.module.css";
 import RequestButton from "../../common/requestButton/RequestButton";
-import buttonLogic from "../../common/requestButton/buttonLogic";
+import buttonStates from "../../common/requestButton/buttonStates";
 
 export default class LoansTable extends Component {
   render() {
@@ -30,8 +30,8 @@ export default class LoansTable extends Component {
                   borrow.bookId
                 } has been removed from the library`
               };
-              const data =
-                borrowedBook && buttonLogic(this.props, borrowedBook);
+              const buttonState =
+                borrowedBook && buttonStates(this.props, borrowedBook);
               return (
                 <Table.Row key={borrow.id}>
                   <Table.Cell className={styles.tableCell}>
@@ -40,12 +40,9 @@ export default class LoansTable extends Component {
                   <Table.Cell>{borrow.borrowDate}</Table.Cell>
                   <Table.Cell>{borrow.returnDate}</Table.Cell>
                   <Table.Cell>
-                    {data && (
+                    {buttonState && (
                       <RequestButton
-                        request={data.request}
-                        colour={data.colour}
-                        buttonText={data.buttonText}
-                        disabled={data.disabled}
+                        buttonState={buttonState}
                         cancelProcess={this.props.cancelProcess}
                         book={borrowedBook}
                         content={borrowedBook.popupText}
