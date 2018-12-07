@@ -76,6 +76,7 @@ public class BorrowServiceTest {
         authentication2 = helper2.getOauthTestAuthentication();
         authentication3 = helper3.getOauthTestAuthentication();
         authentication4 = helper4.getOauthTestAuthentication();
+
         book1 = new Book("0123456789111", "Correct Book1", "Correct Author1", "2001");
         bookService.add(book1);
         book2 = new Book("0123456789", "Correct Book2", "Correct Author2", "2018");
@@ -84,6 +85,7 @@ public class BorrowServiceTest {
         bookService.add(book3);
         book4 = new Book("1111111111", "Correct Book4", "Correct Author4", "1999");
         bookService.add(book4);
+
         borrow1 = new Borrow(1, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));
         borrow1.setId(1);
         borrow2 = new Borrow(2, "TestUser 1", LocalDate.now(), true, LocalDate.now().plusDays(7));
@@ -92,6 +94,7 @@ public class BorrowServiceTest {
         borrow3.setId(3);
         borrow4 = new Borrow(4, "TestUser 1", LocalDate.now().minusDays(8), false, LocalDate.now().minusDays(1));
         borrow4.setId(4);
+
         userService.add(user1);
         userService.add(user2);
         userService.add(user3);
@@ -270,5 +273,64 @@ public class BorrowServiceTest {
 
         //Assert
         assertArrayEquals(new Borrow[] {borrow1, borrow2, borrow3}, borrowService.findAll().toArray());
+    }
+
+    // book not reserved -> attempted to be collected -> check bookNotReserved exception is thrown
+    @Test (expected = BookNotReservedException.class)
+    public void unreserved_Book_Throws_Exception_If_collection_Attempted() {
+        //Act
+        borrowService.bookCollected(1);
+    }
+
+    // book is reserved -> collected -> check reservation is deleted from repo and new borrow is created
+    @Test
+    public void bookCollected_Reservation_Is_Deleted_From_Repo() {
+        //Arrange
+        borrowService.borrow(borrow1.getBookId(), authentication);
+        reservationService.reserve(borrow1.getBookId(), authentication2);
+        reservationService.reserve(borrow1.getBookId(), authentication3);
+        Reservation reservation = Reservation.builder().bookId(1).userId("TestUser 3").queuePosition(1).build();
+        reservation.setId(2);
+        borrow1.setActive(false);
+        borrow1.setReturnDate(LocalDate.now());
+        Borrow borrow5 = Borrow.builder()
+                .bookId(1)
+                .userId("TestUser 2")
+                .borrowDate(LocalDate.now())
+                .isActive(true)
+                .returnDate(LocalDate.now().plusDays(7))
+                .build();
+        borrow5.setId(2);
+
+        //Act
+        borrowService.bookReturned(borrow1.getId());
+        borrowService.bookCollected(borrow1.getBookId());
+
+        //Assert
+        assertArrayEquals(new Reservation[] {reservation}, reservationService.findAll().toArray());
+        assertArrayEquals(new Borrow[] {borrow1, borrow5}, borrowService.findAll().toArray());
+    }
+
+    // book is reserved with other pending reservations -> collected -> check reservations are re-ordered
+    @Test
+    public void bookCollected_Reorders_Reservation_Queue() {
+        //Arrange - borrow and reserve book
+        borrowService.borrow(borrow1.getBookId(), authentication);
+        reservationService.reserve(borrow1.getBookId(), authentication2);
+        reservationService.reserve(borrow1.getBookId(), authentication3);
+        reservationService.reserve(borrow1.getBookId(), authentication4);
+
+        //Arrange - create test case reservations for comparison
+        Reservation reservation1 = Reservation.builder().bookId(1).userId("TestUser 3").queuePosition(1).build();
+        reservation1.setId(2);
+        Reservation reservation2 = Reservation.builder().bookId(1).userId("TestUser 4").queuePosition(2).build();
+        reservation2.setId(3);
+
+        //Act
+        borrowService.bookReturned(borrow1.getId());
+        borrowService.bookCollected(borrow1.getBookId());
+
+        //Assert
+        assertArrayEquals(new Reservation[] {reservation1, reservation2}, reservationService.findAll().toArray());
     }
 }
