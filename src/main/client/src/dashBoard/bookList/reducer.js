@@ -99,7 +99,6 @@ export const borrowBook = book => (dispatch, getState) => {
           eachBook.borrowId = res.data.id;
           eachBook.reservationId = null;
           eachBook.state = "Borrower - Return Not Started";
-          eachBook.popupText = "Return your Book";
           dispatch(addBorrow(res.data, book.id));
         }
         return eachBook;

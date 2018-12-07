@@ -40,10 +40,12 @@ describe("Book Component Tests", () => {
       />
     );
     expect(wrapper.find("RequestButton").exists()).toBe(true);
-    expect(wrapper.find("RequestButton").props().buttonText).toEqual(
-      "Check Availability"
+    expect(
+      wrapper.find("RequestButton").props().buttonState.buttonText
+    ).toEqual("Check Availability");
+    expect(wrapper.find("RequestButton").props().buttonState.colour).toEqual(
+      null
     );
-    expect(wrapper.find("RequestButton").props().colour).toEqual(null);
   });
 
   test("No buttons render when not logged in", () => {
