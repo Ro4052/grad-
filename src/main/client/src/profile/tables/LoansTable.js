@@ -13,7 +13,9 @@ export default class LoansTable extends Component {
             <Table.HeaderCell width={8}>Book Title</Table.HeaderCell>
             <Table.HeaderCell width={2}>Date Borrowed</Table.HeaderCell>
             <Table.HeaderCell width={2}>Due Date</Table.HeaderCell>
-            <Table.HeaderCell width={2}>Return Books</Table.HeaderCell>
+            <Table.HeaderCell width={2} textAlign="center">
+              Return Books
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -39,7 +41,7 @@ export default class LoansTable extends Component {
                   </Table.Cell>
                   <Table.Cell>{borrow.borrowDate}</Table.Cell>
                   <Table.Cell>{borrow.returnDate}</Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell textAlign="center">
                     {buttonState && (
                       <RequestButton
                         buttonState={buttonState}
