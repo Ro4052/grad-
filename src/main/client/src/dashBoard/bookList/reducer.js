@@ -168,16 +168,20 @@ export const setBookState = (id, state, queueLength) => (
 };
 
 export const checkAllBooks = user => (dispatch, getState) => {
-  let state, reservationId, borrowId;
+  let state, collectState, reservationId, borrowId;
   const newBooks = getState().bookList.books.map(book => {
     borrowId = null;
     reservationId = null;
     state = "No State";
+    collectState = "Default State";
     user.reservations.forEach(reservation => {
       if (reservation.bookId === book.id) {
         borrowId = null;
         reservationId = reservation.id;
         state = "Reserver - Cancel Not Started";
+        if (reservation.collectBy) {
+          collectState = "Collector - Collection Not Started";
+        }
       }
     });
     user.borrows.forEach(borrow => {
@@ -190,7 +194,7 @@ export const checkAllBooks = user => (dispatch, getState) => {
     book.borrowId = borrowId;
     book.reservationId = reservationId;
     book.state = state;
-    book.collectState = "Default State";
+    book.collectState = collectState;
     return book;
   });
   dispatch(getBooksAction(newBooks));
