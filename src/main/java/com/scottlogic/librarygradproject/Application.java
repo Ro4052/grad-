@@ -1,5 +1,7 @@
 package com.scottlogic.librarygradproject;
 
+import com.scottlogic.librarygradproject.Helpers.BorrowHelper;
+import com.scottlogic.librarygradproject.Helpers.UserHelper;
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.LibraryUserRepository;
@@ -23,9 +25,15 @@ public class Application {
 
     @Bean
     @Autowired
-    public UserService getUserService(LibraryUserRepository userRepo, ReservationRepository reservationRepository,
-                                      BorrowRepository borrowRepository) {
-        return new UserService(userRepo, reservationRepository, borrowRepository);
+    public UserHelper getUserHelper() {
+        return new UserHelper();
+    }
+
+    @Bean
+    @Autowired
+    public UserService getUserService(UserHelper userHelper, LibraryUserRepository userRepo,
+                                      ReservationRepository reservationRepo, BorrowRepository borrowRepo) {
+        return new UserService(userHelper, userRepo, reservationRepo, borrowRepo);
     }
 
     @Autowired
@@ -33,8 +41,9 @@ public class Application {
 
     @Bean
     @Autowired
-    public BookService getBookService(BookRepository bookRepo) {
-        return new BookService(bookRepo);
+    public BookService getBookService(BookRepository bookRepo, BorrowRepository borrowRepo,
+                                      ReservationRepository reservationRepo) {
+        return new BookService(bookRepo, borrowRepo, reservationRepo);
     }
 
     @Autowired
@@ -42,19 +51,27 @@ public class Application {
 
     @Bean
     @Autowired
-    public ReservationService getReservationService(ReservationRepository reservationRepo, BookService bookService,
-                                                    UserService userService, BorrowService borrowService) {
-        return new ReservationService(reservationRepo, bookService, userService, borrowService);
+    public ReservationService getReservationService(ReservationRepository reservationRepo, BookRepository bookRepo,
+                                                    UserHelper userHelper, LibraryUserRepository userRepo,
+                                                    BorrowHelper borrowHelper, BorrowRepository borrowRepo) {
+        return new ReservationService(reservationRepo, bookRepo, userHelper, userRepo, borrowHelper, borrowRepo);
     }
 
     @Autowired
-    BorrowRepository borrowRepository;
+    BorrowRepository borrowRepo;
 
     @Bean
     @Autowired
-    public BorrowService getBorrowService(BorrowRepository borrowRepository, BookService bookService,
-                                          ReservationRepository reservationRepository) {
-        return new BorrowService(borrowRepository, bookService, reservationRepository); }
+    public BorrowHelper getBorrowHelper(BookRepository bookRepo, BorrowRepository borrowRepo,
+                                        ReservationRepository reservationRepo) {
+        return new BorrowHelper(bookRepo, borrowRepo, reservationRepo);
+    }
+
+    @Bean
+    @Autowired
+    public BorrowService getBorrowService(BorrowHelper borrowHelper, BorrowRepository borrowRepo,
+                                          BookRepository bookRepo, ReservationRepository reservationRepo) {
+        return new BorrowService(borrowHelper, borrowRepo, bookRepo, reservationRepo); }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

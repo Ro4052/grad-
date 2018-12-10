@@ -25,12 +25,10 @@ public class UserControllerTest {
     }
 
     @Test
-    public void loggedIn_Calls_Correct_Functions() {
+    public void loggedIn_Calls_Correct_Function() {
         OAuthClientTestHelper helper = new OAuthClientTestHelper("TestUser 1", "testuser 1", "avatar_url");
         OAuth2Authentication authentication = helper.getOauthTestAuthentication();
         controller.user(authentication);
-        verify(service).loggedIn(authentication);
-        verify(service).findUserReservations(authentication);
-        verify(service).findUserBorrows(authentication);
+        verify(service).userInfo(authentication);
     }
 }

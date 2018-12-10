@@ -3,6 +3,8 @@ package com.scottlogic.librarygradproject.Services;
 import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.*;
+import com.scottlogic.librarygradproject.Helpers.BorrowHelper;
+import com.scottlogic.librarygradproject.Repositories.BookRepository;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,51 +19,49 @@ import java.util.stream.Stream;
 
 public class BorrowService {
 
-    private final BorrowRepository borrowRepository;
-    private final BookService bookService;
-    private final ReservationRepository reservationRepository;
+    private final BorrowHelper borrowHelper;
+    private final BorrowRepository borrowRepo;
+    private final BookRepository bookRepo;
+    private final ReservationRepository reservationRepo;
 
     @Autowired
-    public BorrowService(BorrowRepository borrowRepository, BookService bookService,
-                         ReservationRepository reservationRepository) {
-        this.borrowRepository = borrowRepository;
-        this.bookService = bookService;
-        this.reservationRepository = reservationRepository;
+    public BorrowService(BorrowHelper borrowHelper, BorrowRepository borrowRepo,
+                         BookRepository bookRepo, ReservationRepository reservationRepo) {
+        this.borrowHelper = borrowHelper;
+        this.borrowRepo = borrowRepo;
+        this.bookRepo = bookRepo;
+        this.reservationRepo = reservationRepo;
     }
+
     @SuppressWarnings("unchecked")
     public Borrow borrow(long bookId, OAuth2Authentication authentication) {
-        if (this.isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
+        if (isBorrowed(bookId)) throw new BookAlreadyBorrowedException(bookId);
         String userId = ((Map<String, String>) authentication.getUserAuthentication().getDetails()).get("login");
         LocalDate borrowDate = LocalDate.now();
         LocalDate returnDate = LocalDate.now().plusDays(7);
         Borrow loan = Borrow.builder().bookId(bookId).userId(userId).isActive(true).borrowDate(borrowDate).returnDate(returnDate).build();
-        return borrowRepository.save(loan);
+        return borrowRepo.save(loan);
     }
 
     public List<Borrow> findAll() {
-        return borrowRepository.findAll();
+        return borrowRepo.findAll();
     }
 
     public Borrow findOne(long borrowId) {
-        Optional<Borrow> borrowToGet = borrowRepository.findById(borrowId);
+        Optional<Borrow> borrowToGet = borrowRepo.findById(borrowId);
         return borrowToGet.orElseThrow(() -> new BorrowNotFoundException(borrowId));
     }
 
     public void delete(long borrowId) {
         try {
-            borrowRepository.deleteById(borrowId);
+            borrowRepo.deleteById(borrowId);
         } catch (EmptyResultDataAccessException e) {
             throw new BorrowNotFoundException(borrowId);
         }
     }
 
     public boolean isBorrowed(long bookId) {
-        bookService.findOne(bookId);
-        return borrowRepository.isBookBorrowed(bookId) || reservationRepository.isBookAwaitingCollection(bookId);
-    }
-
-    public boolean existsByUserIdAndBookId(String userId, long bookId) {
-        return borrowRepository.existsByUserIdAndBookIdAndIsActive(userId, bookId, true);
+        return borrowHelper.isBorrowed(bookId);
     }
 
     @Transactional
@@ -76,14 +76,14 @@ public class BorrowService {
         if (isBorrowed(bookId)) {
             throw new BookAlreadyBorrowedException(bookId);
         }
-        Reservation reservationToCollect = reservationRepository.findOneByBookIdAndQueuePosition(bookId, 1);
+        Reservation reservationToCollect = reservationRepo.findOneByBookIdAndQueuePosition(bookId, 1);
         if (reservationToCollect != null) {
             reservationToCollect.setCollectBy(LocalDate.now().plusDays(3));
         }
     }
 
     public Borrow bookCollected(long bookId) {
-            List<Reservation> reservations = reservationRepository.findAllByBookIdOrderByQueuePositionAsc(bookId);
+            List<Reservation> reservations = reservationRepo.findAllByBookIdOrderByQueuePositionAsc(bookId);
             if (reservations.isEmpty()) {throw new BookNotReservedException(bookId);}
 
             Reservation firstReservation = reservations.remove(0);
@@ -96,19 +96,19 @@ public class BorrowService {
                     .returnDate(LocalDate.now().plusDays(7))
                     .build());
 
-            reservationRepository.delete(firstReservation);
+            reservationRepo.delete(firstReservation);
 
             AtomicLong queuePosition = new AtomicLong(1);
             reservations.forEach(reservation -> {
                 reservation.setQueuePosition(queuePosition.getAndIncrement());
-                reservationRepository.save(reservation);
+                reservationRepo.save(reservation);
             });
-            return borrowRepository.save(borrow);
+            return borrowRepo.save(borrow);
     }
 
     @Transactional
     public void updateBorrowed(LocalDate currentDate) {
-        try (Stream<Borrow> borrows = borrowRepository.findOverdueBorrows(currentDate)) {
+        try (Stream<Borrow> borrows = borrowRepo.findOverdueBorrows(currentDate)) {
             borrows.forEach(borrow -> bookReturned(borrow.getId()));
         }
     }
