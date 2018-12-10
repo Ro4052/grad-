@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
 import styles from "../Profile.module.css";
 import RequestButton from "../../common/requestButton/RequestButton";
-import buttonLogic from "../../common/requestButton/buttonLogic";
+import buttonStates from "../../common/requestButton/buttonStates";
 
 export default class ReservationsTable extends Component {
   render() {
@@ -25,7 +25,8 @@ export default class ReservationsTable extends Component {
                 res.bookId
               } has been removed from the library`
             };
-            const data = reservedBook && buttonLogic(this.props, reservedBook);
+            const buttonState =
+              reservedBook && buttonStates(this.props, reservedBook);
             return (
               <Table.Row key={res.id}>
                 <Table.Cell className={styles.tableCell}>
@@ -34,12 +35,11 @@ export default class ReservationsTable extends Component {
                 <Table.Cell>{res.queuePosition}</Table.Cell>
                 <Table.Cell>
                   <RequestButton
-                    request={data.request}
-                    colour={data.colour}
-                    buttonText={data.buttonText}
-                    disabled={data.disabled}
+                    buttonState={buttonState}
                     cancelProcess={this.props.cancelProcess}
                     book={reservedBook}
+                    content={reservedBook.popupText}
+                    processStarted={reservedBook.processStarted}
                   />
                 </Table.Cell>
               </Table.Row>
