@@ -4,7 +4,6 @@ import { Button } from "semantic-ui-react";
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
 import RequestButton from "../../../common/requestButton/RequestButton";
-// import buttonLogic from "../../../common/requestButton/buttonLogic";
 import buttonStates from "../../../common/requestButton/buttonStates";
 import buttonCollectStates from "../../../common/requestButton/buttonCollectStates";
 

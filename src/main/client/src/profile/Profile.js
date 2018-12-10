@@ -50,8 +50,11 @@ export class Profile extends Component {
               reservations={this.props.reservations}
               books={this.props.books}
               cancelReservation={this.props.cancelReservation}
+              startCollection={this.props.startCollection}
+              cancelCollection={this.props.cancelCollection}
               startProcess={this.props.startProcess}
               cancelProcess={this.props.cancelProcess}
+              collectBook={this.props.collectBook}
             />
           </Tab.Pane>
         )
