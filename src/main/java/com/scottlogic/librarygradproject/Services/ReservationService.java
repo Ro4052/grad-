@@ -1,19 +1,19 @@
 package com.scottlogic.librarygradproject.Services;
 
 import com.scottlogic.librarygradproject.Entities.Reservation;
-import com.scottlogic.librarygradproject.Exceptions.AlreadyReservedException;
-import com.scottlogic.librarygradproject.Exceptions.BookAlreadyBorrowedException;
-import com.scottlogic.librarygradproject.Exceptions.BookIsAvailableException;
-import com.scottlogic.librarygradproject.Exceptions.ReservationNotFoundException;
+import com.scottlogic.librarygradproject.Exceptions.*;
+import com.scottlogic.librarygradproject.Helpers.BorrowHelper;
+import com.scottlogic.librarygradproject.Helpers.UserHelper;
+import com.scottlogic.librarygradproject.Repositories.BookRepository;
+import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
+import com.scottlogic.librarygradproject.Repositories.LibraryUserRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -23,22 +23,30 @@ import java.util.stream.Stream;
 public class ReservationService {
 
     private final ReservationRepository resRepo;
-    private final BookService bookService;
-    private final UserService userService;
-    private final BorrowService borrowService;
+    private final BookRepository bookRepo;
+    private final UserHelper userHelper;
+    private final LibraryUserRepository userRepo;
+    private final BorrowHelper borrowHelper;
+    private final BorrowRepository borrowRepo;
 
     @Autowired
-    public ReservationService(ReservationRepository resRepo, BookService bookService, UserService userService,
-                              BorrowService borrowService) {
+    public ReservationService(ReservationRepository resRepo, BookRepository bookRepo, UserHelper userHelper,
+                              LibraryUserRepository userRepo, BorrowHelper borrowHelper, BorrowRepository borrowRepo) {
         this.resRepo = resRepo;
-        this.bookService = bookService;
-        this.userService = userService;
-        this.borrowService = borrowService;
+        this.bookRepo = bookRepo;
+        this.userHelper = userHelper;
+        this.userRepo = userRepo;
+        this.borrowHelper = borrowHelper;
+        this.borrowRepo = borrowRepo;
     }
 
     private void validateReservation(long bookId, String userId) {
-        bookService.findOne(bookId);
-        userService.findOne(userId);
+        if (!bookRepo.existsById(bookId)) {
+            throw new BookNotFoundException(bookId);
+        }
+        if (!userRepo.existsById(userId)) {
+            throw new UserNotFoundException(userId);
+        }
     }
 
     public long checkReservation(long bookId) {
@@ -46,14 +54,14 @@ public class ReservationService {
     }
 
     public Reservation reserve(long bookId, OAuth2Authentication authentication) {
-        String userId = userService.getUserDetails(authentication).getUserId();
+        String userId = userHelper.getUserDetails(authentication).getUserId();
         if (resRepo.existsByUserIdAndBookId(userId, bookId)) {
             throw new AlreadyReservedException(bookId);
         }
-        if (borrowService.existsByUserIdAndBookId(userId, bookId)) {
+        if (borrowRepo.existsByUserIdAndBookIdAndIsActive(userId, bookId, true)) {
             throw new BookAlreadyBorrowedException(bookId);
         }
-        if (!borrowService.isBorrowed(bookId)) {
+        if (!borrowHelper.isBorrowed(bookId)) {
             throw new BookIsAvailableException(bookId);
         }
         validateReservation(bookId, userId);

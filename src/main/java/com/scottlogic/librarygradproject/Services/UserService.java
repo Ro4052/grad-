@@ -4,38 +4,40 @@ import com.scottlogic.librarygradproject.Entities.Borrow;
 import com.scottlogic.librarygradproject.Entities.LibraryUser;
 import com.scottlogic.librarygradproject.Entities.Reservation;
 import com.scottlogic.librarygradproject.Exceptions.UserNotFoundException;
+import com.scottlogic.librarygradproject.Helpers.UserHelper;
 import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
 import com.scottlogic.librarygradproject.Repositories.LibraryUserRepository;
 import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class UserService {
 
+    private final UserHelper userHelper;
     private final LibraryUserRepository userRepo;
-    private final ReservationRepository reservationRepository;
-    private final BorrowRepository borrowRepository;
+    private final ReservationRepository reservationRepo;
+    private final BorrowRepository borrowRepo;
 
     @Autowired
-    public UserService(LibraryUserRepository userRepo, ReservationRepository reservationRepository,
-                       BorrowRepository borrowRepository) {
+    public UserService(UserHelper userHelper, LibraryUserRepository userRepo,
+                       ReservationRepository reservationRepo, BorrowRepository borrowRepo) {
+        this.userHelper = userHelper;
         this.userRepo = userRepo;
-        this.reservationRepository = reservationRepository;
-        this.borrowRepository = borrowRepository;
+        this.reservationRepo = reservationRepo;
+        this.borrowRepo = borrowRepo;
     }
-    @SuppressWarnings("unchecked")
-    public LibraryUser getUserDetails(OAuth2Authentication authentication) {
-        Map<String, String> userDetails = (Map<String, String>) authentication.getUserAuthentication().getDetails();
-        LibraryUser newUser = LibraryUser.builder()
-                .userId(userDetails.get("login"))
-                .name(userDetails.get("name"))
-                .avatarUrl(userDetails.get("avatar_url"))
-                .build();
-        return newUser;
+
+    public Map<String, Object> userInfo(OAuth2Authentication authentication) {
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("userDetails", loggedIn(authentication));
+        userData.put("reservations", findUserReservations(authentication));
+        userData.put("borrows", findUserBorrows(authentication));
+        return userData;
     }
 
     public List<LibraryUser> findAll() {
@@ -51,18 +53,18 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public LibraryUser loggedIn(OAuth2Authentication authentication) {
-        return userRepo.save(getUserDetails(authentication));
+    private LibraryUser loggedIn(OAuth2Authentication authentication) {
+        return userRepo.save(userHelper.getUserDetails(authentication));
     }
 
-    public List<Reservation> findUserReservations(OAuth2Authentication authentication) {
-        String userId = getUserDetails(authentication).getUserId();
-        return reservationRepository.findAllByUserId(userId);
+    private List<Reservation> findUserReservations(OAuth2Authentication authentication) {
+        String userId = userHelper.getUserDetails(authentication).getUserId();
+        return reservationRepo.findAllByUserId(userId);
     }
 
-    public List<Borrow> findUserBorrows(OAuth2Authentication authentication) {
-        String userId = getUserDetails(authentication).getUserId();
-        return borrowRepository.findAllByUserId(userId);
+    private List<Borrow> findUserBorrows(OAuth2Authentication authentication) {
+        String userId = userHelper.getUserDetails(authentication).getUserId();
+        return borrowRepo.findAllByUserId(userId);
     }
 }
 

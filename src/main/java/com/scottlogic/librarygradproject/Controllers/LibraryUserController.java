@@ -24,10 +24,6 @@ public class LibraryUserController {
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public Map<String, Object> user(OAuth2Authentication authentication) {
-        Map<String, Object> userData = new HashMap<>();
-        userData.put("userDetails", userService.loggedIn(authentication));
-        userData.put("reservations", userService.findUserReservations(authentication));
-        userData.put("borrows", userService.findUserBorrows(authentication));
-        return userData;
+        return userService.userInfo(authentication);
     }
 }

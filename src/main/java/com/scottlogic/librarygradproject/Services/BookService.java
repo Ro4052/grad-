@@ -4,6 +4,8 @@ import com.scottlogic.librarygradproject.Entities.Book;
 import com.scottlogic.librarygradproject.Exceptions.BookNotFoundException;
 import com.scottlogic.librarygradproject.Exceptions.IncorrectBookFormatException;
 import com.scottlogic.librarygradproject.Repositories.BookRepository;
+import com.scottlogic.librarygradproject.Repositories.BorrowRepository;
+import com.scottlogic.librarygradproject.Repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import java.util.List;
@@ -12,10 +14,14 @@ import java.util.Optional;
 public class BookService {
 
     private final BookRepository bookRepo;
+    private final BorrowRepository borrowRepo;
+    private final ReservationRepository reservationRepo;
 
     @Autowired
-    public BookService(BookRepository bookRepo) {
+    public BookService(BookRepository bookRepo, BorrowRepository borrowRepo, ReservationRepository reservationRepo) {
         this.bookRepo = bookRepo;
+        this.borrowRepo = borrowRepo;
+        this.reservationRepo = reservationRepo;
     }
 
     public List<Book> findAll() {
@@ -30,8 +36,8 @@ public class BookService {
     public void delete(long id) {
         try {
             bookRepo.deleteById(id);
-            bookRepo.clearDeletedBookReservations();
-            bookRepo.clearDeletedBookBorrows();
+            reservationRepo.deleteByBookId(id);
+            borrowRepo.deactivateByBookId(id);
 
         } catch (EmptyResultDataAccessException e) {
             throw new BookNotFoundException(id);
@@ -46,22 +52,26 @@ public class BookService {
     }
 
     public void update(Book book) {
-        findOne(book.getId());
-        bookRepo.save(book);
+        long bookId = book.getId();
+        if (bookRepo.existsById(bookId)) {
+            bookRepo.save(book);
+        } else {
+            throw new BookNotFoundException(bookId);
+        }
     }
 
     public void deleteAll() {
         bookRepo.deleteAll();
-        bookRepo.clearDeletedBookReservations();
-        bookRepo.clearDeletedBookBorrows();
+        reservationRepo.deleteAll();
+        borrowRepo.deactivateAll();
     }
 
     public void removeMultiple(List<Long> ids) {
         List<Book> validBooks = bookRepo.findAllById(ids);
+        reservationRepo.deleteByMultipleIds(ids);
+        borrowRepo.deactivateByMultipleIds(ids);
         validBooks.forEach(book -> ids.remove(book.getId()));
         bookRepo.deleteAll(validBooks);
-        bookRepo.clearDeletedBookReservations();
-        bookRepo.clearDeletedBookBorrows();
 
         if (ids.size() > 0) {
             throw new BookNotFoundException(ids);
