@@ -10,20 +10,16 @@ const testBook = {
   publishDate: "1999"
 };
 
-const userReservations = [];
+const user = { reservations: [], borrows: [] };
 
 describe("Book Component Tests", () => {
   test("title matches test data", () => {
-    const wrapper = shallow(
-      <Book book={testBook} userReservations={userReservations} />
-    );
+    const wrapper = shallow(<Book book={testBook} user={user} />);
     expect(wrapper.find("h3").text()).toBe(testBook.title);
   });
 
   test("all fields are populated", () => {
-    const wrapper = shallow(
-      <Book book={testBook} userReservations={userReservations} />
-    );
+    const wrapper = shallow(<Book book={testBook} user={user} />);
     expect(wrapper.find("#author1").text()).toBe(`Author: ${testBook.author}`);
     expect(wrapper.find("#isbn1").text()).toBe(`ISBN: ${testBook.isbn}`);
     expect(wrapper.find("#publishDate1").text()).toBe(
@@ -33,11 +29,7 @@ describe("Book Component Tests", () => {
 
   test("Check Availability button rendered by default when logged in", () => {
     const wrapper = shallow(
-      <Book
-        book={testBook}
-        loggedIn={true}
-        userReservations={userReservations}
-      />
+      <Book book={testBook} loggedIn={true} user={user} />
     );
     expect(wrapper.find("RequestButton").exists()).toBe(true);
     expect(
@@ -50,11 +42,7 @@ describe("Book Component Tests", () => {
 
   test("No buttons render when not logged in", () => {
     const wrapper = shallow(
-      <Book
-        book={testBook}
-        loggedIn={false}
-        userReservations={userReservations}
-      />
+      <Book book={testBook} loggedIn={false} user={user} />
     );
     expect(wrapper.find("RequestButton").exists()).toBe(false);
     expect(wrapper.find("#editButton").exists()).toBe(false);
@@ -62,11 +50,7 @@ describe("Book Component Tests", () => {
 
   test("Edit button renders when logged in", () => {
     const wrapper = shallow(
-      <Book
-        book={testBook}
-        loggedIn={true}
-        userReservations={userReservations}
-      />
+      <Book book={testBook} loggedIn={true} user={user} />
     );
     expect(wrapper.find("#editButton").exists()).toBe(true);
   });
