@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { Button, Icon, Popup } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
 import RequestButton from "../../../common/requestButton/RequestButton";
 import buttonStates from "../../../common/requestButton/buttonStates";
 import buttonCollectStates from "../../../common/requestButton/buttonCollectStates";
-
-const moment = require("moment");
+import InfoText from "./InfoText";
 
 export default class Book extends Component {
   constructor(props) {
@@ -37,8 +36,11 @@ export default class Book extends Component {
     const { book } = this.props;
     const buttonState = buttonStates(this.props, book);
     const collectState = buttonCollectStates(this.props, book);
-    const reservation = this.props.userReservations.find(res => {
+    const reservation = this.props.user.reservations.find(res => {
       return res.bookId === book.id;
+    });
+    const borrow = this.props.user.borrows.find(borrow => {
+      return borrow.bookId === book.id;
     });
     return (
       <li className={styles.book}>
@@ -104,27 +106,7 @@ export default class Book extends Component {
                   cancelProcess={this.props.cancelCollection}
                 />
               )}
-            {(book.collectState === "Collector - Collection Not Started" ||
-              book.state === "Available to Borrow") && (
-              <Popup
-                on="hover"
-                position="top center"
-                verticalOffset={10}
-                trigger={<Icon name="question" />}
-                content={
-                  book.state === "Available to Borrow"
-                    ? `You can borrow this book until ${moment()
-                        .add(7, "days")
-                        .format("ddd Do MMM YYYY")}`
-                    : `You must collect this book by ${moment(
-                        reservation.collectBy
-                      ).format(
-                        "ddd Do MMM YYYY"
-                      )}, else your reservation will be cancelled`
-                }
-                hideOnScroll
-              />
-            )}
+            <InfoText book={book} reservation={reservation} borrow={borrow} />
             {book.editState ? (
               <EditBook
                 updateBook={this.props.updateBook}
