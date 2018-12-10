@@ -139,7 +139,12 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loggingIn: true };
 
     case types.LOGOUT:
-      return { ...state, loggingIn: false, loggedIn: false, user: {} };
+      return {
+        ...state,
+        loggingIn: false,
+        loggedIn: false,
+        user: { reservations: [], borrows: [] }
+      };
 
     case types.ADD_BORROW:
       return {

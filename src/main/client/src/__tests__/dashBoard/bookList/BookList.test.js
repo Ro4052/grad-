@@ -17,13 +17,15 @@ const testBook2 = {
   publishDate: "1954"
 };
 
+const user = {};
+
 const searchString = "";
 
 describe("Testing the book list", () => {
   test("book list is empty when there is no books", () => {
     const books = [];
     const wrapper = shallow(
-      <BookList books={books} searchString={searchString} />
+      <BookList books={books} searchString={searchString} user={user} />
     );
     expect(wrapper.find("ul").children().length).toEqual(0);
   });
@@ -31,7 +33,12 @@ describe("Testing the book list", () => {
   test("book list is length 1 when 1 book is passed in", () => {
     const books = [testBook1];
     const wrapper = shallow(
-      <BookList books={books} searchString={searchString} deleteList={[]} />
+      <BookList
+        books={books}
+        searchString={searchString}
+        deleteList={[]}
+        user={user}
+      />
     );
     expect(wrapper.find("ul").children().length).toEqual(1);
   });
@@ -39,7 +46,12 @@ describe("Testing the book list", () => {
   test("book list is length 2 when 2 books are passed in", () => {
     const books = [testBook1, testBook2];
     const wrapper = shallow(
-      <BookList books={books} searchString={searchString} deleteList={[]} />
+      <BookList
+        books={books}
+        searchString={searchString}
+        deleteList={[]}
+        user={user}
+      />
     );
     expect(wrapper.find("ul").children().length).toEqual(2);
   });

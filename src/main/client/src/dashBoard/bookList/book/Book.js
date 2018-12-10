@@ -4,7 +4,9 @@ import { Button } from "semantic-ui-react";
 import EditBook from "./EditBook";
 import styles from "./Book.module.css";
 import RequestButton from "../../../common/requestButton/RequestButton";
-import buttonLogic from "../../../common/requestButton/buttonLogic";
+// import buttonLogic from "../../../common/requestButton/buttonLogic";
+import buttonStates from "../../../common/requestButton/buttonStates";
+import buttonCollectStates from "../../../common/requestButton/buttonCollectStates";
 
 export default class Book extends Component {
   constructor(props) {
@@ -32,7 +34,11 @@ export default class Book extends Component {
 
   render() {
     const { book } = this.props;
-    const data = buttonLogic(this.props, book);
+    const buttonState = buttonStates(this.props, book);
+    const collectState = buttonCollectStates(this.props, book);
+    const reservation = this.props.userReservations.find(res => {
+      return res.bookId === book.id;
+    });
     return (
       <li className={styles.book}>
         {this.props.deleteMode && this.props.loggedIn ? (
@@ -82,12 +88,21 @@ export default class Book extends Component {
         {this.props.loggedIn && (
           <div className={styles.bookBtnsContainer}>
             <RequestButton
-              request={data.request}
-              colour={data.colour}
-              buttonText={data.buttonText}
+              buttonState={buttonState}
               book={book}
+              state={book.state}
               cancelProcess={this.props.cancelProcess}
             />
+            {reservation &&
+              reservation.queuePosition === 1 &&
+              reservation.collectBy && (
+                <RequestButton
+                  buttonState={collectState}
+                  book={book}
+                  state={book.collectState}
+                  cancelProcess={this.props.cancelCollection}
+                />
+              )}
             {book.editState ? (
               <EditBook
                 updateBook={this.props.updateBook}

@@ -12,5 +12,6 @@ const store = createStore(
 const dispatch = store.dispatch;
 dispatch(getBooks());
 dispatch(checkLogin());
+export { dispatch };
 
 export default store;
