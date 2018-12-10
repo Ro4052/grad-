@@ -13,8 +13,12 @@ export default class ReservationsTable extends Component {
           <Table.Row>
             <Table.HeaderCell width={8}>Book Title</Table.HeaderCell>
             <Table.HeaderCell width={2}>Position in Queue</Table.HeaderCell>
-            <Table.HeaderCell width={2}>Cancel Reservations</Table.HeaderCell>
-            <Table.HeaderCell width={2}>Collect Reservations</Table.HeaderCell>
+            <Table.HeaderCell width={2} textAlign="center">
+              Cancel Reservations
+            </Table.HeaderCell>
+            <Table.HeaderCell width={2} textAlign="center">
+              Collect Reservations
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
