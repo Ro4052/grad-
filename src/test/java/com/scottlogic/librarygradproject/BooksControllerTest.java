@@ -1,23 +1,31 @@
 package com.scottlogic.librarygradproject;
 
+import com.scottlogic.librarygradproject.Controllers.BooksController;
+import com.scottlogic.librarygradproject.Entities.Book;
+import com.scottlogic.librarygradproject.Services.BookService;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
 public class BooksControllerTest {
 
+    BookService bookService;
+    BooksController controller;
+
+    @Before
+    public void before_Each_Test() {
+        bookService = mock(BookService.class);
+        controller = new BooksController(bookService);
+    }
+
     @Test
     public void getAll_Calls_Repo_GetAll() {
-
-        // Arrange
-        BookRepository mockRepo = mock(BookRepository.class);
-        BooksController controller = new BooksController(mockRepo);
-
         // Act
         controller.getAll();
 
         // Assert
-        verify(mockRepo).getAll();
+        verify(bookService).findAll();
     }
 
     @Test
@@ -25,22 +33,15 @@ public class BooksControllerTest {
 
         // Arrange
         int id = 1;
-        BookRepository mockRepo = mock(BookRepository.class);
-        BooksController controller = new BooksController(mockRepo);
-
         // Act
         controller.get(id);
 
         // Assert
-        verify(mockRepo).get(id);
+        verify(bookService).findOne(id);
     }
 
     @Test
     public void post_With_Book_Calls_Repo_Add() {
-
-        // Arrange
-        BookRepository mockRepo = mock(BookRepository.class);
-        BooksController controller = new BooksController(mockRepo);
 
         Book newBook = new Book();
 
@@ -48,7 +49,7 @@ public class BooksControllerTest {
         controller.post(newBook);
 
         // Assert
-        verify(mockRepo).add(newBook);
+        verify(bookService).add(newBook);
     }
 
     @Test
@@ -56,13 +57,11 @@ public class BooksControllerTest {
 
         // Arrange
         int id = 1;
-        BookRepository mockRepo = mock(BookRepository.class);
-        BooksController controller = new BooksController(mockRepo);
 
         // Act
         controller.delete(id);
 
         // Assert
-        verify(mockRepo).remove(id);
+        verify(bookService).delete(id);
     }
 }

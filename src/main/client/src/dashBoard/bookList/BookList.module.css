@@ -1,0 +1,13 @@
+.bookListContainer {
+  flex: 10;
+  overflow-y: auto;
+}
+
+.bookList {
+  margin: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  justify-content: space-between;
+  padding: 0 1.5em 0 1.5em;
+}

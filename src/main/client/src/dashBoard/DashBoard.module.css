@@ -1,0 +1,17 @@
+.dashBoard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.selectBookBtn {
+  width: fit-content;
+  align-self: center;
+}
+
+.librarianBtns {
+  align-self: center;
+  display: flex;
+  margin-top: 1em;
+}

@@ -1,45 +1,14 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
 
-import styles from './App.module.css';
+import PageRouter from "./pageRouter/PageRouter";
+import styles from "./App.module.css";
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      books: []
-    };
-    this.getBooks();
-  }
-
-  getBooks() {
-    axios.get('/api/books').then((res) => {
-      this.setState({
-        books: res.data
-      });
-    });
-  }
-
+export default class App extends Component {
   render() {
     return (
-      <div>
-        <h1 className={styles.pageHeader}> Grad Library App </h1>
-        <ul>
-          {this.state.books.map((book) =>
-            <li key={book.id}>
-              <h3> {book.title} </h3>
-              <p>
-                id: {book.id},
-                author: {book.author},
-                isbn: {book.isbn},
-                publishDate: {book.publishDate}
-              </p>
-            </li>
-          )}
-        </ul>
+      <div className={styles.container}>
+        <PageRouter />
       </div>
     );
   }
 }
-
-export default App;

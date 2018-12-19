@@ -1,0 +1,70 @@
+.container {
+  width: 100%;
+  text-align: center;
+  height: 2.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchBarContainer {
+  width: 60%;
+  height: 100%;
+}
+
+.searchBar {
+  width: 90%;
+  height: 100%;
+  border-radius: 1.25em;
+  border: solid 1px grey;
+  padding-left: 1.5em;
+  font-size: 1.5em;
+}
+
+.searchBar:focus,
+.dateEntry:focus {
+  box-shadow: 0 0 0 1px #2185d0;
+  border: none;
+  outline: none;
+}
+
+.searchIcon {
+  position: relative;
+  right: 25px;
+  bottom: 2px;
+}
+
+.dateEntry {
+  width: 25%;
+  height: 100%;
+  border-radius: 1.25em;
+  border: solid 1px grey;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.dateLabel {
+  font-size: 1.25em;
+  align-self: center;
+  margin-left: 1em;
+  margin-right: 0.5em;
+}
+
+.dateSearchContainer {
+  width: fit-content;
+}
+
+.dropdownContainer {
+  height: 100%;
+}
+
+.dropdown {
+  height: 100%;
+  border: none;
+  text-align-last: right;
+  padding: 0 0.5em 0 0.5em;
+}
+
+.dropdown:hover {
+  cursor: pointer;
+}

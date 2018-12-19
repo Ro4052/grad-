@@ -1,0 +1,58 @@
+.book {
+  width: 45%;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.bookDetails {
+  margin-bottom: 0.5em;
+}
+
+.bookFieldEllipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bookFieldBreak {
+  overflow-wrap: break-word;
+}
+
+input[type="checkbox"] + label {
+  display: block;
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"] + label:before {
+  content: "\2714";
+  border: 0.05em solid #000;
+  border-radius: 0.2em;
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  padding-bottom: 0.15em;
+  padding-left: 0.15em;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  color: transparent;
+  transition: 0.2s;
+}
+
+input[type="checkbox"] + label:active:before {
+  transform: scale(0);
+}
+
+input[type="checkbox"]:checked + label:before {
+  background-color: mediumseagreen;
+  border-color: mediumseagreen;
+  color: #fff;
+}
+
+.bookBtnsContainer {
+  display: flex;
+  align-items: baseline;
+}

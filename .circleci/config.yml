@@ -1,58 +1,111 @@
 version: 2
 jobs:
   test_maven:
-
     docker:
-    - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/project-workspace
 
     steps:
-    - checkout
+      - checkout
 
-    - restore_cache:
-        key: maven-dependencies-{{ checksum "pom.xml" }}
+      - attach_workspace:
+          at: ~/project-workspace
 
-    - run:
-        name: Setup Maven Dependencies
-        command: mvn dependency:go-offline
+      - restore_cache:
+          key: maven-dependencies-{{ checksum "pom.xml" }}
 
-    - save_cache:
-        paths:
-          - ~/.m2
-        key: maven-dependencies-{{ checksum "pom.xml" }}
+      - run:
+          name: Setting up Maven dependencies
+          command: mvn dependency:go-offline
 
-    - run:
-        name: Run Server Tests
-        command: mvn test
-    
-    - store_test_results:
-        path: target/surefire-reports
-      
-    - store_artifacts:
-        path: target/grad-library-project-0.0.1-SNAPSHOT.jar
-    
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: maven-dependencies-{{ checksum "pom.xml" }}
+
+      - run:
+          name: Running server unit tests
+          command: mvn package
+
+      - persist_to_workspace:
+          root: .
+          paths: target/library-grad-project-1.0-SNAPSHOT.jar
+
   test_node:
-
     docker:
       - image: circleci/node:8
 
+    working_directory: ~/project-workspace
+
     steps:
-    - checkout
+      - checkout
 
-    - restore_cache:
-        key: node-dependencies-{{ checksum "src/main/client/package.json" }}
+      - restore_cache:
+          key: node-dependencies-{{ checksum "./src/main/client/package.json" }}-0.1.0
 
-    - run:
-        name: Setup Node Dependencies
-        command: cd src/main/client/ && npm install
-    
-    - save_cache:
-        paths:
-          - ./node_modules
-        key: node-dependencies-{{ checksum "src/main/client/package.json" }}
+      - run:
+          name: Setting up Node dependencies
+          command: cd src/main/client && npm install
 
-    - run:
-        name: Run Client Tests
-        command: cd src/main/client/ && set CI=true && npm run test
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: node-dependencies-{{ checksum "./src/main/client/package.json" }}-0.1.0
+
+      - run:
+          name: Running client unit tests
+          command: cd src/main/client && npm run test
+
+  e2e_test:
+    docker:
+      - image: circleci/openjdk:8-jdk-node-browsers
+
+    working_directory: ~/project-workspace
+
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: ~/project-workspace
+
+      - restore_cache:
+          key: node-dependencies-{{ checksum "./src/main/client/package.json" }}-0.1.0
+
+      - run:
+          name: Setting up Node dependencies
+          command: cd src/main/client && npm install
+
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: node-dependencies-{{ checksum "./src/main/client/package.json" }}-0.1.0
+
+      - run:
+          name: Running JAR file
+          command: SPRING_PROFILE=test java -jar target/library-grad-project-1.0-SNAPSHOT.jar
+          background: true
+
+      - run:
+          name: Serving front-end
+          command: cd src/main/client && npm run start
+          background: true
+
+      - run:
+          name: Storing local IP address
+          command: cd src/main/client && npm run store-ip
+
+      - run:
+          name: Waiting for server to start
+          command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):8080/api/books" > /dev/null
+
+      - run:
+          name: Waiting for front-end to start
+          command: wget --retry-connrefused --wait=10 -t 10 "http://$(cat src/main/client/logs/ip.log):3000" > /dev/null
+
+      - run:
+          name: Running e2e tests
+          command: cd src/main/client && npm run test:e2e
 
 workflows:
   version: 2
@@ -60,3 +113,6 @@ workflows:
     jobs:
       - test_maven
       - test_node
+      - e2e_test:
+          requires:
+            - test_maven
