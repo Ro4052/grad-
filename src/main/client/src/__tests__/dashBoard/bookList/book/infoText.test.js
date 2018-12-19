@@ -1,5 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
+import moment from "moment";
 import InfoText from "../../../../dashBoard/bookList/book/InfoText";
 
 const book = {};
@@ -32,7 +33,9 @@ describe("Info Component tests", () => {
     book3.state = "Available to Borrow";
     const wrapper = shallow(<InfoText book={book3} />);
     expect(wrapper.find("Popup").props().content).toBe(
-      "You can borrow this book until Mon 17th Dec 2018"
+      `You can borrow this book until ${moment()
+        .add(7, "days")
+        .format("ddd Do MMM YYYY")}`
     );
   });
 });
